@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>旅行打卡地图</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+background:#1a1d23;color:#cdd6e0;min-height:100vh;display:flex;flex-direction:column;align-items:center;}
+h1{font-size:24px;margin:40px 0 8px;text-align:center;}
+.sub{color:#7f8c9a;font-size:14px;margin-bottom:32px;text-align:center;}
+.cards{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;padding:0 20px;max-width:700px;}
+.card{background:#21252b;border-radius:14px;padding:24px;width:300px;border:1px solid #2d3139;
+text-decoration:none;color:inherit;transition:all .2s;}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.4);border-color:#4ea397;}
+.card .icon{font-size:40px;margin-bottom:12px;}
+.card h2{font-size:17px;margin-bottom:6px;}
+.card p{font-size:12px;color:#7f8c9a;line-height:1.6;}
+.badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:10px;font-weight:600;
+margin-top:8px;}
+.badge.desktop{background:#2d3139;color:#7f8c9a;}
+.badge.iphone{background:#1a3a35;color:#4ea397;}
+.footer{margin:40px 20px;text-align:center;font-size:11px;color:#5a606e;line-height:1.8;}
+</style>
+</head>
+<body>
+<h1>🗺️ 旅行打卡地图</h1>
+<p class="sub">记录你走过的每一个地方</p>
+<div class="cards">
+<a class="card" href="北京地铁打卡地图.html">
+    <div class="icon">🚇</div>
+    <h2>北京地铁打卡</h2>
+    <p>27条线路 · 410个站点 · 点击打卡</p>
+    <span class="badge desktop">桌面版</span>
+</a>
+<a class="card" href="北京地铁打卡-iPhone.html">
+    <div class="icon">📱</div>
+    <h2>北京地铁打卡</h2>
+    <p>27条线路 · 410个站点 · 触屏优化</p>
+    <span class="badge iphone">iPhone版</span>
+</a>
+<a class="card" href="中国旅行足迹地图.html">
+    <div class="icon">🇨🇳</div>
+    <h2>中国旅行足迹</h2>
+    <p>地级行政区打卡 · 省份统计</p>
+    <span class="badge desktop">桌面版</span>
+</a>
+<a class="card" href="中国旅行足迹-iPhone.html">
+    <div class="icon">📱</div>
+    <h2>中国旅行足迹</h2>
+    <p>地级行政区打卡 · 触屏优化</p>
+    <span class="badge iphone">iPhone版</span>
+</a>
+</div>
+<p class="footer">数据存储在你的浏览器本地，不会上传到任何服务器<br>点击分享按钮 → 添加到主屏幕，即可像 App 一样使用</p>
+</body>
+</html>
