@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>西班牙语动词变位 | Presente & Pretérito</title>
+<style>
+:root{
+  --bg:#0d1117; --card:#161b22; --card2:#1c2333;
+  --text:#e6edf3; --text2:#c9d1d9; --muted:#8b949e;
+  --border:#30363d; --accent:#f0883e; --accent2:#d0752a;
+  --green:#3fb950; --red:#f85149; --blue:#58a6ff;
+  --radius:12px; --shadow:0 2px 8px rgba(0,0,0,.3);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:var(--bg); color:var(--text);
+  min-height:100vh; min-height:100dvh;
+  line-height:1.6; -webkit-tap-highlight-color:transparent;
+  padding:16px; padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));
+}
+.container{max-width:760px;margin:0 auto}
+
+/* Header */
+.header{text-align:center;padding:28px 0 20px}
+.header .icon{font-size:48px;margin-bottom:8px}
+.header h1{font-size:26px;font-weight:800;letter-spacing:-.5px}
+.header p{color:var(--muted);font-size:13px;margin-top:6px}
+
+/* Tabs */
+.tabs{display:flex;gap:6px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:1 0 auto;padding:10px 16px;text-align:center;font-size:13px;font-weight:600;border-radius:var(--radius);cursor:pointer;background:var(--card);border:1px solid var(--border);color:var(--muted);transition:all .15s;white-space:nowrap;user-select:none}
+.tab:hover{border-color:var(--accent);color:var(--text)}
+.tab.active{background:rgba(240,136,62,.12);border-color:var(--accent);color:var(--accent)}
+.tab:active{opacity:.8}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin:12px 0}
+.card h3{font-size:15px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.card h3 .emoji{font-size:18px}
+
+/* Tables */
+.table-wrap{overflow-x:auto;margin:12px 0;border-radius:var(--radius);border:1px solid var(--border);-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:13px;text-align:center;min-width:500px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--border)}
+th{background:var(--card2);color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;position:sticky;top:0;z-index:1}
+td{background:var(--card);color:var(--text2)}
+td .ending{color:var(--accent);font-weight:700}
+td.person{color:var(--muted);font-size:11px}
+tr:last-child td{border-bottom:none}
+
+/* Highlight */
+.hl{color:var(--accent);font-weight:600}
+.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;margin-left:4px}
+.badge.ar{background:rgba(240,136,62,.15);color:var(--accent)}
+.badge.er{background:rgba(88,166,255,.15);color:var(--blue)}
+.badge.ir{background:rgba(63,185,80,.15);color:var(--green)}
+.badge.ie{background:rgba(188,140,255,.15);color:#bc8cff}
+
+/* Verb Dictionary */
+.search-wrap{position:relative;margin-bottom:14px}
+.search-wrap input{width:100%;padding:10px 14px 10px 38px;font-size:14px;border-radius:var(--radius);background:var(--card2);border:2px solid var(--border);color:var(--text);outline:none;transition:border .2s}
+.search-wrap input:focus{border-color:var(--accent)}
+.search-wrap .search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);pointer-events:none}
+.verb-dict-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;cursor:pointer;transition:background .15s;border:1px solid transparent}
+.verb-dict-item:hover{background:var(--card2);border-color:var(--border)}
+.verb-dict-item .v-name{font-weight:700;font-size:15px;min-width:80px}
+.verb-dict-item .v-trans{color:var(--muted);font-size:12px;flex:1}
+.verb-dict-item .v-yo{font-family:"SF Mono","Fira Code",monospace;font-size:12px;color:var(--accent)}
+.verb-dict-item .v-preterito{font-family:"SF Mono","Fira Code",monospace;font-size:12px;color:var(--blue)}
+.dict-detail{display:none;padding:12px 14px;margin:4px 0 10px;background:var(--card2);border-radius:8px;border:1px solid var(--border)}
+.dict-detail.show{display:block}
+.dict-detail table{min-width:auto;font-size:11px}
+.dict-detail td,.dict-detail th{padding:5px 8px;font-size:11px}
+
+/* Quiz */
+.quiz-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.quiz-progress{flex:1;min-width:120px}
+.quiz-progress .bar{height:6px;border-radius:3px;background:var(--border);overflow:hidden;margin-top:6px}
+.quiz-progress .bar-fill{height:100%;border-radius:3px;background:var(--accent);transition:width .3s}
+.quiz-stats{display:flex;gap:16px;text-align:right}
+.quiz-stats .stat-val{font-size:22px;font-weight:800}
+.quiz-stats .stat-val.ok{color:var(--green)}
+.quiz-stats .stat-val.err{color:var(--red)}
+.quiz-stats .stat-label{font-size:10px;color:var(--muted);text-transform:uppercase}
+.quiz-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin:10px 0;transition:border .2s}
+.quiz-card.answered.correct{border-color:rgba(63,185,80,.3)}
+.quiz-card.answered.wrong{border-color:rgba(248,81,73,.3)}
+.quiz-card .q-num{font-size:11px;color:var(--muted);margin-bottom:6px}
+.quiz-card .q-text{font-size:15px;margin-bottom:12px;line-height:1.5}
+.quiz-card .q-text .verb{color:var(--accent);font-weight:700;font-size:17px}
+.quiz-card .q-text .subj{color:var(--blue);font-weight:600}
+.quiz-card input{width:100%;padding:11px 14px;font-size:15px;border-radius:8px;background:var(--card2);border:2px solid var(--border);color:var(--text);outline:none;transition:all .2s;font-family:"SF Mono","Fira Code",monospace}
+.quiz-card input:focus{border-color:var(--accent)}
+.quiz-card input.ok{border-color:var(--green)!important;background:rgba(63,185,80,.08)!important}
+.quiz-card input.err{border-color:var(--red)!important;background:rgba(248,81,73,.08)!important}
+.quiz-card .fb{display:none;margin-top:8px;font-size:12px;padding:8px 12px;border-radius:8px;line-height:1.5}
+.quiz-card .fb.show{display:block}
+.quiz-card .fb.ok{background:rgba(63,185,80,.1);color:var(--green)}
+.quiz-card .fb.err{background:rgba(248,81,73,.1);color:var(--red)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 24px;border-radius:var(--radius);border:none;font-size:14px;font-weight:600;cursor:pointer;background:var(--accent);color:#fff;transition:all .15s;white-space:nowrap;font-family:inherit}
+.btn:hover{background:var(--accent2)}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:var(--card);border:1px solid var(--border);color:var(--text)}
+.btn.ghost:hover{background:var(--card2)}
+.btn-row{display:flex;gap:10px;margin:16px 0;flex-wrap:wrap}
+
+/* Timer */
+.timer{font-size:11px;color:var(--muted);text-align:center;margin:8px 0}
+
+/* History */
+.history-item{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-radius:8px;margin:4px 0;background:var(--card2);font-size:12px}
+.history-item .h-score{font-weight:700}
+.history-item .h-score.good{color:var(--green)}
+.history-item .h-score.ok{color:var(--accent)}
+.history-item .h-score.bad{color:var(--red)}
+
+/* Empty state */
+.empty{text-align:center;padding:30px;color:var(--muted);font-size:13px}
+.empty .icon{font-size:36px;margin-bottom:8px}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.show{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;max-width:400px;width:100%;text-align:center}
+.modal .icon{font-size:48px;margin-bottom:12px}
+.modal h3{font-size:18px;margin-bottom:8px}
+.modal p{color:var(--muted);font-size:13px;margin-bottom:16px}
+
+@media(max-width:480px){
+  .header h1{font-size:22px}
+  .quiz-card .q-text{font-size:14px}
+  .quiz-card input{font-size:14px;padding:10px 12px}
+  table{font-size:11px} th,td{padding:6px 7px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="icon">🇪🇸</div>
+  <h1>西班牙语动词变位</h1>
+  <p>Presente (现在时) · Pretérito Indefinido (简单过去时) · 120+ 常用动词 · 交互练习</p>
+</div>
+
+<div class="tabs">
+  <div class="tab active" data-tab="presente">📖 现在时规则</div>
+  <div class="tab" data-tab="preterito">📖 简单过去时</div>
+  <div class="tab" data-tab="dictionary">🔍 动词词典</div>
+  <div class="tab" data-tab="irregular">⭐ 不规则总表</div>
+  <div class="tab" data-tab="quiz">✏️ 变位练习</div>
+  <div class="tab" data-tab="history">📊 练习记录</div>
+</div>
+
+<!-- ============ PRESENTE ============ -->
+<div id="tab-presente">
+<div class="card">
+  <h3><span class="emoji">📋</span> 规则变位口诀</h3>
+  <span class="badge ar">-AR</span> o, as, a, amos, áis, an<br>
+  <span class="badge er">-ER</span> o, es, e, emos, éis, en<br>
+  <span class="badge ir">-IR</span> o, es, e, imos, ís, en
+  <p style="margin-top:8px;font-size:11px;color:var(--muted)">💡 -ER 与 -IR 仅在 nosotros/vosotros 词尾不同</p>
+</div>
+
+<div class="table-wrap">
+<table>
+<tr><th>人称代词</th><th><span class="badge ar">-AR</span> habl<strong>ar</strong></th><th><span class="badge er">-ER</span> com<strong>er</strong></th><th><span class="badge ir">-IR</span> viv<strong>ir</strong></th></tr>
+<tr><td class="person">yo (我)</td><td>habl<span class="ending">o</span></td><td>com<span class="ending">o</span></td><td>viv<span class="ending">o</span></td></tr>
+<tr><td class="person">tú (你)</td><td>habl<span class="ending">as</span></td><td>com<span class="ending">es</span></td><td>viv<span class="ending">es</span></td></tr>
+<tr><td class="person">él/ella/usted (他/她/您)</td><td>habl<span class="ending">a</span></td><td>com<span class="ending">e</span></td><td>viv<span class="ending">e</span></td></tr>
+<tr><td class="person">nosotros (我们)</td><td>habl<span class="ending">amos</span></td><td>com<span class="ending">emos</span></td><td>viv<span class="ending">imos</span></td></tr>
+<tr><td class="person">vosotros (你们)</td><td>habl<span class="ending">áis</span></td><td>com<span class="ending">éis</span></td><td>viv<span class="ending">ís</span></td></tr>
+<tr><td class="person">ellos/ustedes (他们/您们)</td><td>habl<span class="ending">an</span></td><td>com<span class="ending">en</span></td><td>viv<span class="ending">en</span></td></tr>
+</table>
+</div>
+
+<div class="card">
+  <h3><span class="emoji">🔄</span> 词干元音变化 <span style="font-weight:400;color:var(--muted);font-size:12px">(仅重读音节：yo/tú/él/ellos — nosotros/vosotros 不变)</span></h3>
+  <table style="min-width:auto;font-size:12px">
+  <tr><th>类型</th><th>规则</th><th>例词</th><th>yo 变位</th></tr>
+  <tr><td><span class="badge ie">e→ie</span></td><td>重读 e → ie</td><td>pensar, querer, entender, cerrar, empezar, sentir, preferir, perder</td><td>pi<b class="hl">e</b>nso, qu<b class="hl">ie</b>ro</td></tr>
+  <tr><td><span class="badge ie">o→ue</span></td><td>重读 o → ue</td><td>poder, dormir, volver, encontrar, costar, morir, recordar, soñar</td><td>p<b class="hl">ue</b>do, d<b class="hl">ue</b>rmo</td></tr>
+  <tr><td><span class="badge ie">e→i</span></td><td>重读 e → i (仅 -IR)</td><td>pedir, servir, repetir, seguir, conseguir, vestir</td><td>p<b class="hl">i</b>do, s<b class="hl">i</b>rvo</td></tr>
+  <tr><td><span class="badge ie">u→ue</span></td><td>u → ue (仅 jugar)</td><td>jugar</td><td>j<b class="hl">ue</b>go</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3><span class="emoji">⚡</span> 第一人称 yo 不规则（其余人称规则）</h3>
+  <table style="min-width:auto;font-size:12px">
+  <tr><th>动词</th><th>yo 形</th><th>类型</th><th>动词</th><th>yo 形</th><th>类型</th></tr>
+  <tr><td>tener</td><td><b>tengo</b></td><td>-go</td><td>poner</td><td><b>pongo</b></td><td>-go</td></tr>
+  <tr><td>venir</td><td><b>vengo</b></td><td>-go</td><td>salir</td><td><b>salgo</b></td><td>-go</td></tr>
+  <tr><td>hacer</td><td><b>hago</b></td><td>-go</td><td>traer</td><td><b>traigo</b></td><td>-go</td></tr>
+  <tr><td>decir</td><td><b>digo</b></td><td>-go</td><td>caer</td><td><b>caigo</b></td><td>-go</td></tr>
+  <tr><td>oír</td><td><b>oigo</b></td><td>-go</td><td>conocer</td><td><b>conozco</b></td><td>-zco</td></tr>
+  <tr><td>saber</td><td><b>sé</b></td><td>特殊</td><td>ver</td><td><b>veo</b></td><td>-eo</td></tr>
+  <tr><td>dar</td><td><b>doy</b></td><td>-oy</td><td>caber</td><td><b>quepo</b></td><td>特殊</td></tr>
+  </table>
+</div>
+</div>
+
+<!-- ============ PRETERITO ============ -->
+<div id="tab-preterito" style="display:none">
+<div class="card">
+  <h3><span class="emoji">📋</span> 规则变位口诀</h3>
+  <span class="badge ar">-AR</span> é, aste, ó, amos, asteis, aron<br>
+  <span class="badge er">-ER/-IR</span> í, iste, ió, imos, isteis, ieron
+  <p style="margin-top:8px;font-size:11px;color:var(--muted)">💡 -ER 和 -IR 在简单过去时中变位完全相同</p>
+</div>
+
+<div class="table-wrap">
+<table>
+<tr><th>人称代词</th><th><span class="badge ar">-AR</span> hablar</th><th><span class="badge er">-ER</span> comer</th><th><span class="badge ir">-IR</span> vivir</th></tr>
+<tr><td class="person">yo</td><td>habl<span class="ending">é</span></td><td>com<span class="ending">í</span></td><td>viv<span class="ending">í</span></td></tr>
+<tr><td class="person">tú</td><td>habl<span class="ending">aste</span></td><td>com<span class="ending">iste</span></td><td>viv<span class="ending">iste</span></td></tr>
+<tr><td class="person">él/ella/usted</td><td>habl<span class="ending">ó</span></td><td>com<span class="ending">ió</span></td><td>viv<span class="ending">ió</span></td></tr>
+<tr><td class="person">nosotros</td><td>habl<span class="ending">amos</span></td><td>com<span class="ending">imos</span></td><td>viv<span class="ending">imos</span></td></tr>
+<tr><td class="person">vosotros</td><td>habl<span class="ending">asteis</span></td><td>com<span class="ending">isteis</span></td><td>viv<span class="ending">isteis</span></td></tr>
+<tr><td class="person">ellos/ustedes</td><td>habl<span class="ending">aron</span></td><td>com<span class="ending">ieron</span></td><td>viv<span class="ending">ieron</span></td></tr>
+</table>
+</div>
+
+<div class="card">
+  <h3><span class="emoji">⚡</span> 不规则词干 — 特殊人称词尾：-e, -iste, -o, -imos, -ieron/-eron</h3>
+  <table style="min-width:auto;font-size:12px">
+  <tr><th>类型</th><th>动词 (yo 形)</th><th>词干</th></tr>
+  <tr><td><b>U 词干</b></td><td>tener (<b>tuve</b>), estar (<b>estuve</b>), poder (<b>pude</b>), poner (<b>puse</b>), saber (<b>supe</b>), andar (<b>anduve</b>), caber (<b>cupe</b>)</td><td>tuv-, estuv-, pud-, pus-, sup-, anduv-, cup-</td></tr>
+  <tr><td><b>I 词干</b></td><td>hacer (<b>hice</b>, él: <b>hizo</b>), querer (<b>quise</b>), venir (<b>vine</b>)</td><td>hic-/hiz-, quis-, vin-</td></tr>
+  <tr><td><b>J 词干</b></td><td>decir (<b>dije</b>), traer (<b>traje</b>), conducir (<b>conduje</b>), producir (<b>produje</b>), traducir (<b>traduje</b>)<br><span style="color:var(--muted);font-size:11px">-cir 结尾动词 → -j- 词干，ellos 词尾 -eron (非 -ieron)</span></td><td>dij-, traj-, conduj-, produj-, traduj-</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3><span class="emoji">⚠️</span> 完全特殊 — 需单独记忆</h3>
+  <table style="min-width:auto;font-size:12px">
+  <tr><th>动词</th><th>yo</th><th>tú</th><th>él</th><th>nosotros</th><th>ellos</th><th>备注</th></tr>
+  <tr><td><b>ser / ir</b></td><td class="hl">fui</td><td>fuiste</td><td>fue</td><td>fuimos</td><td>fueron</td><td style="color:var(--red);font-size:11px">两者过去时完全相同!</td></tr>
+  <tr><td><b>dar</b></td><td class="hl">di</td><td>diste</td><td>dio</td><td>dimos</td><td>dieron</td><td style="color:var(--muted);font-size:11px">按 -ER/-IR 变位但无重音</td></tr>
+  <tr><td><b>ver</b></td><td class="hl">vi</td><td>viste</td><td>vio</td><td>vimos</td><td>vieron</td><td style="color:var(--muted);font-size:11px">规则但不带重音</td></tr>
+  </table>
+</div>
+</div>
+
+<!-- ============ DICTIONARY ============ -->
+<div id="tab-dictionary" style="display:none">
+<div class="card">
+  <h3><span class="emoji">🔍</span> 常用动词词典 <span style="font-weight:400;color:var(--muted);font-size:12px">（点击展开完整变位）</span></h3>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="dict-search" placeholder="搜索动词 (西语或中文)...">
+  </div>
+  <div id="dict-list"></div>
+</div>
+</div>
+
+<!-- ============ IRREGULAR ============ -->
+<div id="tab-irregular" style="display:none">
+<div class="card">
+  <h3><span class="emoji">⭐</span> 核心不规则动词 — 现在时 & 过去时对照</h3>
+</div>
+<div class="table-wrap">
+<table style="font-size:11px">
+<tr><th rowspan="2">人称</th><th colspan="6">Presente 现在时</th><th colspan="6">Pretérito 简单过去时</th></tr>
+<tr><th>ser</th><th>estar</th><th>ir</th><th>tener</th><th>hacer</th><th>decir</th><th>ser/ir</th><th>estar</th><th>tener</th><th>hacer</th><th>decir</th><th>poder</th></tr>
+<tr><td class="person">yo</td><td class="hl">soy</td><td class="hl">estoy</td><td class="hl">voy</td><td class="hl">tengo</td><td class="hl">hago</td><td class="hl">digo</td><td class="hl">fui</td><td class="hl">estuve</td><td class="hl">tuve</td><td class="hl">hice</td><td class="hl">dije</td><td class="hl">pude</td></tr>
+<tr><td class="person">tú</td><td>eres</td><td>estás</td><td>vas</td><td>tienes</td><td>haces</td><td>dices</td><td>fuiste</td><td>estuviste</td><td>tuviste</td><td>hiciste</td><td>dijiste</td><td>pudiste</td></tr>
+<tr><td class="person">él/usted</td><td>es</td><td>está</td><td>va</td><td>tiene</td><td>hace</td><td>dice</td><td>fue</td><td>estuvo</td><td>tuvo</td><td>hizo</td><td>dijo</td><td>pudo</td></tr>
+<tr><td class="person">nosotros</td><td>somos</td><td>estamos</td><td>vamos</td><td>tenemos</td><td>hacemos</td><td>decimos</td><td>fuimos</td><td>estuvimos</td><td>tuvimos</td><td>hicimos</td><td>dijimos</td><td>pudimos</td></tr>
+<tr><td class="person">ellos/uds</td><td>son</td><td>están</td><td>van</td><td>tienen</td><td>hacen</td><td>dicen</td><td>fueron</td><td>estuvieron</td><td>tuvieron</td><td>hicieron</td><td>dijeron</td><td>pudieron</td></tr>
+</table>
+</div>
+
+<div class="card">
+  <h3><span class="emoji">📋</span> 高频不规则动词快速参考</h3>
+  <table style="min-width:auto;font-size:12px">
+  <tr><th>动词</th><th>现在 yo</th><th>过去 yo</th><th>动词</th><th>现在 yo</th><th>过去 yo</th></tr>
+  <tr><td>ser</td><td class="hl">soy</td><td>fui</td><td>poner</td><td class="hl">pongo</td><td>puse</td></tr>
+  <tr><td>estar</td><td class="hl">estoy</td><td>estuve</td><td>salir</td><td class="hl">salgo</td><td>salí</td></tr>
+  <tr><td>ir</td><td class="hl">voy</td><td>fui</td><td>traer</td><td class="hl">traigo</td><td>traje</td></tr>
+  <tr><td>tener</td><td class="hl">tengo</td><td>tuve</td><td>venir</td><td class="hl">vengo</td><td>vine</td></tr>
+  <tr><td>hacer</td><td class="hl">hago</td><td>hice</td><td>ver</td><td class="hl">veo</td><td>vi</td></tr>
+  <tr><td>decir</td><td class="hl">digo</td><td>dije</td><td>dar</td><td class="hl">doy</td><td>di</td></tr>
+  <tr><td>poder</td><td class="hl">puedo</td><td>pude</td><td>saber</td><td class="hl">sé</td><td>supe</td></tr>
+  <tr><td>querer</td><td class="hl">quiero</td><td>quise</td><td>conocer</td><td class="hl">conozco</td><td>conocí</td></tr>
+  </table>
+</div>
+</div>
+
+<!-- ============ QUIZ ============ -->
+<div id="tab-quiz" style="display:none">
+<div class="quiz-header">
+  <div class="quiz-progress">
+    <div style="display:flex;justify-content:space-between;font-size:12px"><span id="q-progress">0/12</span><span>⏱ <span id="q-timer">00:00</span></span></div>
+    <div class="bar"><div class="bar-fill" id="q-bar" style="width:0%"></div></div>
+  </div>
+  <div class="quiz-stats">
+    <div><div class="stat-val ok" id="q-ok">0</div><div class="stat-label">正确</div></div>
+    <div><div class="stat-val err" id="q-err">0</div><div class="stat-label">错误</div></div>
+  </div>
+</div>
+
+<div id="quiz-area"></div>
+
+<div class="btn-row">
+  <button class="btn" id="btn-check" onclick="checkAll()">✅ 检查答案</button>
+  <button class="btn ghost" onclick="newQuiz()">🔄 换一批 (12题)</button>
+  <button class="btn ghost" id="btn-hint" onclick="showAllHints()">💡 显示提示</button>
+</div>
+</div>
+
+<!-- ============ HISTORY ============ -->
+<div id="tab-history" style="display:none">
+<div class="card">
+  <h3><span class="emoji">📊</span> 练习记录 <span style="font-weight:400;color:var(--muted);font-size:12px">（保存在本地浏览器）</span></h3>
+  <div id="history-list"><div class="empty"><div class="icon">📝</div>暂无练习记录</div></div>
+  <button class="btn ghost" style="margin-top:10px" onclick="clearHistory()" id="btn-clear-hist">🗑 清除记录</button>
+</div>
+</div>
+
+<!-- ============ RESULT MODAL ============ -->
+<div class="modal-overlay" id="modal">
+<div class="modal">
+  <div class="icon" id="modal-icon">🎉</div>
+  <h3 id="modal-title"></h3>
+  <p id="modal-msg"></p>
+  <button class="btn" onclick="closeModal()">👍 继续练习</button>
+</div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+'use strict';
+
+// ======== VERB DICTIONARY ========
+var verbDict = [
+  // === 完全不规则动词 (含完整变位数组) ===
+  {v:'ser',t:'是',type:'irr',yo:'soy',pret:'fui',
+   pres:['soy','eres','es','somos','sois','son'],
+   pretConj:['fui','fuiste','fue','fuimos','fuisteis','fueron']},
+  {v:'estar',t:'在/处于',type:'irr',yo:'estoy',pret:'estuve',
+   pres:['estoy','estás','está','estamos','estáis','están'],
+   pretConj:['estuve','estuviste','estuvo','estuvimos','estuvisteis','estuvieron']},
+  {v:'ir',t:'去',type:'irr',yo:'voy',pret:'fui',
+   pres:['voy','vas','va','vamos','vais','van'],
+   pretConj:['fui','fuiste','fue','fuimos','fuisteis','fueron']},
+  {v:'tener',t:'有',type:'irr',yo:'tengo',pret:'tuve',
+   pres:['tengo','tienes','tiene','tenemos','tenéis','tienen'],
+   pretConj:['tuve','tuviste','tuvo','tuvimos','tuvisteis','tuvieron']},
+  {v:'hacer',t:'做',type:'irr',yo:'hago',pret:'hice',
+   pres:['hago','haces','hace','hacemos','hacéis','hacen'],
+   pretConj:['hice','hiciste','hizo','hicimos','hicisteis','hicieron']},
+  {v:'decir',t:'说',type:'irr',yo:'digo',pret:'dije',
+   pres:['digo','dices','dice','decimos','decís','dicen'],
+   pretConj:['dije','dijiste','dijo','dijimos','dijisteis','dijeron']},
+  {v:'venir',t:'来',type:'irr',yo:'vengo',pret:'vine',
+   pres:['vengo','vienes','viene','venimos','venís','vienen'],
+   pretConj:['vine','viniste','vino','vinimos','vinisteis','vinieron']},
+  {v:'poner',t:'放',type:'irr',yo:'pongo',pret:'puse',
+   pres:['pongo','pones','pone','ponemos','ponéis','ponen'],
+   pretConj:['puse','pusiste','puso','pusimos','pusisteis','pusieron']},
+  {v:'saber',t:'知道',type:'irr',yo:'sé',pret:'supe',
+   pres:['sé','sabes','sabe','sabemos','sabéis','saben'],
+   pretConj:['supe','supiste','supo','supimos','supisteis','supieron']},
+  {v:'salir',t:'出去',type:'irr',yo:'salgo',pret:'salí',
+   pres:['salgo','sales','sale','salimos','salís','salen'],
+   pretConj:['salí','saliste','salió','salimos','salisteis','salieron']},
+  {v:'traer',t:'带来',type:'irr',yo:'traigo',pret:'traje',
+   pres:['traigo','traes','trae','traemos','traéis','traen'],
+   pretConj:['traje','trajiste','trajo','trajimos','trajisteis','trajeron']},
+  {v:'ver',t:'看见',type:'irr',yo:'veo',pret:'vi',
+   pres:['veo','ves','ve','vemos','veis','ven'],
+   pretConj:['vi','viste','vio','vimos','visteis','vieron']},
+  {v:'dar',t:'给',type:'irr',yo:'doy',pret:'di',
+   pres:['doy','das','da','damos','dais','dan'],
+   pretConj:['di','diste','dio','dimos','disteis','dieron']},
+  {v:'conocer',t:'认识',type:'-zco',yo:'conozco',pret:'conocí',
+   pres:['conozco','conoces','conoce','conocemos','conocéis','conocen'],
+   pretConj:['conocí','conociste','conoció','conocimos','conocisteis','conocieron']},
+  {v:'caer',t:'掉落',type:'irr',yo:'caigo',pret:'caí',
+   pres:['caigo','caes','cae','caemos','caéis','caen'],
+   pretConj:['caí','caíste','cayó','caímos','caísteis','cayeron']},
+  {v:'oír',t:'听见',type:'irr',yo:'oigo',pret:'oí',
+   pres:['oigo','oyes','oye','oímos','oís','oyen'],
+   pretConj:['oí','oíste','oyó','oímos','oísteis','oyeron']},
+  {v:'caber',t:'容纳',type:'irr',yo:'quepo',pret:'cupe',
+   pres:['quepo','cabes','cabe','cabemos','cabéis','caben'],
+   pretConj:['cupe','cupiste','cupo','cupimos','cupisteis','cupieron']},
+  // === 词干变化动词 (含完整变位) ===
+  {v:'poder',t:'能',type:'o→ue',yo:'puedo',pret:'pude',
+   pres:['puedo','puedes','puede','podemos','podéis','pueden'],
+   pretConj:['pude','pudiste','pudo','pudimos','pudisteis','pudieron']},
+  {v:'querer',t:'想要/爱',type:'e→ie',yo:'quiero',pret:'quise',
+   pres:['quiero','quieres','quiere','queremos','queréis','quieren'],
+   pretConj:['quise','quisiste','quiso','quisimos','quisisteis','quisieron']},
+  {v:'pensar',t:'思考',type:'e→ie',yo:'pienso',pret:'pensé',
+   pres:['pienso','piensas','piensa','pensamos','pensáis','piensan'],
+   pretConj:['pensé','pensaste','pensó','pensamos','pensasteis','pensaron']},
+  {v:'entender',t:'理解',type:'e→ie',yo:'entiendo',pret:'entendí',
+   pres:['entiendo','entiendes','entiende','entendemos','entendéis','entienden'],
+   pretConj:['entendí','entendiste','entendió','entendimos','entendisteis','entendieron']},
+  {v:'empezar',t:'开始',type:'e→ie',yo:'empiezo',pret:'empecé',
+   pres:['empiezo','empiezas','empieza','empezamos','empezáis','empiezan'],
+   pretConj:['empecé','empezaste','empezó','empezamos','empezasteis','empezaron']},
+  {v:'cerrar',t:'关闭',type:'e→ie',yo:'cierro',pret:'cerré',
+   pres:['cierro','cierras','cierra','cerramos','cerráis','cierran'],
+   pretConj:['cerré','cerraste','cerró','cerramos','cerrasteis','cerraron']},
+  {v:'perder',t:'失去',type:'e→ie',yo:'pierdo',pret:'perdí',
+   pres:['pierdo','pierdes','pierde','perdemos','perdéis','pierden'],
+   pretConj:['perdí','perdiste','perdió','perdimos','perdisteis','perdieron']},
+  {v:'sentir',t:'感觉',type:'e→ie',yo:'siento',pret:'sentí',
+   pres:['siento','sientes','siente','sentimos','sentís','sienten'],
+   pretConj:['sentí','sentiste','sintió','sentimos','sentisteis','sintieron']},
+  {v:'preferir',t:'偏爱',type:'e→ie',yo:'prefiero',pret:'preferí',
+   pres:['prefiero','prefieres','prefiere','preferimos','preferís','prefieren'],
+   pretConj:['preferí','preferiste','prefirió','preferimos','preferisteis','prefirieron']},
+  {v:'dormir',t:'睡觉',type:'o→ue',yo:'duermo',pret:'dormí',
+   pres:['duermo','duermes','duerme','dormimos','dormís','duermen'],
+   pretConj:['dormí','dormiste','durmió','dormimos','dormisteis','durmieron']},
+  {v:'volver',t:'返回',type:'o→ue',yo:'vuelvo',pret:'volví',
+   pres:['vuelvo','vuelves','vuelve','volvemos','volvéis','vuelven'],
+   pretConj:['volví','volviste','volvió','volvimos','volvisteis','volvieron']},
+  {v:'encontrar',t:'找到/遇到',type:'o→ue',yo:'encuentro',pret:'encontré',
+   pres:['encuentro','encuentras','encuentra','encontramos','encontráis','encuentran'],
+   pretConj:['encontré','encontraste','encontró','encontramos','encontrasteis','encontraron']},
+  {v:'costar',t:'花费',type:'o→ue',yo:'cuesto',pret:'costó',
+   pres:['cuesto','cuestas','cuesta','costamos','costáis','cuestan'],
+   pretConj:['costé','costaste','costó','costamos','costasteis','costaron']},
+  {v:'morir',t:'死',type:'o→ue',yo:'muero',pret:'morí',
+   pres:['muero','mueres','muere','morimos','morís','mueren'],
+   pretConj:['morí','moriste','murió','morimos','moristeis','murieron']},
+  {v:'recordar',t:'记得',type:'o→ue',yo:'recuerdo',pret:'recordé',
+   pres:['recuerdo','recuerdas','recuerda','recordamos','recordáis','recuerdan'],
+   pretConj:['recordé','recordaste','recordó','recordamos','recordasteis','recordaron']},
+  {v:'soñar',t:'做梦',type:'o→ue',yo:'sueño',pret:'soñé',
+   pres:['sueño','sueñas','sueña','soñamos','soñáis','sueñan'],
+   pretConj:['soñé','soñaste','soñó','soñamos','soñasteis','soñaron']},
+  {v:'mover',t:'移动',type:'o→ue',yo:'muevo',pret:'moví',
+   pres:['muevo','mueves','mueve','movemos','movéis','mueven'],
+   pretConj:['moví','moviste','movió','movimos','movisteis','movieron']},
+  {v:'probar',t:'尝试/品尝',type:'o→ue',yo:'pruebo',pret:'probé',
+   pres:['pruebo','pruebas','prueba','probamos','probáis','prueban'],
+   pretConj:['probé','probaste','probó','probamos','probasteis','probaron']},
+  {v:'pedir',t:'请求/点餐',type:'e→i',yo:'pido',pret:'pedí',
+   pres:['pido','pides','pide','pedimos','pedís','piden'],
+   pretConj:['pedí','pediste','pidió','pedimos','pedisteis','pidieron']},
+  {v:'servir',t:'服务',type:'e→i',yo:'sirvo',pret:'serví',
+   pres:['sirvo','sirves','sirve','servimos','servís','sirven'],
+   pretConj:['serví','serviste','sirvió','servimos','servisteis','sirvieron']},
+  {v:'repetir',t:'重复',type:'e→i',yo:'repito',pret:'repetí',
+   pres:['repito','repites','repite','repetimos','repetís','repiten'],
+   pretConj:['repetí','repetiste','repitió','repetimos','repetisteis','repitieron']},
+  {v:'seguir',t:'跟随/继续',type:'e→i',yo:'sigo',pret:'seguí',
+   pres:['sigo','sigues','sigue','seguimos','seguís','siguen'],
+   pretConj:['seguí','seguiste','siguió','seguimos','seguisteis','siguieron']},
+  {v:'conseguir',t:'获得',type:'e→i',yo:'consigo',pret:'conseguí',
+   pres:['consigo','consigues','consigue','conseguimos','conseguís','consiguen'],
+   pretConj:['conseguí','conseguiste','consiguió','conseguimos','conseguisteis','consiguieron']},
+  {v:'vestir',t:'穿',type:'e→i',yo:'visto',pret:'vestí',
+   pres:['visto','vistes','viste','vestimos','vestís','visten'],
+   pretConj:['vestí','vestiste','vistió','vestimos','vestisteis','vistieron']},
+  {v:'jugar',t:'玩',type:'u→ue',yo:'juego',pret:'jugué',
+   pres:['juego','juegas','juega','jugamos','jugáis','juegan'],
+   pretConj:['jugué','jugaste','jugó','jugamos','jugasteis','jugaron']},
+  // === 规则动词 (自动生成) ===
+  {v:'hablar',t:'说话',type:'reg-ar',yo:'hablo',pret:'hablé'},
+  {v:'comer',t:'吃',type:'reg-er',yo:'como',pret:'comí'},
+  {v:'vivir',t:'住/生活',type:'reg-ir',yo:'vivo',pret:'viví'},
+  {v:'trabajar',t:'工作',type:'reg-ar',yo:'trabajo',pret:'trabajé'},
+  {v:'estudiar',t:'学习',type:'reg-ar',yo:'estudio',pret:'estudié'},
+  {v:'beber',t:'喝',type:'reg-er',yo:'bebo',pret:'bebí'},
+  {v:'escribir',t:'写',type:'reg-ir',yo:'escribo',pret:'escribí'},
+  {v:'leer',t:'读',type:'reg-er',yo:'leo',pret:'leí'},
+  {v:'abrir',t:'打开',type:'reg-ir',yo:'abro',pret:'abrí'},
+  {v:'bailar',t:'跳舞',type:'reg-ar'},
+  {v:'cantar',t:'唱歌',type:'reg-ar'},
+  {v:'cocinar',t:'烹饪',type:'reg-ar'},
+  {v:'comprar',t:'购买',type:'reg-ar'},
+  {v:'caminar',t:'走路',type:'reg-ar'},
+  {v:'viajar',t:'旅行',type:'reg-ar'},
+  {v:'llegar',t:'到达',type:'reg-ar',pret:'llegué'},
+  {v:'llevar',t:'携带/穿着',type:'reg-ar'},
+  {v:'mirar',t:'看/注视',type:'reg-ar'},
+  {v:'necesitar',t:'需要',type:'reg-ar'},
+  {v:'pagar',t:'付款',type:'reg-ar',pret:'pagué'},
+  {v:'terminar',t:'结束',type:'reg-ar'},
+  {v:'tomar',t:'拿/喝/乘坐',type:'reg-ar'},
+  {v:'usar',t:'使用',type:'reg-ar'},
+  {v:'esperar',t:'等待/希望',type:'reg-ar'},
+  {v:'llamar',t:'打电话/叫',type:'reg-ar'},
+  {v:'enviar',t:'发送',type:'reg-ar'},
+  {v:'dejar',t:'留下/允许',type:'reg-ar'},
+  {v:'escuchar',t:'听',type:'reg-ar'},
+  {v:'explicar',t:'解释',type:'reg-ar',pret:'expliqué'},
+  {v:'gustar',t:'使喜欢',type:'reg-ar'},
+  {v:'lavar',t:'洗',type:'reg-ar'},
+  {v:'limpiar',t:'打扫',type:'reg-ar'},
+  {v:'nadar',t:'游泳',type:'reg-ar'},
+  {v:'pasar',t:'经过/传递',type:'reg-ar'},
+  {v:'preguntar',t:'提问',type:'reg-ar'},
+  {v:'regresar',t:'回来',type:'reg-ar'},
+  {v:'ayudar',t:'帮助',type:'reg-ar'},
+  {v:'buscar',t:'寻找',type:'reg-ar',pret:'busqué'},
+  {v:'cambiar',t:'改变',type:'reg-ar'},
+  {v:'descansar',t:'休息',type:'reg-ar'},
+  {v:'entrar',t:'进入',type:'reg-ar'},
+  {v:'ganar',t:'赢/赚',type:'reg-ar'},
+  {v:'gastar',t:'花费/浪费',type:'reg-ar'},
+  {v:'mandar',t:'命令/发送',type:'reg-ar'},
+  {v:'olvidar',t:'忘记',type:'reg-ar'},
+  {v:'preparar',t:'准备',type:'reg-ar'},
+  {v:'aprender',t:'学习/学会',type:'reg-er'},
+  {v:'correr',t:'跑',type:'reg-er'},
+  {v:'creer',t:'相信',type:'reg-er',yo:'creo',pret:'creí'},
+  {v:'deber',t:'应该/欠',type:'reg-er'},
+  {v:'responder',t:'回答',type:'reg-er'},
+  {v:'vender',t:'卖',type:'reg-er'},
+  {v:'romper',t:'打破',type:'reg-er'},
+  {v:'comprender',t:'理解',type:'reg-er'},
+  {v:'esconder',t:'藏',type:'reg-er'},
+  {v:'prometer',t:'承诺',type:'reg-er'},
+  {v:'recibir',t:'收到',type:'reg-ir'},
+  {v:'subir',t:'上升/上传',type:'reg-ir'},
+  {v:'decidir',t:'决定',type:'reg-ir'},
+  {v:'describir',t:'描述',type:'reg-ir'},
+  {v:'permitir',t:'允许',type:'reg-ir'},
+  {v:'sufrir',t:'受苦',type:'reg-ir'},
+  {v:'unir',t:'连接',type:'reg-ir'},
+  {v:'existir',t:'存在',type:'reg-ir'},
+  {v:'ocurrir',t:'发生',type:'reg-ir'},
+  {v:'acostarse',t:'躺下',type:'o→ue',yo:'me acuesto'},
+  {v:'despertarse',t:'醒来',type:'e→ie',yo:'me despierto'},
+  {v:'levantarse',t:'起床',type:'reg-ar',yo:'me levanto'},
+  {v:'llamarse',t:'名叫',type:'reg-ar',yo:'me llamo'},
+  {v:'sentirse',t:'感到',type:'e→ie',yo:'me siento'},
+  {v:'vestirse',t:'穿衣服',type:'e→i',yo:'me visto'},
+  {v:'divertirse',t:'玩得开心',type:'e→ie',yo:'me divierto'},
+];
+
+// ======== QUIZ BANK (120+ items) ========
+var verbBank = [
+  // === Regular Present ===
+  {v:'hablar',tense:'presente',person:'yo',subj:'tú',ans:'hablas',hint:'-AR: 去 ar + as'},
+  {v:'comer',tense:'presente',person:'yo',subj:'él',ans:'come',hint:'-ER: 去 er + e'},
+  {v:'vivir',tense:'presente',person:'yo',subj:'nosotros',ans:'vivimos',hint:'-IR: 去 ir + imos'},
+  {v:'trabajar',tense:'presente',person:'yo',subj:'ellos',ans:'trabajan',hint:'-AR: 去 ar + an'},
+  {v:'beber',tense:'presente',person:'yo',subj:'yo',ans:'bebo',hint:'-ER: 去 er + o'},
+  {v:'escribir',tense:'presente',person:'yo',subj:'tú',ans:'escribes',hint:'-IR: 去 ir + es'},
+  {v:'estudiar',tense:'presente',person:'yo',subj:'vosotros',ans:'estudiáis',hint:'-AR: 去 ar + áis (重音)'},
+  {v:'aprender',tense:'presente',person:'yo',subj:'él',ans:'aprende',hint:'-ER: 去 er + e'},
+  {v:'recibir',tense:'presente',person:'yo',subj:'ellos',ans:'reciben',hint:'-IR: 去 ir + en'},
+  {v:'bailar',tense:'presente',person:'yo',subj:'nosotros',ans:'bailamos',hint:'-AR: 去 ar + amos'},
+  {v:'cantar',tense:'presente',person:'yo',subj:'tú',ans:'cantas',hint:'-AR: 去 ar + as'},
+  {v:'comprar',tense:'presente',person:'yo',subj:'yo',ans:'compro',hint:'-AR: 去 ar + o'},
+  {v:'cocinar',tense:'presente',person:'yo',subj:'ella',ans:'cocina',hint:'-AR: 去 ar + a'},
+  {v:'correr',tense:'presente',person:'yo',subj:'nosotros',ans:'corremos',hint:'-ER: 去 er + emos'},
+  {v:'leer',tense:'presente',person:'yo',subj:'tú',ans:'lees',hint:'-ER: 去 er + es'},
+  {v:'subir',tense:'presente',person:'yo',subj:'ellos',ans:'suben',hint:'-IR: 去 ir + en'},
+  {v:'abrir',tense:'presente',person:'yo',subj:'nosotros',ans:'abrimos',hint:'-IR: 去 ir + imos'},
+  {v:'vender',tense:'presente',person:'yo',subj:'tú',ans:'vendes',hint:'-ER: 规则变位，第三人称也常用'},
+  {v:'decidir',tense:'presente',person:'yo',subj:'él',ans:'decide',hint:'-IR: 去 ir + e'},
+  {v:'necesitar',tense:'presente',person:'yo',subj:'ellos',ans:'necesitan',hint:'-AR: 去 ar + an'},
+  // === Stem Change Present ===
+  {v:'pensar',tense:'presente',person:'yo',subj:'yo',ans:'pienso',hint:'e→ie 词干变化 (nos/vos 不变)'},
+  {v:'querer',tense:'presente',person:'yo',subj:'él',ans:'quiere',hint:'e→ie 词干变化'},
+  {v:'poder',tense:'presente',person:'yo',subj:'yo',ans:'puedo',hint:'o→ue 词干变化'},
+  {v:'dormir',tense:'presente',person:'yo',subj:'tú',ans:'duermes',hint:'o→ue 词干变化'},
+  {v:'pedir',tense:'presente',person:'yo',subj:'él',ans:'pide',hint:'e→i 词干变化 (仅 -IR 动词)'},
+  {v:'volver',tense:'presente',person:'yo',subj:'ellos',ans:'vuelven',hint:'o→ue 词干变化'},
+  {v:'entender',tense:'presente',person:'yo',subj:'yo',ans:'entiendo',hint:'e→ie 词干变化'},
+  {v:'empezar',tense:'presente',person:'yo',subj:'yo',ans:'empiezo',hint:'e→ie + -zar 拼写变化'},
+  {v:'cerrar',tense:'presente',person:'yo',subj:'tú',ans:'cierras',hint:'e→ie 词干变化'},
+  {v:'sentir',tense:'presente',person:'yo',subj:'él',ans:'siente',hint:'e→ie 词干变化'},
+  {v:'preferir',tense:'presente',person:'yo',subj:'yo',ans:'prefiero',hint:'e→ie 词干变化 (二级)'},
+  {v:'encontrar',tense:'presente',person:'yo',subj:'ellos',ans:'encuentran',hint:'o→ue 词干变化'},
+  {v:'costar',tense:'presente',person:'yo',subj:'él',ans:'cuesta',hint:'o→ue (常用第三人称)'},
+  {v:'recordar',tense:'presente',person:'yo',subj:'yo',ans:'recuerdo',hint:'o→ue 词干变化'},
+  {v:'soñar',tense:'presente',person:'yo',subj:'tú',ans:'sueñas',hint:'o→ue 词干变化 (ñ)'},
+  {v:'jugar',tense:'presente',person:'yo',subj:'yo',ans:'juego',hint:'u→ue (唯一一个!)'},
+  {v:'servir',tense:'presente',person:'yo',subj:'tú',ans:'sirves',hint:'e→i 词干变化'},
+  {v:'repetir',tense:'presente',person:'yo',subj:'él',ans:'repite',hint:'e→i 词干变化'},
+  {v:'seguir',tense:'presente',person:'yo',subj:'yo',ans:'sigo',hint:'e→i + 不规则 yo'},
+  {v:'perder',tense:'presente',person:'yo',subj:'tú',ans:'pierdes',hint:'e→ie 词干变化'},
+  {v:'probar',tense:'presente',person:'yo',subj:'yo',ans:'pruebo',hint:'o→ue 词干变化'},
+  {v:'mover',tense:'presente',person:'yo',subj:'nosotros',ans:'movemos',hint:'o→ue (nos 不变!)'},
+  // === Irregular Yo Present ===
+  {v:'tener',tense:'presente',person:'yo',subj:'yo',ans:'tengo',hint:'不规则 yo 形 (-go)'},
+  {v:'hacer',tense:'presente',person:'yo',subj:'yo',ans:'hago',hint:'不规则 yo 形 (-go)'},
+  {v:'venir',tense:'presente',person:'yo',subj:'tú',ans:'vienes',hint:'e→ie + 不规则 yo (vengo)'},
+  {v:'salir',tense:'presente',person:'yo',subj:'él',ans:'sale',hint:'yo 不规则 (salgo) 其余规则'},
+  {v:'poner',tense:'presente',person:'yo',subj:'ellos',ans:'ponen',hint:'yo 不规则 (pongo) 其余规则'},
+  {v:'traer',tense:'presente',person:'yo',subj:'nosotros',ans:'traemos',hint:'yo 不规则 (traigo)'},
+  {v:'conocer',tense:'presente',person:'yo',subj:'yo',ans:'conozco',hint:'-zco 型不规则 yo'},
+  {v:'saber',tense:'presente',person:'yo',subj:'tú',ans:'sabes',hint:'仅 yo 特殊 (sé)，其余规则'},
+  {v:'ver',tense:'presente',person:'yo',subj:'él',ans:'ve',hint:'仅 yo 特殊 (veo)，其余规则'},
+  {v:'dar',tense:'presente',person:'yo',subj:'nosotros',ans:'damos',hint:'仅 yo 特殊 (doy)'},
+  {v:'caer',tense:'presente',person:'yo',subj:'yo',ans:'caigo',hint:'-igo 型不规则 yo'},
+  {v:'oír',tense:'presente',person:'yo',subj:'tú',ans:'oyes',hint:'不规则 yo (oigo) + y 拼写'},
+  {v:'caber',tense:'presente',person:'yo',subj:'yo',ans:'quepo',hint:'完全不规则 yo (caber→quepo)'},
+  // === Ser/Estar/Ir Present ===
+  {v:'ser',tense:'presente',person:'yo',subj:'yo',ans:'soy',hint:'ser 完全不规则'},
+  {v:'ser',tense:'presente',person:'yo',subj:'nosotros',ans:'somos',hint:'ser 完全不规则'},
+  {v:'ser',tense:'presente',person:'yo',subj:'ellos',ans:'son',hint:'ser 完全不规则'},
+  {v:'estar',tense:'presente',person:'yo',subj:'tú',ans:'estás',hint:'estar 不规则，有重音'},
+  {v:'estar',tense:'presente',person:'yo',subj:'él',ans:'está',hint:'estar 不规则'},
+  {v:'estar',tense:'presente',person:'yo',subj:'ellos',ans:'están',hint:'estar 不规则'},
+  {v:'ir',tense:'presente',person:'yo',subj:'él',ans:'va',hint:'ir 完全不规则 (voy/vas/va...)'},
+  {v:'ir',tense:'presente',person:'yo',subj:'nosotros',ans:'vamos',hint:'ir — nosotros 不规则'},
+  // === Regular Preterite ===
+  {v:'hablar',tense:'preterito',person:'yo',subj:'yo',ans:'hablé',hint:'-AR 过去: é (重音!)'},
+  {v:'comer',tense:'preterito',person:'yo',subj:'él',ans:'comió',hint:'-ER 过去: ió (重音!)'},
+  {v:'vivir',tense:'preterito',person:'yo',subj:'ellos',ans:'vivieron',hint:'-IR 过去: ieron'},
+  {v:'estudiar',tense:'preterito',person:'yo',subj:'tú',ans:'estudiaste',hint:'-AR 过去: aste'},
+  {v:'trabajar',tense:'preterito',person:'yo',subj:'nosotros',ans:'trabajamos',hint:'-AR 过去: amos (同现在时!)'},
+  {v:'beber',tense:'preterito',person:'yo',subj:'ellos',ans:'bebieron',hint:'-ER 过去: ieron'},
+  {v:'escribir',tense:'preterito',person:'yo',subj:'tú',ans:'escribiste',hint:'-IR 过去: iste'},
+  {v:'bailar',tense:'preterito',person:'yo',subj:'él',ans:'bailó',hint:'-AR 过去: ó (重音!)'},
+  {v:'comprar',tense:'preterito',person:'yo',subj:'yo',ans:'compré',hint:'-AR 过去: é (重音!)'},
+  {v:'aprender',tense:'preterito',person:'yo',subj:'ellos',ans:'aprendieron',hint:'-ER 过去: ieron'},
+  {v:'recibir',tense:'preterito',person:'yo',subj:'yo',ans:'recibí',hint:'-IR 过去: í (重音!)'},
+  {v:'leer',tense:'preterito',person:'yo',subj:'él',ans:'leyó',hint:'leer 过去: y 拼写变化 (leyó)'},
+  {v:'correr',tense:'preterito',person:'yo',subj:'nosotros',ans:'corrimos',hint:'-ER 过去: imos'},
+  {v:'subir',tense:'preterito',person:'yo',subj:'yo',ans:'subí',hint:'-IR 过去: í'},
+  {v:'cocinar',tense:'preterito',person:'yo',subj:'tú',ans:'cocinaste',hint:'-AR 过去: aste'},
+  // === Preterite Irregular ===
+  {v:'tener',tense:'preterito',person:'yo',subj:'yo',ans:'tuve',hint:'U 词干: tuv- + e'},
+  {v:'estar',tense:'preterito',person:'yo',subj:'él',ans:'estuvo',hint:'U 词干: estuv- + o'},
+  {v:'poder',tense:'preterito',person:'yo',subj:'ellos',ans:'pudieron',hint:'U 词干: pud- + ieron'},
+  {v:'poner',tense:'preterito',person:'yo',subj:'tú',ans:'pusiste',hint:'U 词干: pus- + iste'},
+  {v:'saber',tense:'preterito',person:'yo',subj:'nosotros',ans:'supimos',hint:'U 词干: sup- + imos'},
+  {v:'hacer',tense:'preterito',person:'yo',subj:'él',ans:'hizo',hint:'I 词干: hic- → él 变 hizo (!)'},
+  {v:'querer',tense:'preterito',person:'yo',subj:'yo',ans:'quise',hint:'I 词干: quis- + e (注意:不再"想要")'},
+  {v:'venir',tense:'preterito',person:'yo',subj:'ellos',ans:'vinieron',hint:'I 词干: vin- + ieron'},
+  {v:'decir',tense:'preterito',person:'yo',subj:'ellos',ans:'dijeron',hint:'J 词干: dij- + eron (不是 ieron!)'},
+  {v:'traer',tense:'preterito',person:'yo',subj:'yo',ans:'traje',hint:'J 词干: traj- + e'},
+  {v:'ser',tense:'preterito',person:'yo',subj:'yo',ans:'fui',hint:'ser/ir 过去完全同形 — 需根据上下文判断'},
+  {v:'ir',tense:'preterito',person:'yo',subj:'nosotros',ans:'fuimos',hint:'ser/ir 过去完全同形'},
+  {v:'dar',tense:'preterito',person:'yo',subj:'tú',ans:'diste',hint:'dar 特殊过去: 按 -ER 变但无重音'},
+  {v:'ver',tense:'preterito',person:'yo',subj:'yo',ans:'vi',hint:'ver 特殊过去: 无重音，规则词尾'},
+  {v:'andar',tense:'preterito',person:'yo',subj:'yo',ans:'anduve',hint:'U 词干: anduv- (andar 唯一不规则时态)'},
+  // === More Common Verbs ===
+  {v:'llamar',tense:'presente',person:'yo',subj:'él',ans:'llama',hint:'-AR: 规则变位'},
+  {v:'viajar',tense:'presente',person:'yo',subj:'nosotros',ans:'viajamos',hint:'-AR: 规则变位'},
+  {v:'tomar',tense:'presente',person:'yo',subj:'tú',ans:'tomas',hint:'-AR: 规则变位'},
+  {v:'mirar',tense:'presente',person:'yo',subj:'ellos',ans:'miran',hint:'-AR: 规则变位'},
+  {v:'escuchar',tense:'presente',person:'yo',subj:'yo',ans:'escucho',hint:'-AR: 规则变位'},
+  {v:'esperar',tense:'presente',person:'yo',subj:'él',ans:'espera',hint:'-AR: 规则变位'},
+  {v:'ayudar',tense:'presente',person:'yo',subj:'nosotros',ans:'ayudamos',hint:'-AR: 规则变位'},
+  {v:'preguntar',tense:'presente',person:'yo',subj:'tú',ans:'preguntas',hint:'-AR: 规则变位'},
+  {v:'deber',tense:'presente',person:'yo',subj:'ellos',ans:'deben',hint:'-ER: 规则变位 (deber + inf = 应该做...)'},
+  {v:'creer',tense:'presente',person:'yo',subj:'yo',ans:'creo',hint:'-ER: creer → creo (注意拼写)'},
+  {v:'responder',tense:'presente',person:'yo',subj:'él',ans:'responde',hint:'-ER: 规则变位'},
+  {v:'vender',tense:'presente',person:'yo',subj:'tú',ans:'vendes',hint:'-ER: 规则变位'},
+  {v:'describir',tense:'presente',person:'yo',subj:'ellos',ans:'describen',hint:'-IR: 规则变位'},
+  {v:'permitir',tense:'presente',person:'yo',subj:'él',ans:'permite',hint:'-IR: 规则变位'},
+  {v:'lavar',tense:'preterito',person:'yo',subj:'tú',ans:'lavaste',hint:'-AR 过去: aste'},
+  {v:'pasar',tense:'preterito',person:'yo',subj:'yo',ans:'pasé',hint:'-AR 过去: é'},
+  {v:'llevar',tense:'preterito',person:'yo',subj:'él',ans:'llevó',hint:'-AR 过去: ó'},
+  {v:'ganar',tense:'preterito',person:'yo',subj:'ellos',ans:'ganaron',hint:'-AR 过去: aron'},
+  {v:'abrir',tense:'preterito',person:'yo',subj:'yo',ans:'abrí',hint:'-IR 过去: í'},
+  {v:'romper',tense:'preterito',person:'yo',subj:'tú',ans:'rompiste',hint:'-ER 过去: iste'},
+  {v:'decidir',tense:'preterito',person:'yo',subj:'él',ans:'decidió',hint:'-IR 过去: ió'},
+  {v:'morir',tense:'preterito',person:'yo',subj:'ellos',ans:'murieron',hint:'o→ue 动词，过去规则'},
+  {v:'sentir',tense:'preterito',person:'yo',subj:'yo',ans:'sentí',hint:'e→ie 动词，过去规则 (但 él→sintió!)'},
+  {v:'dormir',tense:'preterito',person:'yo',subj:'él',ans:'durmió',hint:'o→ue 动词，él 过去→u (durmió!)'},
+  {v:'vestir',tense:'preterito',person:'yo',subj:'él',ans:'vistió',hint:'e→i 动词，过去 él→i'},
+  {v:'gustar',tense:'presente',person:'yo',subj:'él',ans:'gusta',hint:'gustar 常用第三人称 (me gusta...)'},
+  {v:'buscar',tense:'preterito',person:'yo',subj:'yo',ans:'busqué',hint:'-car 过去 yo → -qué (拼写变化)'},
+  {v:'llegar',tense:'preterito',person:'yo',subj:'yo',ans:'llegué',hint:'-gar 过去 yo → -gué (拼写变化)'},
+  {v:'empezar',tense:'preterito',person:'yo',subj:'yo',ans:'empecé',hint:'-zar 过去 yo → -cé (拼写变化)'},
+];
+
+// ======== STATE ========
+var quizQuestions = [], quizChecked = false;
+var timerSec = 0, timerInterval = null;
+var currentTab = 'presente';
+
+// ======== HELPERS ========
+function $(id){return document.getElementById(id)}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a}
+
+// ======== TABS ========
+function switchTab(t){
+  currentTab = t;
+  document.querySelectorAll('.tab').forEach(function(el){el.classList.remove('active')});
+  document.querySelector('[data-tab="'+t+'"]').classList.add('active');
+  ['presente','preterito','dictionary','irregular','quiz','history'].forEach(function(id){
+    var el = $('tab-'+id); if(el) el.style.display = id===t?'block':'none';
+  });
+  if(t==='quiz'){newQuiz();}
+  if(t==='dictionary'){renderDict();}
+  if(t==='history'){renderHistory();}
+}
+
+// ======== DICTIONARY ========
+var dictExpanded = null;
+function renderDict(filter){
+  filter = (filter||'').toLowerCase();
+  var list = verbDict.filter(function(v){
+    return !filter || v.v.indexOf(filter)>=0 || v.t.indexOf(filter)>=0;
+  });
+  var h = '';
+  list.forEach(function(v,i){
+    var typeLabel = {'reg-ar':'-AR','reg-er':'-ER','reg-ir':'-IR','e→ie':'e→ie','o→ue':'o→ue','e→i':'e→i','u→ue':'u→ue','-zco':'-zco','irr':'不规则'}[v.type]||v.type;
+    var pret = v.pret||(v.type==='reg-ar'?v.v.slice(0,-2)+'ó':v.v.slice(0,-2)+'ió');
+    h += '<div class="verb-dict-item" data-idx="'+i+'" onclick="toggleDictDetail('+i+')">'+
+      '<div class="v-name">'+v.v+'</div>'+
+      '<div class="v-trans">'+v.t+' <span style="color:var(--muted)">· '+typeLabel+'</span></div>'+
+      '<div class="v-yo">'+v.yo+'</div>'+
+      '<div class="v-preterito">'+pret+'</div>'+
+      '</div>'+
+      '<div class="dict-detail" id="dict-detail-'+i+'"></div>';
+  });
+  if(!list.length) h = '<div class="empty"><div class="icon">🔍</div>未找到匹配的动词</div>';
+  $('dict-list').innerHTML = h;
+}
+
+function toggleDictDetail(i){
+  var el = $('dict-detail-'+i);
+  if(el.classList.contains('show')){el.classList.remove('show');return}
+  // Close others
+  document.querySelectorAll('.dict-detail.show').forEach(function(d){d.classList.remove('show')});
+  var v = verbDict[i];
+  if(!v) return;
+  var stem = v.v.slice(0,-2), ending = v.v.slice(-2);
+
+  // Present — use stored array if available, else auto-generate
+  var presConj;
+  if(v.pres){
+    presConj = v.pres;
+  }else{
+    presConj = (ending==='ar')
+      ? [stem+'o',stem+'as',stem+'a',stem+'amos',stem+'áis',stem+'an']
+      : (ending==='er')
+      ? [stem+'o',stem+'es',stem+'e',stem+'emos',stem+'éis',stem+'en']
+      : [stem+'o',stem+'es',stem+'e',stem+'imos',stem+'ís',stem+'en'];
+  }
+
+  // Preterite — use stored array if available, else auto-generate
+  var pretConj;
+  if(v.pretConj){
+    pretConj = v.pretConj;
+  }else if(ending==='ar'){
+    pretConj = [stem+'é',stem+'aste',stem+'ó',stem+'amos',stem+'asteis',stem+'aron'];
+  }else{
+    pretConj = [stem+'í',stem+'iste',stem+'ió',stem+'imos',stem+'isteis',stem+'ieron'];
+  }
+
+  var persons = ['yo','tú','él/ella/usted','nosotros','vosotros','ellos/ustedes'];
+  var rows = '';
+  for(var p=0;p<6;p++){
+    rows += '<tr><td>'+persons[p]+'</td><td style="color:var(--accent)">'+presConj[p]+'</td><td style="color:var(--blue)">'+pretConj[p]+'</td></tr>';
+  }
+  el.innerHTML = '<table><tr><th>人称代词</th><th>现在时 (Presente)</th><th>简单过去时 (Pretérito)</th></tr>'+rows+'</table>';
+  el.classList.add('show');
+}
+
+// Search
+$('dict-search').addEventListener('input',function(){renderDict(this.value)});
+
+// ======== QUIZ ========
+function newQuiz(){
+  quizQuestions = shuffle(verbBank.slice()).slice(0,12);
+  quizChecked = false;
+  $('q-ok').textContent='0'; $('q-err').textContent='0';
+  $('q-progress').textContent='0/'+quizQuestions.length;
+  $('q-bar').style.width='0%';
+  $('btn-hint').style.display='';
+  stopTimer(); timerSec=0; $('q-timer').textContent='00:00';
+  var h='';
+  quizQuestions.forEach(function(q,i){
+    h+='<div class="quiz-card" id="qc-'+i+'">'+
+      '<div class="q-num">第 '+(i+1)+' 题 · '+(q.tense==='presente'?'现在时':'简单过去时')+'</div>'+
+      '<div class="q-text">'+
+      '<span class="verb">'+q.v+'</span> '+
+      '「<span class="subj">'+q.subj+'</span>」→ 原形 <b>'+q.person+'</b> 的变位是？'+
+      '</div>'+
+      '<input type="text" id="inp-'+i+'" placeholder="输入变位形式..." autocomplete="off" autocorrect="off" autocapitalize="off" data-idx="'+i+'">'+
+      '<div class="fb" id="fb-'+i+'"></div>'+
+      '</div>';
+  });
+  $('quiz-area').innerHTML=h;
+  // Bind Enter key on all inputs
+  document.querySelectorAll('#quiz-area input').forEach(function(inp){
+    inp.addEventListener('keydown',function(e){if(e.key==='Enter')checkAll()});
+  });
+  // Focus first input
+  setTimeout(function(){var f=document.querySelector('#quiz-area input');if(f)f.focus()},100);
+  startTimer();
+}
+
+function checkAll(){
+  if(quizChecked) return;
+  var ok=0;
+  quizQuestions.forEach(function(q,i){
+    var inp=$('inp-'+i); if(!inp) return;
+    var fb=$('fb-'+i); if(!fb) return;
+    var card=$('qc-'+i); if(!card) return;
+    var userAns=inp.value.trim().toLowerCase();
+    var correctAns=q.ans.toLowerCase();
+    if(userAns===correctAns){
+      inp.className='ok';ok++;
+      fb.className='fb show ok';
+      fb.textContent='✅ 正确！'+q.hint;
+      card.className='quiz-card answered correct';
+    }else{
+      inp.className='err';
+      fb.className='fb show err';
+      var showAns = q.ans + (q.ans!==correctAns?' (你的: '+userAns+')':'');
+      fb.textContent='❌ 正确答案: '+q.ans+' — '+q.hint;
+      card.className='quiz-card answered wrong';
+    }
+  });
+  quizChecked=true;
+  $('q-ok').textContent=ok;
+  $('q-err').textContent=quizQuestions.length-ok;
+  $('q-progress').textContent=quizQuestions.length+'/'+quizQuestions.length;
+  $('q-bar').style.width='100%';
+  $('btn-hint').style.display='none';
+  stopTimer();
+  saveHistory(ok, quizQuestions.length);
+  // Show modal for perfect/all-wrong
+  if(ok===quizQuestions.length){
+    showModal('🎉','¡Perfecto!','全部正确！你对动词变位掌握得很好！');
+  }else if(ok===0){
+    showModal('😅','¡Ánimo!','没关系，多练习就会进步！查看提示再试一次吧。');
+  }
+  // Scroll to top of quiz
+  $('tab-quiz').scrollIntoView({behavior:'smooth'});
+}
+
+function showAllHints(){
+  quizQuestions.forEach(function(q,i){
+    var fb=$('fb-'+i); if(!fb||fb.classList.contains('show')) return;
+    fb.className='fb show';
+    fb.style.cssText='background:rgba(88,166,255,.08);color:var(--blue)';
+    fb.textContent='💡 提示: '+q.hint;
+  });
+  $('btn-hint').style.display='none';
+}
+
+// ======== TIMER ========
+function startTimer(){stopTimer();timerSec=0;updateTimerDisplay();timerInterval=setInterval(function(){timerSec++;updateTimerDisplay()},1000)}
+function stopTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null}}
+function updateTimerDisplay(){var m=Math.floor(timerSec/60),s=timerSec%60;$('q-timer').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
+
+// ======== HISTORY ========
+function loadHistory(){
+  try{var raw=localStorage.getItem('spanish_verb_hist');return raw?JSON.parse(raw):[]}catch(e){return[]}
+}
+function saveHistory(ok,total){
+  var h=loadHistory();
+  h.push({ok:ok,total:total,pct:Math.round(ok/total*100),ts:new Date().toISOString()});
+  if(h.length>50) h=h.slice(-50); // keep last 50
+  try{localStorage.setItem('spanish_verb_hist',JSON.stringify(h))}catch(e){}
+}
+function renderHistory(){
+  var h=loadHistory();
+  if(!h.length){$('history-list').innerHTML='<div class="empty"><div class="icon">📝</div>暂无练习记录<br><span style="font-size:11px">完成一次练习后自动记录</span></div>';return}
+  h.reverse();
+  var html='';
+  h.forEach(function(r,i){
+    var cls=r.pct>=90?'good':r.pct>=60?'ok':'bad';
+    var d=new Date(r.ts);
+    var ds=d.toLocaleDateString('zh-CN')+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+    html+='<div class="history-item"><span>📅 '+ds+'</span><span>'+r.ok+'/'+r.total+'</span><span class="h-score '+cls+'">'+r.pct+'分</span></div>';
+  });
+  $('history-list').innerHTML=html;
+  $('btn-clear-hist').style.display=h.length?'':'none';
+}
+function clearHistory(){
+  try{localStorage.removeItem('spanish_verb_hist')}catch(e){}
+  renderHistory();
+}
+
+// ======== MODAL ========
+function showModal(icon,title,msg){$('modal-icon').textContent=icon;$('modal-title').textContent=title;$('modal-msg').textContent=msg;$('modal').classList.add('show')}
+function closeModal(){$('modal').classList.remove('show')}
+
+// ======== INIT ========
+document.querySelectorAll('.tab').forEach(function(el){
+  el.addEventListener('click',function(){switchTab(this.dataset.tab)});
+});
+// Keyboard: 1-6 switch tabs
+document.addEventListener('keydown',function(e){
+  if(e.target.tagName==='INPUT') return;
+  var tabs=['presente','preterito','dictionary','irregular','quiz','history'];
+  var n=parseInt(e.key);
+  if(n>=1&&n<=6){switchTab(tabs[n-1])}
+});
+// Close modal on click outside
+$('modal').addEventListener('click',function(e){if(e.target===$('modal'))closeModal()});
+
+// Start
+switchTab('presente');
+</script>
+</body>
+</html>

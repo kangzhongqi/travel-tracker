@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>多语种在线测试 | JLPT · DELE · Goethe</title>
+<style>
+:root{--bg:#0f1117;--card:#181b22;--accent:#dc4a3c;--text:#e2e4e9;--muted:#6b7080;--border:#252830;--radius:14px;--safe-b:env(safe-area-inset-bottom,0px)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;-webkit-tap-highlight-color:transparent}
+.container{max-width:700px;margin:0 auto;padding:16px 18px 40px}
+
+/* ── Screens ── */
+#home-screen .hero{text-align:center;padding:32px 0 20px}
+#home-screen .hero h1{font-size:24px;font-weight:800}
+#home-screen .hero p{color:var(--muted);font-size:13px;margin-top:4px}
+#level-screen{display:none}
+#test-screen{display:none}
+#result-screen{display:none}
+
+/* ── Language Cards ── */
+.lang-grid{display:grid;grid-template-columns:1fr;gap:12px;margin:8px 0 20px}
+@media(min-width:500px){.lang-grid{grid-template-columns:1fr 1fr 1fr}}
+.lang-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;cursor:pointer;transition:all .18s;text-align:center}
+.lang-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.lang-card:active{transform:scale(.97)}
+.lang-card .lc-flag{font-size:48px;margin-bottom:8px}
+.lang-card .lc-name{font-weight:700;font-size:17px}
+.lang-card .lc-desc{font-size:11px;color:var(--muted);margin-top:4px}
+.lang-card .lc-levels{display:inline-block;padding:3px 10px;border-radius:8px;font-size:10px;font-weight:600;margin-top:8px}
+.lang-card.jp .lc-levels{background:#1a2e28;color:#4ea397}
+.lang-card.es .lc-levels{background:#2e241a;color:#f0a548}
+.lang-card.de .lc-levels{background:#1a222e;color:#5b9ecf}
+
+/* ── Level Cards ── */
+#level-screen .back-row{padding:8px 0 16px}
+.back-btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:8px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.back-btn:active{background:#252830}
+#level-screen .lang-header{text-align:center;margin-bottom:16px}
+#level-screen .lang-header .lh-flag{font-size:40px}
+#level-screen .lang-header .lh-name{font-size:20px;font-weight:700;margin-top:4px}
+.level-grid{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:500px){.level-grid{grid-template-columns:1fr 1fr}}
+.level-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:14px}
+.level-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.level-card:active{transform:scale(.98)}
+.level-card .lv-badge{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0}
+.level-card .lv-info{flex:1;min-width:0}
+.level-card .lv-info .lv-name{font-weight:700;font-size:15px}
+.level-card .lv-info .lv-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.level-card .lv-arrow{color:var(--muted);font-size:18px}
+
+/* ── Test Screen ── */
+.test-topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 0 14px;gap:8px}
+.test-topbar .tt-lang{font-size:12px;color:var(--text);font-weight:600;padding:4px 10px;border-radius:6px;white-space:nowrap}
+.test-topbar .tt-lv{padding:5px 11px;border-radius:7px;font-size:12px;font-weight:700;color:#fff}
+.test-topbar .timer{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;margin-left:auto}
+.test-topbar .timer.warn{color:var(--accent);animation:pulse .8s infinite}
+@keyframes pulse{50%{opacity:.5}}
+.progress-bar{height:3px;background:var(--border);border-radius:2px;margin-bottom:18px}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s}
+.q-block{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px 20px;margin-bottom:12px}
+.q-block .q-type{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px}
+.q-block .q-text{font-size:17px;font-weight:500;line-height:1.7}
+.options{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.opt{padding:14px 16px;border-radius:10px;background:#1e212a;border:2px solid #1e212a;cursor:pointer;font-size:14px;transition:all .12s;display:flex;align-items:center;gap:10px}
+.opt:hover{border-color:#3a3e48}.opt:active{background:#252830}
+.opt.sel{border-color:var(--accent);background:#251a1c}
+.opt .ol{width:24px;height:24px;border-radius:50%;border:2px solid #3a3e48;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.opt.sel .ol{border-color:var(--accent);background:var(--accent);color:#fff}
+.opt.ok{background:#13261c!important;border-color:#27ae60!important}.opt.ok .ol{border-color:#27ae60;background:#27ae60;color:#fff}
+.opt.ko{background:#261314!important;border-color:var(--accent)!important}.opt.ko .ol{border-color:var(--accent);background:var(--accent);color:#fff}
+.explain{display:none;margin-top:14px;padding:12px 15px;background:#14171d;border-radius:10px;font-size:12px;color:var(--muted);line-height:1.7;border-left:3px solid var(--border)}
+.explain.show{display:block}.explain.ok{border-left-color:#27ae60}.explain.ko{border-left-color:var(--accent)}
+.nav-btns{display:flex;gap:10px;margin-top:14px}
+.nav-btn{flex:1;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:14px;cursor:pointer;text-align:center;transition:all .12s}
+.nav-btn:active{background:#252830}.nav-btn.go{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+
+/* ── Result ── */
+.result-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 22px;text-align:center}
+.result-card .big{font-size:72px;font-weight:800;line-height:1;letter-spacing:-2px}
+.result-card .big.great{color:#4ea397}.result-card .big.good{color:#f0a548}
+.result-card .big.ok{color:#c96bb0}.result-card .big.low{color:#dc4a3c}
+.result-card .gtxt{font-size:17px;font-weight:600;margin:4px 0}
+.result-card .gsub{font-size:12px;color:var(--muted)}
+.result-card .srow{display:flex;justify-content:center;gap:24px;margin:18px 0}
+.si{text-align:center}.si .v{font-size:22px;font-weight:700}.si .l{font-size:10px;color:var(--muted)}
+.rlist{margin-top:18px;text-align:left}
+.ri{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;border-bottom:1px solid var(--border)}
+.ri:last-child{border-bottom:none}.ri .ric{width:20px;text-align:center;flex-shrink:0}
+.rbtn-row{display:flex;gap:10px;margin-top:20px}
+.rbtn{flex:1;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:14px;cursor:pointer;text-align:center}
+.rbtn:active{background:#252830}.rbtn.go{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+
+/* ── History ── */
+#history-list{margin-top:12px}
+.hi{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;font-size:12px}
+.hi .hil{display:flex;align-items:center;gap:8px}
+.hi .hib{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:700;color:#fff;white-space:nowrap}
+.hi .his{font-weight:600;font-size:13px}.hi .hit{font-size:10px;color:var(--muted)}
+.empty{text-align:center;padding:30px;color:var(--muted);font-size:13px}.empty .ei{font-size:36px;margin-bottom:8px}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ═══════════════ HOME ═══════════════ -->
+<div id="home-screen">
+  <div class="hero">
+    <h1>🌍 多语种在线测试</h1>
+    <p>选择语种，测试你的外语水平</p>
+  </div>
+  <div class="lang-grid">
+    <div class="lang-card jp" onclick="pickLang('jp')">
+      <div class="lc-flag">🇯🇵</div>
+      <div class="lc-name">日本語</div>
+      <div class="lc-desc">日语能力测试</div>
+      <span class="lc-levels">N5 - N1</span>
+    </div>
+    <div class="lang-card es" onclick="pickLang('es')">
+      <div class="lc-flag">🇪🇸</div>
+      <div class="lc-name">Español</div>
+      <div class="lc-desc">西班牙语水平测试</div>
+      <span class="lc-levels">A1 - B2</span>
+    </div>
+    <div class="lang-card de" onclick="pickLang('de')">
+      <div class="lc-flag">🇩🇪</div>
+      <div class="lc-name">Deutsch</div>
+      <div class="lc-desc">德语水平测试</div>
+      <span class="lc-levels">A1 - B2</span>
+    </div>
+  </div>
+  <h3 style="font-size:13px;color:var(--muted);margin:20px 0 8px">📋 历史成绩</h3>
+  <div id="history-list"></div>
+</div>
+
+<!-- ═══════════════ LEVEL ═══════════════ -->
+<div id="level-screen">
+  <div class="back-row"><button class="back-btn" onclick="goHome()">← 选择其他语种</button></div>
+  <div class="lang-header">
+    <div class="lh-flag" id="lh-flag"></div>
+    <div class="lh-name" id="lh-name"></div>
+  </div>
+  <div class="level-grid" id="level-grid"></div>
+</div>
+
+<!-- ═══════════════ TEST ═══════════════ -->
+<div id="test-screen">
+  <div class="test-topbar">
+    <button class="back-btn" onclick="goLevel()">← 级别</button>
+    <span class="tt-lang" id="tt-lang"></span>
+    <span class="tt-lv" id="tt-lv"></span>
+    <span class="timer" id="timer">00:00</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  <div id="qa"></div>
+  <div class="nav-btns">
+    <button class="nav-btn" id="prev-btn" onclick="prevQuestion()">◀ 上一题</button>
+    <span style="align-self:center;font-size:12px;color:var(--muted)" id="q-counter">1/10</span>
+    <button class="nav-btn" id="next-btn" onclick="nextQuestion()">下一题 ▶</button>
+  </div>
+  <div class="nav-btns" style="margin-top:6px">
+    <button class="nav-btn go" id="submit-btn" onclick="submitTest()">📝 提交答案</button>
+  </div>
+  <div style="text-align:center;margin-top:8px">
+    <button class="back-btn" onclick="if(confirm('确定退出？当前进度将丢失'))goLevel()">🚪 退出测试</button>
+  </div>
+</div>
+
+<!-- ═══════════════ RESULT ═══════════════ -->
+<div id="result-screen">
+  <div class="result-card">
+    <div class="big" id="big"></div>
+    <div class="gtxt" id="gtxt"></div>
+    <div class="gsub" id="gsub"></div>
+    <div class="srow">
+      <div class="si"><div class="v" id="sc"></div><div class="l">正确</div></div>
+      <div class="si"><div class="v" id="sw"></div><div class="l">错误</div></div>
+      <div class="si"><div class="v" id="st"></div><div class="l">用时</div></div>
+    </div>
+    <div class="rlist" id="rlist"></div>
+    <div class="rbtn-row">
+      <button class="rbtn" onclick="retryTest()">🔄 重做</button>
+      <button class="rbtn go" onclick="goLevel()">📋 换级别</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+'use strict';
+// ═══════════════════════════════════════════
+//  QUESTION BANK
+// ═══════════════════════════════════════════
+var QB = {
+jp:{
+  name:'日本語',flag:'🇯🇵',color:'#4ea397',bg:'#1a2e28',
+  levels:{
+    n5:{name:'N5 入门',desc:'基本问候·数字·日常词汇',color:'#4ea397'},
+    n4:{name:'N4 基础',desc:'简单对话·基本语法·短文',color:'#5b9ecf'},
+    n3:{name:'N3 进阶',desc:'日常交流·中级语法·読解',color:'#f0a548'},
+    n2:{name:'N2 上级',desc:'商务日语·复杂语法·新闻読解',color:'#c96bb0'},
+    n1:{name:'N1 高级',desc:'学术日语·古典语法·高级読解',color:'#dc4a3c'}
+  },
+  q:{
+    n5:[{t:'語彙',q:'「ありがとう」の意味は？',o:['谢谢','再见','你好','对不起'],a:0,e:'ありがとう = 谢谢。日常最常用感谢表达。'},{t:'語彙',q:'数字「さん」は？',o:['1','2','3','4'],a:2,e:'さん = 3。いち(1)、に(2)、さん(3)。'},{t:'語彙',q:'「すみません」の使い方は？',o:['道歉/搭话','道谢','告别','称赞'],a:0,e:'すみません = 对不起/打扰一下。可道歉或搭话。'},{t:'文法',q:'「これは＿＿本です。」',o:['を','は','に','で'],a:1,e:'これは本です = 这是书。は提示主题。'},{t:'語彙',q:'「おはようございます」の時間帯は？',o:['朝','昼','夕方','夜'],a:0,e:'早上问候语。白天用こんにちは，晚上用こんばんは。'},{t:'文法',q:'「学校＿＿行きます。」',o:['を','で','に','が'],a:2,e:'目的地用に。学校に行きます = 去学校。'},{t:'語彙',q:'「わたし」の意味は？',o:['你','我','他','她'],a:1,e:'わたし = 我。最常用第一人称。'},{t:'文法',q:'「本を＿＿。」読むのます形は？',o:['読みます','読まます','読めます','読います'],a:0,e:'五段読む→読み+ます = 読みます。'},{t:'語彙',q:'「たべもの」の漢字は？',o:['飲み物','食べ物','果物','建物'],a:1,e:'食べ物 = 食物。飲み物=饮料，果物=水果。'},{t:'文法',q:'「りんご＿＿みかん？」',o:['を','に','と','で'],a:2,e:'并列用と。りんごとみかん = 苹果和橘子。'}],
+    n4:[{t:'文法',q:'「雨＿＿、出かけなかった。」',o:['だから','なので','から','で'],a:1,e:'なので表原因。接名词/な形容词后。'},{t:'語彙',q:'「いそがしい」の意味は？',o:['空闲','忙碌','开心','困难'],a:1,e:'忙しい = 忙碌。反义词：暇(ひま)。'},{t:'文法',q:'おいしいの過去形は？',o:['おいしかった','おいしいだった','おいしでした','おいしいかった'],a:0,e:'い形容词去い+かった = おいしかった。'},{t:'語彙',q:'「やくそく」の漢字は？',o:['約束','予約','予定','契約'],a:0,e:'約束 = 约定/承诺。予約=预约。'},{t:'文法',q:'「先生は学生＿＿教える。」',o:['を','に','が','で'],a:1,e:'给予对象用に。学生に教える。'},{t:'読解',q:'「ごめん、今日はちょっと…」の意味は？',o:['很想去','委婉拒绝','不知道在哪','已看过'],a:1,e:'ちょっと…是委婉拒绝经典表达。'},{t:'文法',q:'「ゆっくり」の意味は？',o:['大声地','慢慢地','安静地','快速地'],a:1,e:'ゆっくり = 慢慢地。'},{t:'語彙',q:'「けっこん」の意味は？',o:['离婚','结婚','恋爱','约会'],a:1,e:'結婚 = 结婚。离婚=離婚(りこん)。'},{t:'文法',q:'「開ける」のて形は？',o:['あけて','あいて','あけって','あいって'],a:0,e:'一段动词去る+て = 開けて。'},{t:'読解',q:'日本で家に入る時、靴を？',o:['はきます','ぬぎます','かえます','あらいます'],a:1,e:'进屋脱鞋(靴を脱ぎます)。日本文化常识。'}],
+    n3:[{t:'文法',q:'「難しくて＿＿。」',o:['なかなかできない','とてもできる','すぐできた','かんたんだ'],a:0,e:'なかなか〜ない = 怎么也做不到。'},{t:'語彙',q:'「あきらめる」の意味は？',o:['开始','放弃','完成','后悔'],a:1,e:'諦める = 放弃。夢を諦めない。'},{t:'文法',q:'「日本語を勉強＿＿日本に行く。」',o:['すると','するなら','すれば','して'],a:3,e:'て形表先后。勉強して日本に行く。'},{t:'語彙',q:'「けんこう」の意味は？',o:['金钱','健康','经验','旅行'],a:1,e:'健康(けんこう)。健康のために。'},{t:'文法',q:'ほめるの受身形は？',o:['ほめます','ほめられます','ほめさせます','ほめない'],a:1,e:'一段被动态：去る+られる。'},{t:'読解',q:'「席をはずしております」の意味は？',o:['暂离座位(谦让)','辞职了','站在座位旁','弄坏椅子'],a:0,e:'席を外す=离席。おります=いる自谦。'},{t:'文法',q:'「お金があったら旅行に＿＿。」',o:['行く','行った','行きたい','行ける'],a:2,e:'〜たら〜たい = 如果有…想去。'},{t:'語彙',q:'「そつぎょう」の意味は？',o:['入学','毕业','就职','退学'],a:1,e:'卒業 = 毕业。入学=にゅうがく。'},{t:'文法',q:'読めば読む＿＿おもしろい。',o:['読む','読んだ','ほど','読んで'],a:2,e:'〜ば〜ほど = 越…越…。'},{t:'読解',q:'「ご覧になりますか」は？',o:['尊敬语','自谦语','简体','命令形'],a:0,e:'ご覧になる=見る的尊敬语。'}],
+    n2:[{t:'文法',q:'「若い＿＿しっかりしてる。」',o:['ものの','くせに','わりに','ながら'],a:2,e:'わりに=虽然…但(出乎意料)。くせに含贬义。'},{t:'語彙',q:'「格差(かくさ)」の意味は？',o:['差距','合作','对立','友好'],a:0,e:'格差=差距。経済格差=经济差距。'},{t:'文法',q:'「理解＿＿。」理解できない。',o:['しやすい','しかねる','しなおす','しきる'],a:1,e:'〜かねる=难以…。理解しかねる。'},{t:'語彙',q:'「ややこしい」の意味は？',o:['簡単','複雑','面白い','珍しい'],a:1,e:'ややこしい=复杂/麻烦(口语)。'},{t:'文法',q:'正式道歉最高敬语是？',o:['申し訳ございません','すみません','ごめんなさい','失礼しました'],a:0,e:'申し訳ございません是最高敬语道歉。'},{t:'読解',q:'「中止せざるを得ない」の意味は？',o:['不得不中止','可以继续','应该中止但不会','希望中止'],a:0,e:'〜ざるを得ない=不得不…(书面语)。'},{t:'文法',q:'まるで日本人の＿＿話す。',o:['ようだ','ような','ように','ようで'],a:2,e:'まるで〜かのように。用ように接续。'},{t:'語彙',q:'「転居(てんきょ)」の意味は？',o:['搬家','工作调动','跳槽','转校'],a:0,e:'転居=搬家。転勤=调动，転職=跳槽。'},{t:'文法',q:'「努力した＿＿不合格。」',o:['に関わらず','にも関わらず','のおかげで','のせいで'],a:1,e:'にも関わらず=尽管…却…。'},{t:'読解',q:'「歯止めがかからない」の意味は？',o:['无法遏制','已经解决','问题不严重','牙齿问题'],a:0,e:'歯止めがかからない=刹不住/无法遏制。'}],
+    n1:[{t:'文法',q:'「理解に＿＿。」',o:['たえない','あたいしない','かなわない','およばない'],a:0,e:'〜に堪えない=不堪…。理解に堪えない。'},{t:'語彙',q:'「潤滑(じゅんかつ)」の意味は？',o:['润滑顺畅','纯粹','瞬间','循环'],a:0,e:'潤滑=润滑/顺畅。润畅的判断。'},{t:'文法',q:'「やむを＿＿欠席した。」',o:['えない','いられない','おかない','やまない'],a:0,e:'やむを得ない=不得已。'},{t:'語彙',q:'「相互(そうご)」の意味は？',o:['相互','総合','相違','相応'],a:0,e:'相互=彼此。総合=综合，相違=差异。'},{t:'文法',q:'「強がり＿＿弱音を吐かない。」',o:['まいと','ながらも','ばかりか','まで'],a:1,e:'〜ながらも=虽然…但转折。'},{t:'読解',q:'「示唆に富む」の意味は？',o:['富有启发性','充满矛盾','毫无意义','令人愤怒'],a:0,e:'示唆に富む=富有启发性/意味深长。'},{t:'文法',q:'この問題＿＿議論が続く。',o:['かんして','めぐって','わたって','そって'],a:1,e:'〜をめぐって=围绕…(多方争议)。'},{t:'語彙',q:'「聞くに堪えない」の漢字は？',o:['聞き','効き','危機','機器'],a:0,e:'聞くに堪えない=不堪入耳。'},{t:'文法',q:'「努力＿＿すれば道は開ける。」',o:['すら','だに','さえ','こそ'],a:2,e:'さえ=只要…就。すら=连…都(消极)。'},{t:'読解',q:'「慟哭」の読みと意味は？',o:['どうこく·嚎啕大哭','なく·小声哭','どうく·痛苦','こく·叫喊'],a:0,e:'慟哭(どうこく)=嚎啕大哭/悲恸。'}]
+  }
+},
+es:{
+  name:'Español',flag:'🇪🇸',color:'#f0a548',bg:'#2e241a',
+  levels:{
+    a1:{name:'A1 入门',desc:'问候·自我介绍·基础词汇·现在时',color:'#4ea397'},
+    a2:{name:'A2 基础',desc:'简单过去时·反身动词·基础对话',color:'#5b9ecf'},
+    b1:{name:'B1 中级',desc:'虚拟式入门·复合时态·阅读理解',color:'#f0a548'},
+    b2:{name:'B2 中高级',desc:'高级虚拟式·习语表达·复杂阅读',color:'#c96bb0'}
+  },
+  q:{
+    a1:[{t:'Vocabulario',q:'¿Qué significa <i>hola</i>?',o:['Adiós','Hola','Gracias','Por favor'],a:1,e:'Hola = 你好。Adiós=再见，Gracias=谢谢。'},{t:'Gramática',q:'Yo ______ estudiante.',o:['soy','eres','es','son'],a:0,e:'Ser变位：yo soy, tú eres, él/ella es。'},{t:'Vocabulario',q:'¿Qué significa <i>gracias</i>?',o:['谢谢','你好','再见','对不起'],a:0,e:'Gracias = 谢谢。最常用感谢表达。'},{t:'Gramática',q:'______ dos manzanas.',o:['Hay','Es','Está','Son'],a:0,e:'Hay = 有(存在)。Hay dos manzanas = 有两个苹果。'},{t:'Vocabulario',q:'El número <i>tres</i> es:',o:['1','2','3','4'],a:2,e:'Tres = 3。Uno(1), dos(2), tres(3), cuatro(4)。'},{t:'Gramática',q:'¿______ te llamas?',o:['Qué','Cómo','Dónde','Cuándo'],a:1,e:'¿Cómo te llamas? = 你叫什么名字？'},{t:'Vocabulario',q:'<i>Buenos días</i> 使用的时段是？',o:['早上','下午','晚上','深夜'],a:0,e:'Buenos días = 早上好。下午用 Buenas tardes。'},{t:'Gramática',q:'Ella ______ de España.',o:['soy','eres','es','somos'],a:2,e:'Él/Ella es。Ser表示来源/国籍。'},{t:'Vocabulario',q:'<i>Agua</i> 的意思是？',o:['水','火','酒','牛奶'],a:0,e:'Agua = 水。注意agua是阴性名词但用el(el agua)。'},{t:'Gramática',q:'______ libro es interesante.',o:['El','La','Los','Las'],a:0,e:'Libro是阳性名词，用定冠词El。'}],
+    a2:[{t:'Gramática',q:'Ayer ______ al cine.',o:['voy','fui','iba','iré'],a:1,e:'Ayer+简单过去时。ir→fui(我去过)。'},{t:'Vocabulario',q:'<i>Desayuno</i> 的意思是？',o:['午餐','早餐','晚餐','点心'],a:1,e:'Desayuno = 早餐。Almuerzo=午餐，Cena=晚餐。'},{t:'Gramática',q:'Me ______ a las 7 cada día.',o:['levanto','levanta','levantas','levantan'],a:0,e:'Levantarse(起床)反身动词。Yo me levanto。'},{t:'Vocabulario',q:'<i>Ayer</i> 的意思是？',o:['今天','明天','昨天','现在'],a:2,e:'Ayer = 昨天。Hoy=今天，Mañana=明天。'},{t:'Gramática',q:'Voy ______ parque.',o:['a el','al','en el','del'],a:1,e:'a+el=al。Voy al parque = 我去公园。'},{t:'Vocabulario',q:'<i>Médico</i> 的意思是？',o:['老师','医生','律师','工程师'],a:1,e:'Médico = 医生。Profesor=老师，Abogado=律师。'},{t:'Gramática',q:'______ gusta el café.',o:['Me','Yo','Mi','Mí'],a:0,e:'Gustar用法：Me gusta = 我喜欢(某物让我喜欢)。'},{t:'Vocabulario',q:'<i>Hermano</i> 的意思是？',o:['姐妹','兄弟','父亲','叔叔'],a:1,e:'Hermano = 兄弟。Hermana = 姐妹。'},{t:'Gramática',q:'Estoy ______ (cansado).',o:['cansado','cansada','cansados','cansadas'],a:0,e:'Estar+形容词。主语为男性用cansado。'},{t:'Lectura',q:'<i>Lo siento, no puedo ir.</i> 意思是？',o:['我很抱歉不能去','我能去','我不知道','我不想去'],a:0,e:'Lo siento = 抱歉。No puedo ir = 我不能去。'}],
+    b1:[{t:'Gramática',q:'Espero que ______ bien.',o:['estés','estás','estás','estarás'],a:0,e:'Espero que + 虚拟式。Estar→estés。'},{t:'Vocabulario',q:'<i>Desarrollar</i> 的意思是？',o:['发展','破坏','描述','发现'],a:0,e:'Desarrollar = 发展/开发。Destruir=破坏，Descubrir=发现。'},{t:'Gramática',q:'Si ______ dinero, viajaría.',o:['tengo','tuviera','tenía','tendré'],a:1,e:'条件句虚拟过去。Si tuviera = 如果我有(但实际没有)。'},{t:'Vocabulario',q:'<i>A pesar de</i> 的意思是？',o:['因为','尽管','为了','根据'],a:1,e:'A pesar de = 尽管。表让步。'},{t:'Gramática',q:'He ______ (comer) ya.',o:['comido','comiendo','comer','como'],a:0,e:'现在完成时：haber+过去分词。Comer→comido。'},{t:'Lectura',q:'<i>No me importa lo que digan.</i> 意思是？',o:['我不在乎别人说什么','我不同意','请再说一遍','我听不懂'],a:0,e:'No me importa = 我不在乎。lo que digan(虚拟) = 别人说的。'},{t:'Gramática',q:'Cuando ______ (llegar), te llamo.',o:['llego','llegue','llegaré','llegaba'],a:1,e:'Cuando+虚拟式表将来。Cuando llegue = 当我到了的时候。'},{t:'Vocabulario',q:'<i>Sin embargo</i> 的意思是？',o:['此外','然而','因此','同时'],a:1,e:'Sin embargo = 然而/但是。书面语常用转折词。'},{t:'Gramática',q:'Ojalá ______ (llover) mañana.',o:['llueve','llueva','lloverá','llovía'],a:1,e:'Ojalá+虚拟式。Ojalá llueva = 但愿明天下雨。'},{t:'Lectura',q:'<i>Me da igual.</i> 的意思是？',o:['我无所谓','我很喜欢','我不同意','我很生气'],a:0,e:'Me da igual = 我无所谓/对我来说一样。口语常用。'}],
+    b2:[{t:'Gramática',q:'Si lo ______, habría venido.',o:['sabría','hubiera sabido','sabía','sé'],a:1,e:'条件完成虚拟。Si hubiera sabido = 如果当时知道。'},{t:'Vocabulario',q:'<i>Huelga</i> 的意思是？',o:['罢工','假日','庆祝','会议'],a:0,e:'Huelga = 罢工。Huelga general = 总罢工。'},{t:'Gramática',q:'______ lo que ______, lo haré.',o:['Pase','Pasa','Pasara','Pasando'],a:0,e:'Pase lo que pase = 无论如何。固定习语用虚拟式。'},{t:'Vocabulario',q:'<i>Envergadura</i> 的意思是？',o:['规模','信封','疾病','价格'],a:0,e:'Envergadura = 规模/重要性。De gran envergadura = 大规模的。'},{t:'Lectura',q:'<i>No hay mal que por bien no venga.</i> 意思是？',o:['塞翁失马焉知非福','恶有恶报','好事不出门','祸不单行'],a:0,e:'西班牙谚语：塞翁失马焉知非福(坏事背后藏好事)。'},{t:'Gramática',q:'No creo que lo ______ (hacer).',o:['haya hecho','ha hecho','hizo','haría'],a:0,e:'No creo que+完成虚拟。Haya hecho = (他)做了。'},{t:'Vocabulario',q:'<i>Soslayar</i> 的意思是？',o:['回避','解决','强调','分析'],a:0,e:'Soslayar = 回避/绕过。Soslayar un problema = 回避问题。'},{t:'Lectura',q:'<i>Estar en las nubes.</i> 意思是？',o:['心不在焉','在飞机上','很高兴','很生气'],a:0,e:'Estar en las nubes = 心不在焉/做白日梦。'},{t:'Gramática',q:'De haberlo sabido, no ______ .',o:['habría ido','iría','fuera','iba'],a:0,e:'De haber+分词 = 如果当时…。与条件完成式搭配。'},{t:'Vocabulario',q:'<i>Inaudito</i> 的意思是？',o:['前所未闻的','声音大的','听不见的','有趣的'],a:0,e:'Inaudito = 前所未闻的/令人震惊的。In-否定+audito(听)。'}]
+  }
+},
+de:{
+  name:'Deutsch',flag:'🇩🇪',color:'#5b9ecf',bg:'#1a222e',
+  levels:{
+    a1:{name:'A1 入门',desc:'问候·冠词·基础词汇·现在时',color:'#4ea397'},
+    a2:{name:'A2 基础',desc:'格变化·介词·情态动词·完成时',color:'#5b9ecf'},
+    b1:{name:'B1 中级',desc:'从句语序·被动态·关系从句',color:'#f0a548'},
+    b2:{name:'B2 中高级',desc:'虚拟式·高级句法·习语表达',color:'#c96bb0'}
+  },
+  q:{
+    a1:[{t:'Wortschatz',q:'Was bedeutet <i>Hallo</i>?',o:['Tschüss','Hallo','Danke','Bitte'],a:1,e:'Hallo = 你好。Tschüss=再见，Danke=谢谢。'},{t:'Grammatik',q:'Ich ______ Max.',o:['bin','bist','ist','sind'],a:0,e:'Sein变位：ich bin, du bist, er/sie ist。'},{t:'Wortschatz',q:'Was bedeutet <i>Danke</i>?',o:['谢谢','你好','再见','请'],a:0,e:'Danke = 谢谢。Bitte = 请/不客气。'},{t:'Grammatik',q:'______ Mann ist alt.',o:['Der','Die','Das','Den'],a:0,e:'Mann是阳性名词，用Der。Der Mann = 这个男人。'},{t:'Wortschatz',q:'Die Zahl <i>drei</i> ist:',o:['1','2','3','4'],a:2,e:'Drei = 3。Eins(1), zwei(2), drei(3), vier(4)。'},{t:'Grammatik',q:'Wie ______ Sie?',o:['heißen','heißt','heiße','heiß'],a:0,e:'Sie(您)用heißen。Wie heißen Sie? = 您叫什么？'},{t:'Wortschatz',q:'<i>Guten Morgen</i> 使用时段？',o:['早上','下午','晚上','深夜'],a:0,e:'Guten Morgen = 早上好。下午 Guten Tag，晚上 Guten Abend。'},{t:'Grammatik',q:'Das ______ ein Buch.',o:['ist','sind','bin','seid'],a:0,e:'Es/Das ist。Das ist ein Buch = 这是一本书。'},{t:'Wortschatz',q:'<i>Wasser</i> 的意思是？',o:['水','啤酒','葡萄酒','牛奶'],a:0,e:'Wasser = 水。Bier=啤酒，Wein=葡萄酒。'},{t:'Grammatik',q:'______ Frau wohnt in Berlin.',o:['Die','Der','Das','Den'],a:0,e:'Frau是阴性名词，用Die。Die Frau = 这个女人。'}],
+    a2:[{t:'Grammatik',q:'Ich habe gestern ______ .',o:['gearbeitet','arbeiten','arbeitete','arbeite'],a:0,e:'完成时：haben+二分词。Arbeiten→gearbeitet。'},{t:'Wortschatz',q:'<i>Frühstück</i> 的意思是？',o:['午餐','早餐','晚餐','点心'],a:1,e:'Frühstück = 早餐。Mittagessen=午餐，Abendessen=晚餐。'},{t:'Grammatik',q:'Ich fahre ______ Berlin.',o:['in','nach','zu','auf'],a:1,e:'城市名用nach。Nach Berlin fahren = 去柏林。'},{t:'Wortschatz',q:'<i>Gestern</i> 的意思是？',o:['今天','明天','昨天','现在'],a:2,e:'Gestern = 昨天。Heute=今天，Morgen=明天。'},{t:'Grammatik',q:'Er hilft ______ Mutter.',o:['der','die','dem','den'],a:0,e:'Helfen+Dat。die Mutter→der Mutter(三格)。'},{t:'Wortschatz',q:'<i>Arzt</i> 的意思是？',o:['老师','医生','律师','农民'],a:1,e:'Arzt = 医生。Lehrer=老师，Anwalt=律师。'},{t:'Grammatik',q:'______ du das machen? (können)',o:['Kannst','Kann','Könnt','Können'],a:0,e:'Können变位：du kannst。Kannst du...? = 你能…吗？'},{t:'Wortschatz',q:'<i>Bruder</i> 的意思是？',o:['姐妹','兄弟','父亲','母亲'],a:1,e:'Bruder = 兄弟。Schwester = 姐妹。'},{t:'Grammatik',q:'Ich warte ______ den Bus.',o:['für','auf','mit','an'],a:1,e:'Warten auf+Akk。Auf den Bus warten = 等公交。'},{t:'Lesen',q:'<i>Es tut mir leid.</i> 意思是？',o:['对不起','我很累','我不舒服','我喜欢'],a:0,e:'Es tut mir leid = 对不起/很抱歉。'}],
+    b1:[{t:'Grammatik',q:'Ich weiß nicht, ______ er kommt.',o:['wann','als','wenn','das'],a:0,e:'间接疑问句用wann。Wann er kommt = 他什么时候来。'},{t:'Wortschatz',q:'<i>Entwicklung</i> 的意思是？',o:['发展','破坏','描述','发现'],a:0,e:'Entwicklung = 发展。Zerstörung=破坏，Entdeckung=发现。'},{t:'Grammatik',q:'Das Buch ______ (lesen) von mir.',o:['wird gelesen','wird lesen','ist gelesen','hat gelesen'],a:0,e:'被动态：werden+二分词。Wird gelesen = 被读。'},{t:'Wortschatz',q:'<i>Trotz</i> 的意思是？(+Gen.)',o:['因为','尽管','为了','根据'],a:1,e:'Trotz+Gen. = 尽管。Trotz des Regens = 尽管下雨。'},{t:'Grammatik',q:'Er sagte, er ______ krank.',o:['sei','ist','war','wäre'],a:0,e:'间接引语用第一虚拟式。Er sei krank = 他说他病了。'},{t:'Lesen',q:'<i>Das ist mir egal.</i> 意思是？',o:['我无所谓','我很喜欢','我不同意','我很生气'],a:0,e:'Das ist mir egal = 我无所谓。口语常用。'},{t:'Grammatik',q:'Die Frau, ______ dort steht, ...',o:['die','der','das','den'],a:0,e:'关系从句：阴性主格用die。Die Frau, die...'},{t:'Wortschatz',q:'<i>Allerdings</i> 的意思是？',o:['此外','然而','总是','从不'],a:1,e:'Allerdings = 然而/不过。语气比aber弱。'},{t:'Grammatik',q:'Wenn ich Zeit ______ , käme ich.',o:['habe','hätte','hatte','haben'],a:1,e:'第二虚拟式条件句。Wenn+第二虚拟 = 非现实条件。'},{t:'Lesen',q:'<i>Ich drücke dir die Daumen!</i> 意思是？',o:['祝你好运','我很生气','不要放弃','快点'],a:0,e:'Jdm die Daumen drücken = 祝好运(拇指按压手势)。'}],
+    b2:[{t:'Grammatik',q:'______ er früher gekommen, ...',o:['Wäre','War','Ist','Hätte'],a:0,e:'Wenn省略，动词前置。Wäre er... = 如果他…。'},{t:'Wortschatz',q:'<i>Streik</i> 的意思是？',o:['罢工','假日','庆祝','会议'],a:0,e:'Streik = 罢工。Generalstreik = 总罢工。'},{t:'Grammatik',q:'Es ______ dringend gehandelt werden.',o:['muss','müsste','musste','müssen'],a:0,e:'Es muss+二分词+werden = 必须被…。被动+情态。'},{t:'Wortschatz',q:'<i>Tragweite</i> 的意思是？',o:['影响范围','悲剧','支撑力','宽度'],a:0,e:'Tragweite = 影响范围/重要性。Von großer Tragweite。'},{t:'Lesen',q:'<i>Die Katze aus dem Sack lassen.</i>',o:['泄露秘密','放猫出去','非常小心','自找麻烦'],a:0,e:'俗语：Die Katze aus dem Sack lassen = 泄露秘密/摊牌。'},{t:'Grammatik',q:'Nicht, ______ ich wüsste.',o:['dass','weil','ob','wenn'],a:0,e:'Nicht, dass ich wüsste = 据我所知没有(虚拟式固定搭配)。'},{t:'Wortschatz',q:'<i>Unabdingbar</i> 的意思是？',o:['必不可少的','不可能的','不合理的','不相关的'],a:0,e:'Unabdingbar = 必不可少的/不可或缺的。'},{t:'Lesen',q:'<i>Das ist nicht mein Bier.</i> 意思是？',o:['这不关我的事','这不是我的啤酒','我不同意','我不喜欢'],a:0,e:'Das ist nicht mein Bier = 这不关我的事(口语)。'},{t:'Grammatik',q:'Es hat sollen gemacht ______ .',o:['werden','worden','sein','haben'],a:0,e:'情态动词完成被动：sollen+二分词+werden→hat gemacht werden sollen。'},{t:'Wortschatz',q:'<i>Fingerspitzengefühl</i> 近似意思是？',o:['直觉/分寸感','指尖疼痛','手巧','触觉'],a:0,e:'Fingerspitzengefühl = 直觉/分寸感/敏锐的判断力。'}]
+  }
+}
+};
+
+// ═══════════════════════════════════════════
+//  APP STATE
+// ═══════════════════════════════════════════
+var lang=null, lv=null, qi=0, ans=[], done=false, sec=0, tid=null;
+function byId(id){return document.getElementById(id)}
+function showScreen(id){
+  ['home-screen','level-screen','test-screen','result-screen'].forEach(function(s){
+    var el=byId(s); if(el) el.style.display='none';
+  });
+  var target=byId(id); if(target) target.style.display='block';
+}
+
+// ═══════ HOME ═══════
+function goHome(){ stopTimer(); lang=null; lv=null; showScreen('home-screen'); loadHistory(); window.scrollTo(0,0); }
+function pickLang(l){
+  lang=l; showScreen('level-screen');
+  var d=QB[l];
+  byId('lh-flag').textContent=d.flag;
+  byId('lh-name').textContent=d.name;
+  var h='';
+  Object.keys(d.levels).forEach(function(k){
+    var v=d.levels[k];
+    h+='<div class="level-card" onclick="pickLevel(\''+k+'\')"><div class="lv-badge" style="background:'+v.color+'">'+k.toUpperCase()+'</div><div class="lv-info"><div class="lv-name">'+v.name+'</div><div class="lv-desc">'+v.desc+'</div></div><div class="lv-arrow">→</div></div>';
+  });
+  byId('level-grid').innerHTML=h;
+  window.scrollTo(0,0);
+}
+function goLevel(){ stopTimer(); done=false; showScreen('level-screen'); window.scrollTo(0,0); }
+
+// ═══════ HELPERS ═══════
+function resetButtons(){
+  var pb=byId('prev-btn'), nb=byId('next-btn'), sb=byId('submit-btn');
+  if(pb){ pb.style.display=''; pb.style.visibility='visible'; }
+  if(nb){ nb.style.display=''; nb.textContent='下一题 ▶'; }
+  if(sb){ sb.style.display='none'; }
+}
+
+// ═══════ TEST ═══════
+function pickLevel(l){
+  lv=l; qi=0; done=false; sec=0;
+  var qs=QB[lang].q[lv];
+  ans=new Array(qs.length).fill(-1);
+  showScreen('test-screen');
+  resetButtons();
+  byId('tt-lang').textContent=QB[lang].flag+' '+QB[lang].name;
+  byId('tt-lang').style.background=QB[lang].bg;
+  byId('tt-lv').textContent=QB[lang].levels[lv].name;
+  byId('tt-lv').style.background=QB[lang].levels[lv].color;
+  byId('timer').textContent='00:00';
+  byId('timer').classList.remove('warn');
+  renderQuestion();
+  startTimer();
+  window.scrollTo(0,0);
+}
+
+function startTimer(){
+  stopTimer();
+  tid=setInterval(function(){
+    sec++;
+    var m=String(Math.floor(sec/60)).padStart(2,'0');
+    var s=String(sec%60).padStart(2,'0');
+    byId('timer').textContent=m+':'+s;
+    if(sec>600) byId('timer').classList.add('warn');
+  },1000);
+}
+function stopTimer(){ if(tid){ clearInterval(tid); tid=null; } }
+
+function renderQuestion(){
+  var qs=QB[lang].q[lv], q=qs[qi], total=qs.length;
+  byId('progress-fill').style.width=Math.round((qi+1)/total*100)+'%';
+  byId('q-counter').textContent=(qi+1)+'/'+total;
+
+  // Prev button
+  var pb=byId('prev-btn');
+  pb.style.display=''; pb.style.visibility=qi===0?'hidden':'visible';
+
+  // Next button
+  var nb=byId('next-btn');
+  nb.style.display='';
+  nb.textContent=qi===total-1?'最后一题 ▶':'下一题 ▶';
+
+  // Submit button
+  var sb=byId('submit-btn');
+  sb.style.display=qi===total-1?'block':'none';
+
+  // Build options HTML
+  var optHTML='';
+  q.o.forEach(function(opt,i){
+    var sel=ans[qi]===i?' sel':'';
+    optHTML+='<div class="opt'+sel+'" id="opt-'+i+'" onclick="selectOpt('+i+')"><span class="ol">'+'ABCD'[i]+'</span><span>'+opt+'</span></div>';
+  });
+
+  byId('qa').innerHTML=
+    '<div class="q-block">'+
+    '<div class="q-type">'+q.t+' · '+QB[lang].levels[lv].name+'</div>'+
+    '<div class="q-text">'+q.q+'</div>'+
+    '<div class="options">'+optHTML+'</div>'+
+    '<div class="explain" id="exb"></div>'+
+    '</div>';
+}
+
+function selectOpt(i){
+  if(done) return;
+  ans[qi]=i;
+  var opts=document.querySelectorAll('.opt');
+  for(var j=0; j<opts.length; j++) opts[j].classList.remove('sel');
+  var el=byId('opt-'+i); if(el) el.classList.add('sel');
+}
+
+function prevQuestion(){
+  if(qi>0){ qi--; renderQuestion(); }
+}
+function nextQuestion(){
+  var qs=QB[lang].q[lv];
+  if(qi<qs.length-1){ qi++; renderQuestion(); }
+}
+
+// ═══════ SUBMIT ═══════
+function submitTest(){
+  var qs=QB[lang].q[lv];
+  var missed=0;
+  for(var i=0; i<ans.length; i++){ if(ans[i]===-1) missed++; }
+  if(missed>0 && !confirm('还有 '+missed+' 题未作答，确定提交吗？')) return;
+
+  stopTimer(); done=true;
+  var correct=0, resultHTML='';
+
+  for(var i=0; i<qs.length; i++){
+    var q=qs[i], ua=ans[i], ok=ua===q.a;
+    if(ok) correct++;
+    var expClass=ua>=0?(ok?'ok':'ko'):'';
+
+    resultHTML+='<div class="q-block"><div class="q-type">'+q.t+' · 第'+(i+1)+'题</div><div class="q-text">'+q.q+'</div><div class="options">';
+
+    for(var j=0; j<q.o.length; j++){
+      var cls='';
+      if(j===q.a) cls=' ok';
+      if(j===ua && !ok) cls=' ko';
+      resultHTML+='<div class="opt'+cls+'"><span class="ol">'+'ABCD'[j]+'</span><span>'+q.o[j]+'</span>';
+      if(j===q.a) resultHTML+=' ✅';
+      if(j===ua && !ok) resultHTML+=' ❌';
+      resultHTML+='</div>';
+    }
+    resultHTML+='</div><div class="explain show '+expClass+'">'+q.e+'</div></div>';
+  }
+
+  byId('qa').innerHTML=resultHTML;
+  byId('progress-fill').style.width='100%';
+  byId('prev-btn').style.display='none';
+  byId('next-btn').style.display='none';
+  byId('submit-btn').style.display='none';
+  byId('q-counter').textContent='提交完毕';
+
+  var total=qs.length, pct=Math.round(correct/total*100);
+  var m=String(Math.floor(sec/60)).padStart(2,'0');
+  var s=String(sec%60).padStart(2,'0');
+  var timeStr=m+':'+s;
+
+  var bs=byId('big');
+  bs.textContent=correct+'/'+total;
+  bs.className='big '+(pct>=80?'great':pct>=60?'good':pct>=40?'ok':'low');
+
+  var emoji, grade;
+  if(pct>=90){ emoji='🎉'; grade='优秀！母语者水平'; }
+  else if(pct>=70){ emoji='👍'; grade='很好！继续加油'; }
+  else if(pct>=50){ emoji='📖'; grade='不错！还有进步空间'; }
+  else if(pct>=30){ emoji='💪'; grade='加油！多加练习'; }
+  else{ emoji='🌱'; grade='入门阶段，继续努力'; }
+
+  byId('gtxt').textContent=emoji+' '+grade;
+  byId('gsub').textContent=QB[lang].name+' · '+QB[lang].levels[lv].name+' · 正确率 '+pct+'%';
+  byId('sc').textContent=correct;
+  byId('sw').textContent=total-correct;
+  byId('st').textContent=timeStr;
+
+  // Review list
+  var rl='';
+  for(var i=0; i<qs.length; i++){
+    var icon=ans[i]===qs[i].a?'✅':'❌';
+    var txt=ans[i]===qs[i].a?'正确':'错误';
+    rl+='<div class="ri"><span class="ric">'+icon+'</span>第'+(i+1)+'题 '+txt+'</div>';
+  }
+  byId('rlist').innerHTML=rl;
+
+  showScreen('result-screen');
+  saveHistory(lang, lv, correct, total, pct, timeStr);
+  window.scrollTo(0,0);
+}
+
+function retryTest(){ if(lang && lv) pickLevel(lv); }
+
+// ═══════ HISTORY ═══════
+function saveHistory(la, le, c, t, pct, ts){
+  try {
+    var raw=localStorage.getItem('lang_test_h');
+    var h=raw?JSON.parse(raw):[];
+    if(!Array.isArray(h)) h=[];
+    h.unshift({la:la, le:le, c:c, t:t, pct:pct, ts:ts, d:new Date().toISOString().slice(0,10)});
+    if(h.length>30) h.length=30;
+    localStorage.setItem('lang_test_h', JSON.stringify(h));
+  } catch(e){ console.log('saveHistory error:', e); }
+}
+
+function loadHistory(){
+  try {
+    var raw=localStorage.getItem('lang_test_h');
+    var h=raw?JSON.parse(raw):[];
+    if(!Array.isArray(h)) h=[];
+    var list=byId('history-list');
+    if(!list) return;
+
+    if(h.length===0){
+      list.innerHTML='<div class="empty"><div class="ei">📭</div>暂无测试记录</div>';
+      return;
+    }
+
+    var html='';
+    for(var i=0; i<Math.min(h.length,12); i++){
+      var r=h[i];
+      var ld=QB[r.la];
+      if(!ld) continue; // skip if language no longer exists
+      var lvData=ld.levels[r.le];
+      if(!lvData) continue;
+      html+='<div class="hi"><div class="hil"><span class="hib" style="background:'+lvData.color+'">'+ld.flag+' '+r.le.toUpperCase()+'</span><span>'+r.d+'</span></div><div><span class="his" style="color:'+(r.pct>=80?'#27ae60':r.pct>=50?'#f0a548':'#dc4a3c')+'">'+r.c+'/'+r.t+' ('+r.pct+'%)</span> <span class="hit">'+r.ts+'</span></div></div>';
+    }
+    list.innerHTML=html||'<div class="empty"><div class="ei">📭</div>暂无测试记录</div>';
+  } catch(e){ console.log('loadHistory error:', e); }
+}
+
+loadHistory();
+</script>
+</body>
+</html>
