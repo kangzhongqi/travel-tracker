@@ -59,7 +59,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 <div id="loading"><div class="spinner"></div><div class="txt">加载 2874 个县区数据...</div></div>
 <div id="toast"></div>
 <div id="app">
-<div id="chart"><div id="back-float" onclick="goLevel((level==='city'?'province':'nation'),(level==='city'?currentProvince:null),(level==='city'?currentCity:null))">↩ 返回</div></div>
+<div id="chart"><div id="back-float" onclick="goBack()">↩ 返回</div></div>
 <div id="panel">
 <div class="breadcrumb" id="breadcrumb"><a href="javascript:goLevel('nation')">🇨🇳 全国</a></div>
 <div class="stat-card"><div class="label" id="stat-label">📊 全国统计</div><div class="row"><span class="val ok" id="stat-visited">0</span><span class="total">/ <span id="stat-total">2874</span> 个县区</span></div><div class="bar"><div class="bar-fill" id="stat-bar" style="width:0%"></div></div></div>
@@ -160,10 +160,14 @@ function init(){
 }
 
 // === Navigation ===
+function goBack(){
+  if(level==='city')goLevel('province',currentProvince);
+  else goLevel('nation');
+}
 function goLevel(lvl, prov, city){
   level=lvl; currentProvince=prov||null; currentCity=city||null;
   document.getElementById('search-input').value='';
-  document.getElementById('back-float').className = (lvl==='nation')?'':'show';
+  var bf=document.getElementById('back-float'); if(bf)bf.className=(lvl==='nation')?'':'show';
   if(lvl==='nation'){renderNationMap();renderNationList();updateNationStats();setBreadcrumb()}
   else if(lvl==='province'){if(!COUNTY_GEOJSON){toast('数据加载中...');return}renderProvinceMap(prov);renderCityList(prov);updateProvStats(prov);setBreadcrumb(prov)}
   else if(lvl==='city'){if(!COUNTY_GEOJSON){toast('数据加载中...');return}renderCityMap(prov,city);renderCountyList(prov,city);updateCityStats(prov,city);setBreadcrumb(prov,city)}
