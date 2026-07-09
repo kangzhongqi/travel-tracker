@@ -687,9 +687,11 @@ function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()
 
 // ======== TABS ========
 function switchTab(t){
+  if(!t) return;
   currentTab = t;
   document.querySelectorAll('.tab').forEach(function(el){el.classList.remove('active')});
-  document.querySelector('[data-tab="'+t+'"]').classList.add('active');
+  var target = document.querySelector('[data-tab="'+t+'"]');
+  if(target) target.classList.add('active');
   ['presente','preterito','dictionary','irregular','quiz','history'].forEach(function(id){
     var el = $('tab-'+id); if(el) el.style.display = id===t?'block':'none';
   });
@@ -702,17 +704,26 @@ function switchTab(t){
 var dictExpanded = null;
 function renderDict(filter){
   filter = (filter||'').toLowerCase();
-  var list = verbDict.filter(function(v){
-    return !filter || v.v.indexOf(filter)>=0 || v.t.indexOf(filter)>=0;
+  var indices = []; // Track original verbDict indices
+  var list = [];
+  verbDict.forEach(function(v,i){
+    if(!filter || v.v.indexOf(filter)>=0 || v.t.indexOf(filter)>=0){
+      list.push(v);
+      indices.push(i);
+    }
   });
   var h = '';
-  list.forEach(function(v,i){
+  list.forEach(function(v,fi){
+    var i = indices[fi]; // Original index in verbDict
     var typeLabel = {'reg-ar':'-AR','reg-er':'-ER','reg-ir':'-IR','e→ie':'e→ie','o→ue':'o→ue','e→i':'e→i','u→ue':'u→ue','-zco':'-zco','irr':'不规则'}[v.type]||v.type;
-    var pret = v.pret||(v.type==='reg-ar'?v.v.slice(0,-2)+'ó':v.v.slice(0,-2)+'ió');
+    // Auto-generate yo form for regular verbs
+    var stem=v.v.slice(0,-2), ending=v.v.slice(-2);
+    var yo=v.yo||(ending==='ar'?stem+'o':stem+'o');
+    var pret=v.pret||(ending==='ar'?stem+'ó':stem+'ió');
     h += '<div class="verb-dict-item" data-idx="'+i+'" onclick="toggleDictDetail('+i+')">'+
       '<div class="v-name">'+v.v+'</div>'+
       '<div class="v-trans">'+v.t+' <span style="color:var(--muted)">· '+typeLabel+'</span></div>'+
-      '<div class="v-yo">'+v.yo+'</div>'+
+      '<div class="v-yo">'+yo+'</div>'+
       '<div class="v-preterito">'+pret+'</div>'+
       '</div>'+
       '<div class="dict-detail" id="dict-detail-'+i+'"></div>';
@@ -775,11 +786,13 @@ function newQuiz(){
   stopTimer(); timerSec=0; $('q-timer').textContent='00:00';
   var h='';
   quizQuestions.forEach(function(q,i){
+    var personLabel={'yo':'我','tú':'你','él':'他/她/您','ella':'她','nosotros':'我们','vosotros':'你们','ellos':'他们/您们'};
+    var subjLabel = personLabel[q.subj] || q.subj;
     h+='<div class="quiz-card" id="qc-'+i+'">'+
       '<div class="q-num">第 '+(i+1)+' 题 · '+(q.tense==='presente'?'现在时':'简单过去时')+'</div>'+
       '<div class="q-text">'+
       '<span class="verb">'+q.v+'</span> '+
-      '「<span class="subj">'+q.subj+'</span>」→ 原形 <b>'+q.person+'</b> 的变位是？'+
+      '的<b>「'+q.subj+'」</b>('+subjLabel+')变位是？'+
       '</div>'+
       '<input type="text" id="inp-'+i+'" placeholder="输入变位形式..." autocomplete="off" autocorrect="off" autocapitalize="off" data-idx="'+i+'">'+
       '<div class="fb" id="fb-'+i+'"></div>'+
