@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>数据同步</title>
+<style>
+:root{--bg:#090d15;--card:#111827;--card2:#1a2235;--text:#e5e7eb;--text2:#9ca3af;--text3:#6b7280;--border:#1f2937;--accent:#10b981;--accent2:#34d399;--radius:16px;--radius-sm:10px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:20px;-webkit-tap-highlight-color:transparent}
+.container{max-width:600px;margin:0 auto}
+.header{text-align:center;padding:24px 0 20px}
+.header h1{font-size:22px;font-weight:800}
+.header p{color:var(--text2);font-size:13px;margin-top:4px}
+.back{display:inline-flex;align-items:center;gap:4px;color:var(--text3);font-size:12px;text-decoration:none;margin-bottom:8px}
+.back:hover{color:var(--text)}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin:14px 0}
+.card h3{font-size:15px;margin-bottom:12px}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.stat{background:var(--card2);border-radius:8px;padding:8px 14px;font-size:11px;color:var(--text2)}
+.stat b{color:var(--accent2);font-size:14px}
+
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.btn{display:inline-flex;align-items:center;gap:4px;padding:10px 22px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn.accent{background:var(--accent);color:#fff}.btn.accent:hover{opacity:.9}
+.btn.ghost{background:var(--card);border:1px solid var(--border);color:var(--text2)}
+.btn.ghost:hover{background:var(--card2);color:var(--text)}
+.btn:active{transform:scale(.97)}
+
+.qr-wrap{text-align:center;margin:16px 0}
+.qr-wrap img{border-radius:12px;border:4px solid #fff;background:#fff}
+.qr-wrap .hint{font-size:10px;color:var(--text3);margin-top:6px}
+
+.code-box{display:flex;gap:8px;align-items:center;margin:10px 0}
+.code-box textarea{flex:1;height:50px;padding:8px 12px;font-size:11px;font-family:monospace;border-radius:8px;background:var(--card2);border:1px solid var(--border);color:var(--text);resize:none;outline:none;word-break:break-all}
+.code-box textarea:focus{border-color:var(--accent)}
+
+.tabs{display:flex;gap:4px;margin-bottom:16px}
+.tab{flex:1;padding:10px;text-align:center;font-size:12px;font-weight:600;border-radius:8px;cursor:pointer;background:var(--card);border:1px solid var(--border);color:var(--text3)}
+.tab.active{background:rgba(16,185,129,.08);border-color:var(--accent);color:var(--accent2)}
+
+.import-input{width:100%;padding:10px;font-size:12px;font-family:monospace;border-radius:8px;background:var(--card2);border:1px solid var(--border);color:var(--text);outline:none;resize:vertical}
+.import-input:focus{border-color:var(--accent)}
+
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:999;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:600;background:var(--card);border:1px solid var(--border);color:var(--text);opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="container">
+
+<a class="back" href="index.html">← 返回首页</a>
+
+<div class="header"><h1>📱 多端同步</h1><p>不登录 · 不联网存储 · 扫码即传</p></div>
+
+<div class="tabs">
+  <div class="tab active" data-tab="export">📤 导出到其他设备</div>
+  <div class="tab" data-tab="import">📥 从其他设备导入</div>
+</div>
+
+<div id="tab-export">
+  <div class="card">
+    <h3>📊 当前数据概览</h3>
+    <div class="stats" id="data-stats"></div>
+    <p style="font-size:11px;color:var(--text3);margin-top:8px">
+      点击下方按钮收集所有页面的打卡/学习数据
+    </p>
+    <button class="btn accent" onclick="collectData()" style="margin-top:8px">📦 收集数据</button>
+    <button class="btn ghost" onclick="copyData()" style="margin-top:8px;display:none" id="btn-copy">📋 复制文本码</button>
+  </div>
+
+  <div class="card" id="qr-card" style="display:none">
+    <h3>📱 扫码同步</h3>
+    <div class="qr-wrap" id="qr-img"></div>
+    <p class="hint">用另一台设备打开本页面 → 切到"导入"→ 粘贴下方文本码</p>
+    <div class="code-box">
+      <textarea id="export-code" readonly onclick="this.select()" placeholder="点击「收集数据」生成传输码..."></textarea>
+    </div>
+    <p style="font-size:10px;color:var(--text3)">二维码最大容量有限，超大数据请用下方文本码复制传输</p>
+  </div>
+</div>
+
+<div id="tab-import" style="display:none">
+  <div class="card">
+    <h3>📥 导入数据</h3>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:10px">
+      在导出设备上生成的文本码粘贴到下方，点击导入
+    </p>
+    <textarea class="import-input" id="import-code" rows="4" placeholder="粘贴文本码..."></textarea>
+    <div class="btn-row" style="margin-top:10px">
+      <button class="btn accent" onclick="importData()">📥 导入</button>
+    </div>
+    <div id="import-result" style="margin-top:10px;font-size:12px"></div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+var collectedData = null;
+var $=function(id){return document.getElementById(id)};
+
+// Known localStorage keys across all apps
+var knownKeys = [
+  {key:'visited',label:'🇨🇳 地级市打卡',page:'中国旅行足迹地图.html'},
+  {key:'county_visited_v4',label:'🗺️ 县级打卡',page:'中国旅行足迹-县级.html'},
+  {key:'subway_checked',label:'🚇 北京地铁打卡',page:'北京地铁打卡地图.html'},
+  {key:'lang_test_h',label:'📝 语言测试记录',page:'japanese-test.html'},
+  {key:'spanish_verb_hist',label:'🇪🇸 西语练习记录',page:'spanish-verbs.html'},
+];
+
+function collectData(){
+  var bundle = {v:1,ts:new Date().toISOString(),data:{}};
+  var statsHtml = '';
+  var totalItems = 0;
+
+  knownKeys.forEach(function(k){
+    try{
+      var raw = localStorage.getItem(k.key);
+      if(raw){
+        var parsed = JSON.parse(raw);
+        bundle.data[k.key] = parsed;
+        var count = Array.isArray(parsed)?parsed.length:(typeof parsed==='object'?Object.keys(parsed).length:1);
+        totalItems += count;
+        statsHtml += '<div class="stat">'+k.label+'<br><b>'+count+'</b> 条</div>';
+      }
+    }catch(e){}
+  });
+
+  if(totalItems === 0){
+    statsHtml = '<div class="stat" style="color:var(--text3)">暂无数据</div>';
+    $('qr-card').style.display='none';
+    $('btn-copy').style.display='none';
+  }else{
+    // Compress: JSON → minimal JSON → base64
+    var json = JSON.stringify(bundle);
+    // Use built-in btoa with chunking for long strings
+    var encoded = btoa(unescape(encodeURIComponent(json)));
+    collectedData = encoded;
+
+    // Generate QR
+    var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data='+encodeURIComponent(encoded);
+    $('qr-img').innerHTML = '<img src="'+qrUrl+'" width="220" height="220" alt="QR Code" onerror="this.parentElement.innerHTML=\'<p style=color:var(--text3)>QR 生成失败（数据太大）<br>请用下方文本码</p>\'">';
+    $('qr-card').style.display='block';
+    $('btn-copy').style.display='inline-flex';
+    $('export-code').value = encoded;
+  }
+
+  $('data-stats').innerHTML = statsHtml;
+  toast('已收集 '+totalItems+' 条数据');
+}
+
+function copyData(){
+  if(!collectedData){toast('请先收集数据');return}
+  $('export-code').select();
+  document.execCommand('copy');
+  toast('📋 文本码已复制！发到另一台设备即可');
+}
+
+function importData(){
+  var code = $('import-code').value.trim();
+  if(!code){toast('请粘贴文本码');return}
+
+  try{
+    // Decode
+    var json = decodeURIComponent(escape(atob(code)));
+    var bundle = JSON.parse(json);
+    if(!bundle.data){throw new Error('格式错误')}
+
+    var imported = 0;
+    for(var key in bundle.data){
+      if(bundle.data.hasOwnProperty(key)){
+        try{
+          // Check if we should merge or replace
+          var existing = localStorage.getItem(key);
+          if(existing && !confirm('「'+key+'」已有数据（'+knownKeys.find(function(k){return k.key===key})?.label||key+'），是否覆盖？\\n确定=覆盖，取消=跳过'))continue;
+          localStorage.setItem(key, JSON.stringify(bundle.data[key]));
+          imported++;
+        }catch(e){}
+      }
+    }
+    $('import-result').innerHTML = '<span style="color:var(--accent2)">✅ 成功导入 '+imported+' 组数据</span>';
+    toast('✅ 已导入 '+imported+' 组数据');
+  }catch(e){
+    $('import-result').innerHTML = '<span style="color:#f85149">❌ 格式错误，请检查文本码是否完整</span>';
+    toast('❌ 格式错误');
+  }
+}
+
+// Tabs
+document.querySelectorAll('.tab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    var t = this.dataset.tab;
+    document.querySelectorAll('.tab').forEach(function(el){el.classList.remove('active')});
+    this.classList.add('active');
+    $('tab-export').style.display = (t==='export')?'block':'none';
+    $('tab-import').style.display = (t==='import')?'block':'none';
+  });
+});
+
+// Toast
+var tt;
+function toast(m){
+  var e=$('toast');e.textContent=m;e.classList.add('show');
+  clearTimeout(tt);tt=setTimeout(function(){e.classList.remove('show')},2000);
+}
+
+// Init: collect on load
+collectData();
+</script>
+</body>
+</html>

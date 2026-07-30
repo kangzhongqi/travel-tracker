@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>西语语法速查 | Duolingo 配套</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--card2:#1c2333;--text:#e6edf3;--text2:#c9d1d9;--muted:#8b949e;--border:#30363d;--accent:#f0883e;--accent2:#d0752a;--green:#3fb950;--red:#f85149;--blue:#58a6ff;--purple:#bc8cff;--radius:14px;--radius-sm:10px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.7;-webkit-tap-highlight-color:transparent;padding:16px}
+.container{max-width:760px;margin:0 auto}
+.header{text-align:center;padding:28px 0 20px}
+.header .icon{font-size:44px;margin-bottom:8px}
+.header h1{font-size:24px;font-weight:800}
+.header p{color:var(--muted);font-size:13px;margin-top:4px}
+.tabs{display:flex;gap:4px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:1 0 auto;padding:10px 14px;text-align:center;font-size:12px;font-weight:600;border-radius:var(--radius);cursor:pointer;background:var(--card);border:1px solid var(--border);color:var(--muted);transition:all .15s;white-space:nowrap;user-select:none}
+.tab:hover{border-color:var(--accent);color:var(--text)}
+.tab.active{background:rgba(240,136,62,.1);border-color:var(--accent);color:var(--accent)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin:14px 0}
+.card h3{font-size:16px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card p{font-size:13px;color:var(--text2);margin-bottom:10px}
+
+/* Compare table */
+.compare-table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{background:var(--card2);color:var(--muted);font-weight:600;padding:9px 12px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+.compare-table td{padding:9px 12px;border-top:1px solid var(--border);vertical-align:top;line-height:1.6}
+.compare-table tr:first-child td{border-top:none}
+.compare-table .col-label{color:var(--accent);font-weight:700;white-space:nowrap;width:80px}
+
+/* Example */
+.example{background:var(--card2);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;padding:10px 14px;margin:8px 0;font-size:12px}
+.example .es{color:var(--text);font-weight:600;font-style:italic}
+.example .zh{color:var(--muted);margin-top:2px}
+.example .note{color:var(--blue);font-size:11px;margin-top:2px}
+
+/* Tip box */
+.tip{background:rgba(240,136,62,.08);border:1px solid rgba(240,136,62,.15);border-radius:var(--radius-sm);padding:12px 16px;margin:12px 0;font-size:12px;color:var(--accent);font-weight:600}
+.tip::before{content:'💡 '}
+
+/* Mini Quiz */
+.quiz-section{margin:16px 0}
+.quiz-section h4{font-size:14px;margin-bottom:10px;color:var(--text2)}
+.quiz-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;margin:8px 0}
+.quiz-item .q{font-size:14px;margin-bottom:10px}
+.quiz-item .q .blank{color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:4px}
+.quiz-item .opts{display:flex;gap:8px;flex-wrap:wrap}
+.quiz-item .opt{padding:8px 20px;border-radius:8px;border:2px solid var(--border);background:var(--card2);color:var(--text2);font-size:13px;cursor:pointer;transition:all .15s;font-family:inherit;font-weight:600}
+.quiz-item .opt:hover{border-color:var(--accent);color:var(--text)}
+.quiz-item .opt.picked{border-color:var(--blue);background:rgba(88,166,255,.1);color:var(--blue)}
+.quiz-item .opt.right{border-color:var(--green);background:rgba(63,185,80,.1);color:var(--green)}
+.quiz-item .opt.wrong{border-color:var(--red);background:rgba(248,81,73,.1);color:var(--red)}
+.quiz-item .explain{display:none;margin-top:10px;padding:10px 14px;background:var(--card2);border-radius:8px;font-size:12px;color:var(--text2);line-height:1.6}
+.quiz-item .explain.show{display:block}
+.quiz-item .explain b{color:var(--accent)}
+.quiz-score{text-align:center;padding:8px;font-size:14px;font-weight:700}
+.quiz-score .n{color:var(--accent);font-size:20px}
+
+.btn-row{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:4px;padding:8px 20px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer;background:var(--accent);color:#fff;font-family:inherit;transition:all .15s}
+.btn:hover{opacity:.9}.btn:active{transform:scale(.97)}
+.btn.ghost{background:var(--card);border:1px solid var(--border);color:var(--text2)}
+.btn.ghost:hover{background:var(--card2)}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="icon">🦉</div>
+  <h1>西语语法速查</h1>
+  <p>Duolingo 配套 · 专治"为什么选这个不选那个"</p>
+</div>
+
+<div class="tabs" id="tab-bar">
+  <div class="tab active" data-tab="ser-estar">Ser vs Estar</div>
+  <div class="tab" data-tab="por-para">Por vs Para</div>
+  <div class="tab" data-tab="preterito-imperfecto">过去时选择</div>
+  <div class="tab" data-tab="saber-conocer">Saber vs Conocer</div>
+</div>
+
+<!-- ==================== SER vs ESTAR ==================== -->
+<div id="tab-ser-estar">
+
+<div class="card">
+<h3>⚡ Ser vs Estar — "是"的两个面孔</h3>
+<p>中文都翻译成"是"，但西语严格区分：<b>Ser = 本质/身份</b>，<b>Estar = 状态/位置</b>。用错会让句子意思完全不同。</p>
+
+<table class="compare-table">
+<tr><th style="color:var(--accent)">SER — 本质、永久</th><th style="color:var(--blue)">ESTAR — 状态、临时</th></tr>
+<tr><td>🎂 身份/职业：Soy profesor.<br><span class="muted">我是老师（我的职业）</span></td><td>😊 情绪/状态：Estoy cansado.<br><span class="muted">我累了（暂时的）</span></td></tr>
+<tr><td>📅 时间/日期：Hoy es lunes.<br><span class="muted">今天是周一</span></td><td>📍 位置：Estoy en casa.<br><span class="muted">我在家</span></td></tr>
+<tr><td>🏠 来源/材料：Es de madera.<br><span class="muted">是木头做的</span></td><td>🔄 进行时：Estoy comiendo.<br><span class="muted">我正在吃</span></td></tr>
+<tr><td>👤 特征：Eres muy alto.<br><span class="muted">你很高（天生）</span></td><td>👤 临时特征：Estás muy guapo.<br><span class="muted">你今天很帅（打扮了）</span></td></tr>
+</table>
+
+<div class="tip">一个词判断：如果加了"现在/今天/正在"更通顺 → 用 Estar。如果是在定义"是什么" → 用 Ser。</div>
+
+<div class="example">
+  <div class="es">Soy feliz. vs Estoy feliz.</div>
+  <div class="zh">我是幸福的人（性格乐观） vs 我现在很开心（遇上好事了）</div>
+  <div class="note">同样一个 feliz，用 ser 和 estar 意思完全不同！</div>
+</div>
+</div>
+
+<div class="quiz-section"><h4>✏️ 小测 — Ser 还是 Estar？（5题）</h4><div id="quiz-se"></div>
+<div class="quiz-score">得分：<span class="n" id="score-se">-</span></div>
+<div class="btn-row">
+  <button class="btn" onclick="checkQuiz('se')">✅ 检查</button>
+  <button class="btn ghost" onclick="newQuiz('se')">🔄 换题</button>
+</div></div>
+
+</div>
+
+<!-- ==================== POR vs PARA ==================== -->
+<div id="tab-por-para" style="display:none">
+
+<div class="card">
+<h3>🧭 Por vs Para — 两个"为了"怎么分</h3>
+<p>最简单的记忆法：<b>Para = 目标/目的地（向前看）</b>，<b>Por = 原因/途径（回头看）</b></p>
+
+<table class="compare-table">
+<tr><th style="color:var(--accent)">PARA — 目的、终点</th><th style="color:var(--blue)">POR — 原因、途径</th></tr>
+<tr><td>🎯 目的：Estudio para aprender.<br><span class="muted">我学习是为了学会</span></td><td>💭 原因：Lo hago por ti.<br><span class="muted">我这么做是因为你</span></td></tr>
+<tr><td>📅 截止时间：Para el lunes.<br><span class="muted">周一之前</span></td><td>⏰ 时间段：Por la mañana.<br><span class="muted">在早上（泛指）</span></td></tr>
+<tr><td>🚗 方向/目的地：Voy para Madrid.<br><span class="muted">我去马德里</span></td><td>🛤️ 经过/途径：Paso por Madrid.<br><span class="muted">我经过马德里</span></td></tr>
+<tr><td>👤 接收者：Es para ti.<br><span class="muted">这是给你的</span></td><td>💰 交换：Lo compré por 10€.<br><span class="muted">我花 10 欧买的</span></td></tr>
+<tr><td>📐 对比标准：Para su edad...<br><span class="muted">考虑到他的年龄…</span></td><td>🙏 代办：Gracias por venir.<br><span class="muted">谢谢你来</span></td></tr>
+</table>
+
+<div class="tip">Para = 箭头 → 指向未来目标。Por = 箭头 ← 回头看动机。</div>
+</div>
+
+<div class="quiz-section"><h4>✏️ 小测 — Por 还是 Para？（5题）</h4><div id="quiz-pp"></div>
+<div class="quiz-score">得分：<span class="n" id="score-pp">-</span></div>
+<div class="btn-row"><button class="btn" onclick="checkQuiz('pp')">✅ 检查</button><button class="btn ghost" onclick="newQuiz('pp')">🔄 换题</button></div></div>
+
+</div>
+
+<!-- ==================== PRETERITO vs IMPERFECTO ==================== -->
+<div id="tab-preterito-imperfecto" style="display:none">
+
+<div class="card">
+<h3>⏳ 简单过去时 vs 过去未完成时</h3>
+<p>Duolingo 里最让人头疼的选择。一句话总结：<b>Indefinido = 完成的动作/事件</b>，<b>Imperfecto = 背景/习惯/进行中的状态</b></p>
+
+<table class="compare-table">
+<tr><th style="color:var(--accent)">INDEFINIDO (简单过去时)</th><th style="color:var(--blue)">IMPERFECTO (过去未完成时)</th></tr>
+<tr><td>✅ 一次性完成的动作：Ayer fui al cine.<br><span class="muted">昨天我去了电影院</span></td><td>🔄 过去的习惯：Iba al cine todos los días.<br><span class="muted">我以前每天去电影院</span></td></tr>
+<tr><td>📅 具体时间点：A las 8 llegué.<br><span class="muted">8 点我到了</span></td><td>🌅 背景描述：Eran las 8, hacía sol.<br><span class="muted">当时 8 点，天气晴朗</span></td></tr>
+<tr><td>🔗 连续动作链：Entré, miré, salí.<br><span class="muted">我进去，看了看，出来了</span></td><td>⏸️ 同时进行的动作：Mientras comía, leía.<br><span class="muted">他一边吃一边读</span></td></tr>
+<tr><td>🧠 状态改变（开始/结束）：Supe la verdad.<br><span class="muted">我知道了真相（那一刻）</span></td><td>🧠 持续状态：Sabía la verdad.<br><span class="muted">我（当时）知道真相</span></td></tr>
+</table>
+
+<div class="tip">电影思维：Indefinido = 镜头里发生的"动作戏"。Imperfecto = 镜头里的"布景和氛围"。</div>
+
+<div class="example">
+  <div class="es">Cuando <b>entré</b>, <b>llovía</b>.</div>
+  <div class="zh">当我进来时（一个动作），天在下雨（持续背景）</div>
+  <div class="note">同一句话里两个时态配合：动作用 Indefinido，背景用 Imperfecto</div>
+</div>
+</div>
+
+<div class="quiz-section"><h4>✏️ 小测 — Indefinido 还是 Imperfecto？（5题）</h4><div id="quiz-pi"></div>
+<div class="quiz-score">得分：<span class="n" id="score-pi">-</span></div>
+<div class="btn-row"><button class="btn" onclick="checkQuiz('pi')">✅ 检查</button><button class="btn ghost" onclick="newQuiz('pi')">🔄 换题</button></div></div>
+
+</div>
+
+<!-- ==================== SABER vs CONOCER ==================== -->
+<div id="tab-saber-conocer" style="display:none">
+
+<div class="card">
+<h3>🧠 Saber vs Conocer — 两个"知道"</h3>
+<p><b>Saber = 知道信息/会做某事</b>，<b>Conocer = 认识人/地方/事物</b>（有过接触了解）</p>
+
+<table class="compare-table">
+<tr><th style="color:var(--accent)">SABER — 知识、技能</th><th style="color:var(--blue)">CONOCER — 认识、熟悉</th></tr>
+<tr><td>📚 知道事实：Sé que es tarde.<br><span class="muted">我知道很晚了</span></td><td>👤 认识人：Conozco a María.<br><span class="muted">我认识 María</span></td></tr>
+<tr><td>🎵 会做某事 (saber + inf)：Sé nadar.<br><span class="muted">我会游泳</span></td><td>🏙️ 熟悉地方：Conozco Madrid.<br><span class="muted">我熟悉马德里（去过）</span></td></tr>
+<tr><td>📖 记得内容：¿Sabes la respuesta?<br><span class="muted">你知道答案吗？</span></td><td>📖 听说过/接触过：¿Conoces este libro?<br><span class="muted">你知道这本书吗？（读过/见过）</span></td></tr>
+</table>
+
+<div class="tip">Saber 后面可以接 que / si / 疑问词 / 动词不定式。Conocer 后面直接接名词或 a + 人。</div>
+
+<div class="example">
+  <div class="es">Sé quién es, pero no lo conozco.</div>
+  <div class="zh">我知道他是谁（有信息），但我不认识他（没接触过）</div>
+  <div class="note">同一句话里两个"知道"的区别一目了然</div>
+</div>
+</div>
+
+<div class="quiz-section"><h4>✏️ 小测 — Saber 还是 Conocer？（5题）</h4><div id="quiz-sk"></div>
+<div class="quiz-score">得分：<span class="n" id="score-sk">-</span></div>
+<div class="btn-row"><button class="btn" onclick="checkQuiz('sk')">✅ 检查</button><button class="btn ghost" onclick="newQuiz('sk')">🔄 换题</button></div></div>
+
+</div>
+
+</div><!-- /container -->
+
+<script>
+'use strict';
+
+// ===== QUIZ DATA =====
+var quizBanks = {
+  'se': [ // Ser vs Estar
+    {q:'Mi hermano ___ médico.',blank:'___',opts:['es','está'],ans:0,hint:'职业用 ser（本质身份）'},
+    {q:'Hoy ___ muy contenta.',blank:'___',opts:['soy','estoy'],ans:1,hint:'"今天"说明是暂时的情绪 → estar'},
+    {q:'¿De dónde ___ tú?',blank:'___',opts:['eres','estás'],ans:0,hint:'来源/籍贯用 ser'},
+    {q:'La fiesta ___ en mi casa.',blank:'___',opts:['es','está'],ans:1,hint:'活动地点用 estar（事件位置）'},
+    {q:'Ella ___ muy inteligente.',blank:'___',opts:['es','está'],ans:0,hint:'性格特征（持久的）用 ser'},
+    {q:'Mis llaves ___ en la mesa.',blank:'___',opts:['son','están'],ans:1,hint:'物品位置用 estar'},
+    {q:'___ las tres de la tarde.',blank:'___',opts:['Son','Están'],ans:0,hint:'时间用 ser'},
+    {q:'La sopa ___ fría ya.',blank:'___',opts:['es','está'],ans:1,hint:'汤变冷了（状态变化）→ estar'},
+    {q:'Nosotros ___ de China.',blank:'___',opts:['somos','estamos'],ans:0,hint:'来源/国籍用 ser'},
+    {q:'¿___ cansado? Has trabajado mucho.',blank:'___',opts:['Eres','Estás'],ans:1,hint:'临时状态（累了）用 estar'},
+  ],
+  'pp': [ // Por vs Para
+    {q:'Estudio español ___ viajar a México.',blank:'___',opts:['por','para'],ans:1,hint:'目的（为了旅行）→ para'},
+    {q:'Gracias ___ tu ayuda.',blank:'___',opts:['por','para'],ans:0,hint:'感谢原因用 por'},
+    {q:'Este regalo es ___ ti.',blank:'___',opts:['por','para'],ans:1,hint:'接收者用 para'},
+    {q:'Cambié mi coche ___ uno nuevo.',blank:'___',opts:['por','para'],ans:0,hint:'交换用 por'},
+    {q:'___ ser tan joven, habla muy bien.',blank:'___',opts:['Por','Para'],ans:1,hint:'对比标准（考虑到…）用 para'},
+    {q:'Salimos ___ la puerta trasera.',blank:'___',opts:['por','para'],ans:0,hint:'通过/途径用 por'},
+    {q:'Necesito terminar esto ___ mañana.',blank:'___',opts:['por','para'],ans:1,hint:'截止时间用 para'},
+    {q:'Me pagan ___ hora.',blank:'___',opts:['por','para'],ans:0,hint:'单位/每…用 por'},
+    {q:'Trabajo ___ ganar dinero.',blank:'___',opts:['por','para'],ans:1,hint:'目的（为了赚钱）→ para'},
+    {q:'Lo hice ___ mis hijos.',blank:'___',opts:['por','para'],ans:0,hint:'原因/为了某人（动机）→ por'},
+  ],
+  'pi': [ // Preterito vs Imperfecto
+    {q:'Ayer ___ al supermercado.',blank:'___',opts:['fui','iba'],ans:0,hint:'"昨天" + 一次性完成动作用 indefinido'},
+    {q:'Cuando era niño, siempre ___ al parque.',blank:'___',opts:['fui','iba'],ans:1,hint:'"siempre" + 过去习惯用 imperfecto'},
+    {q:'___ las 10 cuando llegó.',blank:'___',opts:['Fueron','Eran'],ans:1,hint:'背景时间（当时是10点）用 imperfecto'},
+    {q:'Ella ___ la puerta y salió.',blank:'___',opts:['abrió','abría'],ans:0,hint:'连续动作链中的一环用 indefinido'},
+    {q:'___ mucho frío aquel día.',blank:'___',opts:['Hizo','Hacía'],ans:1,hint:'背景描述（那天天气冷）用 imperfecto'},
+    {q:'De repente, ___ a llover.',blank:'___',opts:['empezó','empezaba'],ans:0,hint:'"de repente" + 突然开始用 indefinido'},
+    {q:'Mientras yo ___, él cocinaba.',blank:'___',opts:['estudié','estudiaba'],ans:1,hint:'"mientras" + 同时进行用 imperfecto'},
+    {q:'La conocí cuando ___ en Madrid.',blank:'___',opts:['viví','vivía'],ans:1,hint:'when I was living（持续状态）用 imperfecto'},
+    {q:'El año pasado ___ a España.',blank:'___',opts:['viajé','viajaba'],ans:0,hint:'"el año pasado" + 完成事件用 indefinido'},
+    {q:'___ sol y los pájaros cantaban.',blank:'___',opts:['Hizo','Hacía'],ans:1,hint:'天气背景描述用 imperfecto'},
+  ],
+  'sk': [ // Saber vs Conocer
+    {q:'¿___ dónde está el banco?',blank:'___',opts:['Sabes','Conoces'],ans:0,hint:'知道信息（银行在哪）用 saber'},
+    {q:'___ a su hermana desde hace años.',blank:'___',opts:['Sé','Conozco'],ans:1,hint:'认识人用 conocer（+ a）'},
+    {q:'Ella ___ hablar tres idiomas.',blank:'___',opts:['sabe','conoce'],ans:0,hint:'会做某事（saber + inf）'},
+    {q:'No ___ bien esta ciudad todavía.',blank:'___',opts:['sé','conozco'],ans:1,hint:'熟悉地方用 conocer'},
+    {q:'¿___ que mañana es fiesta?',blank:'___',opts:['Sabes','Conoces'],ans:0,hint:'知道事实（saber + que）'},
+    {q:'Quiero ___ la verdad.',blank:'___',opts:['saber','conocer'],ans:0,hint:'想知道信息用 saber'},
+    {q:'¿___ este restaurante? Es nuevo.',blank:'___',opts:['Sabes','Conoces'],ans:1,hint:'听说过/知道这个地方用 conocer'},
+    {q:'Mi abuelo no ___ leer.',blank:'___',opts:['sabe','conoce'],ans:0,hint:'会技能（saber + inf）'},
+    {q:'___ a muchas personas famosas.',blank:'___',opts:['Sabe','Conoce'],ans:1,hint:'认识人用 conocer'},
+    {q:'¿___ cuánto cuesta?',blank:'___',opts:['Sabes','Conoces'],ans:0,hint:'知道信息（多少钱）用 saber'},
+  ]
+};
+
+// Quiz state
+var picked = {};
+
+function newQuiz(key){
+  picked[key] = {};
+  var bank = quizBanks[key];
+  var items = bank.slice(); // All items
+  // Shuffle and pick 5
+  for(var i=items.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=items[i];items[i]=items[j];items[j]=t;}
+  items = items.slice(0,5);
+
+  var h = '';
+  items.forEach(function(item, i){
+    var qText = item.q.replace('___', '<span class="blank">'+item.blank+'</span>');
+    h += '<div class="quiz-item" id="qi-'+key+'-'+i+'">'+
+      '<div class="q">'+qText+'</div>'+
+      '<div class="opts">'+
+        item.opts.map(function(opt, oi){
+          return '<button class="opt" onclick="pickOpt(\''+key+'\','+i+','+oi+')">'+opt+'</button>';
+        }).join('')+
+      '</div>'+
+      '<div class="explain" id="explain-'+key+'-'+i+'"><b>👉 '+item.hint+'</b></div>'+
+    '</div>';
+  });
+  document.getElementById('quiz-'+key).innerHTML = h;
+  document.getElementById('score-'+key).textContent = '-';
+}
+
+function pickOpt(key, qi, oi){
+  if(picked[key][qi] !== undefined) return; // already answered
+  var item = document.getElementById('qi-'+key+'-'+qi);
+  var bank = quizBanks[key];
+  // Find the current question (need to store original question indices)
+  // Since we shuffled, we need to look up by DOM
+  var opts = item.querySelectorAll('.opt');
+  var correct = -1;
+  // Find correct answer by matching button text to opts
+  opts.forEach(function(opt, idx){
+    // Get hint from the explain div
+  });
+
+  picked[key][qi] = oi;
+  // Mark picked
+  opts.forEach(function(opt, idx){
+    opt.style.pointerEvents = 'none';
+  });
+  opts[oi].classList.add('picked');
+
+  // Find which option is correct - we need to track this
+  // Use the data from the DOM: the correct answer is embedded
+  var explainDiv = document.getElementById('explain-'+key+'-'+qi);
+  explainDiv.classList.add('show');
+}
+
+function checkQuiz(key){
+  var bank = quizBanks[key];
+  // Get the 5 displayed questions by finding the quiz items
+  var items = document.querySelectorAll('#quiz-'+key+' .quiz-item');
+  var score = 0;
+  items.forEach(function(item, i){
+    var opts = item.querySelectorAll('.opt');
+    var explainDiv = document.getElementById('explain-'+key+'-'+i);
+    // Determine correct answer from hint text
+    // Rebuild: need to track correct answer per displayed question
+
+    // Find which button was picked
+    var pickedIdx = picked[key][i];
+    if(pickedIdx === undefined) return;
+
+    // Determine correct answer by checking which option text matches expected
+    // We need the original question data. Let me restructure.
+  });
+}
+
+// For now, make check work by storing correct answer in a data attr
+// Actually let me restructure newQuiz to track correct answers
+var quizState = {};
+
+function newQuizV2(key){
+  quizState[key] = {answered:{}};
+  var bank = quizBanks[key];
+  var items = bank.slice();
+  for(var i=items.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=items[i];items[i]=items[j];items[j]=t;}
+  items = items.slice(0,5);
+  quizState[key].items = items;
+  quizState[key].picked = {};
+
+  var h = '';
+  items.forEach(function(item, i){
+    var qText = item.q.replace('___', '<span class="blank">'+item.blank+'</span>');
+    h += '<div class="quiz-item" id="qi-'+key+'-'+i+'">'+
+      '<div class="q">'+qText+'</div>'+
+      '<div class="opts">'+
+        item.opts.map(function(opt, oi){
+          return '<button class="opt" onclick="pickOptV2(\''+key+'\','+i+','+oi+')">'+opt+'</button>';
+        }).join('')+
+      '</div>'+
+      '<div class="explain" id="explain-'+key+'-'+i+'"><b>👉 '+item.hint+'</b></div>'+
+    '</div>';
+  });
+  document.getElementById('quiz-'+key).innerHTML = h;
+  document.getElementById('score-'+key).textContent = '-';
+}
+
+function pickOptV2(key, qi, oi){
+  var st = quizState[key];
+  if(st.picked[qi] !== undefined) return;
+  st.picked[qi] = oi;
+
+  var item = document.getElementById('qi-'+key+'-'+qi);
+  var opts = item.querySelectorAll('.opt');
+  var correctAns = st.items[qi].ans;
+
+  opts.forEach(function(o){o.style.pointerEvents='none'});
+
+  if(oi === correctAns){
+    opts[oi].classList.add('right');
+  } else {
+    opts[oi].classList.add('wrong');
+    opts[correctAns].classList.add('right');
+  }
+
+  var explainDiv = document.getElementById('explain-'+key+'-'+qi);
+  explainDiv.classList.add('show');
+}
+
+function checkQuizV2(key){
+  var st = quizState[key];
+  if(!st) return;
+  var score = 0;
+  st.items.forEach(function(item, i){
+    if(st.picked[i] === item.ans) score++;
+  });
+  document.getElementById('score-'+key).textContent = score + '/' + st.items.length;
+  // Reveal all explanations
+  st.items.forEach(function(item, i){
+    var explainDiv = document.getElementById('explain-'+key+'-'+i);
+    if(explainDiv) explainDiv.classList.add('show');
+    // Mark unpicked
+    if(st.picked[i] === undefined){
+      var itemEl = document.getElementById('qi-'+key+'-'+i);
+      if(itemEl){
+        var opts = itemEl.querySelectorAll('.opt');
+        opts[item.ans].classList.add('right');
+        opts.forEach(function(o){o.style.pointerEvents='none'});
+      }
+    }
+  });
+}
+
+// Replace old functions
+var newQuiz = newQuizV2;
+var pickOpt = pickOptV2;
+var checkQuiz = checkQuizV2;
+
+// ===== TABS =====
+document.querySelectorAll('#tab-bar .tab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    var t = this.dataset.tab;
+    document.querySelectorAll('#tab-bar .tab').forEach(function(el){el.classList.remove('active')});
+    this.classList.add('active');
+    ['ser-estar','por-para','preterito-imperfecto','saber-conocer'].forEach(function(id){
+      var el = document.getElementById('tab-'+id);
+      if(el) el.style.display = (id===t)?'block':'none';
+    });
+  });
+});
+
+// ===== INIT =====
+newQuiz('se');newQuiz('pp');newQuiz('pi');newQuiz('sk');
+</script>
+</body>
+</html>
