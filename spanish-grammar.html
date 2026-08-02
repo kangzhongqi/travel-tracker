@@ -3,427 +3,769 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>西语语法速查 | Duolingo 配套</title>
+<title>西语 A2 学习手册 | 语法 + 词汇</title>
 <style>
 :root{--bg:#0d1117;--card:#161b22;--card2:#1c2333;--text:#e6edf3;--text2:#c9d1d9;--muted:#8b949e;--border:#30363d;--accent:#f0883e;--accent2:#d0752a;--green:#3fb950;--red:#f85149;--blue:#58a6ff;--purple:#bc8cff;--radius:14px;--radius-sm:10px}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.7;-webkit-tap-highlight-color:transparent;padding:16px}
-.container{max-width:760px;margin:0 auto}
-.header{text-align:center;padding:28px 0 20px}
-.header .icon{font-size:44px;margin-bottom:8px}
-.header h1{font-size:24px;font-weight:800}
-.header p{color:var(--muted);font-size:13px;margin-top:4px}
-.tabs{display:flex;gap:4px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
-.tabs::-webkit-scrollbar{display:none}
-.tab{flex:1 0 auto;padding:10px 14px;text-align:center;font-size:12px;font-weight:600;border-radius:var(--radius);cursor:pointer;background:var(--card);border:1px solid var(--border);color:var(--muted);transition:all .15s;white-space:nowrap;user-select:none}
-.tab:hover{border-color:var(--accent);color:var(--text)}
-.tab.active{background:rgba(240,136,62,.1);border-color:var(--accent);color:var(--accent)}
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin:14px 0}
-.card h3{font-size:16px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.card p{font-size:13px;color:var(--text2);margin-bottom:10px}
+.container{max-width:780px;margin:0 auto}
+.header{text-align:center;padding:24px 0 18px}
+.header h1{font-size:24px;font-weight:800}.header p{color:var(--muted);font-size:13px;margin-top:4px}
 
-/* Compare table */
-.compare-table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
-.compare-table th{background:var(--card2);color:var(--muted);font-weight:600;padding:9px 12px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
-.compare-table td{padding:9px 12px;border-top:1px solid var(--border);vertical-align:top;line-height:1.6}
-.compare-table tr:first-child td{border-top:none}
-.compare-table .col-label{color:var(--accent);font-weight:700;white-space:nowrap;width:80px}
+/* Tabs row */
+.tab-row{display:flex;gap:4px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.tab-row::-webkit-scrollbar{display:none}
+.tab-btn{flex:1 0 auto;padding:9px 12px;text-align:center;font-size:11px;font-weight:600;border-radius:8px;cursor:pointer;background:var(--card);border:1px solid var(--border);color:var(--muted);transition:all .15s;white-space:nowrap;user-select:none}
+.tab-btn:hover{border-color:var(--accent);color:var(--text)}
+.tab-btn.on{background:rgba(240,136,62,.1);border-color:var(--accent);color:var(--accent)}
 
-/* Example */
+/* Sub-tabs (Grammar / Vocab) */
+.subtabs{display:flex;gap:6px;margin-bottom:16px}
+.subtab{flex:1;padding:8px;text-align:center;font-size:12px;font-weight:700;border-radius:8px;cursor:pointer;background:var(--card);border:1px solid var(--border);color:var(--text3);transition:all .15s}
+.subtab.on{background:var(--card2);border-color:var(--accent2);color:var(--accent2)}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin:12px 0}
+.card h3{font-size:15px;margin-bottom:10px}
+.card p{font-size:13px;color:var(--text2);margin-bottom:8px}
+
+/* Tables */
+.tbl{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.tbl th{background:var(--card2);color:var(--muted);font-weight:600;padding:8px 12px;text-align:left;font-size:10px;text-transform:uppercase}
+.tbl td{padding:8px 12px;border-top:1px solid var(--border);font-size:12px;vertical-align:top;line-height:1.6}
+.tbl .lbl{color:var(--accent);font-weight:700;white-space:nowrap;width:70px}
+
 .example{background:var(--card2);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;padding:10px 14px;margin:8px 0;font-size:12px}
-.example .es{color:var(--text);font-weight:600;font-style:italic}
+.example .es{font-style:italic;color:var(--text)}
 .example .zh{color:var(--muted);margin-top:2px}
-.example .note{color:var(--blue);font-size:11px;margin-top:2px}
+.example .tag{color:var(--blue);font-size:10px;margin-top:2px}
 
-/* Tip box */
-.tip{background:rgba(240,136,62,.08);border:1px solid rgba(240,136,62,.15);border-radius:var(--radius-sm);padding:12px 16px;margin:12px 0;font-size:12px;color:var(--accent);font-weight:600}
-.tip::before{content:'💡 '}
+.tip{background:rgba(240,136,62,.06);border:1px solid rgba(240,136,62,.12);border-radius:var(--radius-sm);padding:10px 14px;margin:12px 0;font-size:12px;color:var(--accent)}
+.tip::before{content:'💡 ';font-weight:700}
 
-/* Mini Quiz */
+.warn{background:rgba(248,81,73,.06);border:1px solid rgba(248,81,73,.12);border-radius:var(--radius-sm);padding:10px 14px;margin:12px 0;font-size:12px;color:var(--red)}
+.warn::before{content:'⚠️ 中国学习者常见错误：';font-weight:700;display:block;margin-bottom:4px}
+
+/* Quiz */
 .quiz-section{margin:16px 0}
-.quiz-section h4{font-size:14px;margin-bottom:10px;color:var(--text2)}
-.quiz-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;margin:8px 0}
-.quiz-item .q{font-size:14px;margin-bottom:10px}
-.quiz-item .q .blank{color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:4px}
-.quiz-item .opts{display:flex;gap:8px;flex-wrap:wrap}
-.quiz-item .opt{padding:8px 20px;border-radius:8px;border:2px solid var(--border);background:var(--card2);color:var(--text2);font-size:13px;cursor:pointer;transition:all .15s;font-family:inherit;font-weight:600}
-.quiz-item .opt:hover{border-color:var(--accent);color:var(--text)}
-.quiz-item .opt.picked{border-color:var(--blue);background:rgba(88,166,255,.1);color:var(--blue)}
-.quiz-item .opt.right{border-color:var(--green);background:rgba(63,185,80,.1);color:var(--green)}
-.quiz-item .opt.wrong{border-color:var(--red);background:rgba(248,81,73,.1);color:var(--red)}
-.quiz-item .explain{display:none;margin-top:10px;padding:10px 14px;background:var(--card2);border-radius:8px;font-size:12px;color:var(--text2);line-height:1.6}
-.quiz-item .explain.show{display:block}
-.quiz-item .explain b{color:var(--accent)}
-.quiz-score{text-align:center;padding:8px;font-size:14px;font-weight:700}
-.quiz-score .n{color:var(--accent);font-size:20px}
+.quiz-section h4{font-size:13px;margin-bottom:8px;color:var(--text2)}
+.q-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin:8px 0}
+.q-item .q-txt{font-size:13px;margin-bottom:8px}
+.q-item .q-txt .gap{color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:4px}
+.q-opts{display:flex;gap:6px;flex-wrap:wrap}
+.q-opt{padding:7px 16px;border-radius:7px;border:2px solid var(--border);background:var(--card2);color:var(--text2);font-size:12px;cursor:pointer;transition:all .15s;font-weight:600;font-family:inherit}
+.q-opt:hover{border-color:var(--accent)}
+.q-opt.picked{border-color:var(--blue);background:rgba(88,166,255,.1);color:var(--blue)}
+.q-opt.ok{border-color:var(--green);background:rgba(63,185,80,.1);color:var(--green)}
+.q-opt.bad{border-color:var(--red);background:rgba(248,81,73,.1);color:var(--red)}
+.q-exp{display:none;margin-top:8px;padding:8px 12px;background:var(--card2);border-radius:6px;font-size:11px;color:var(--text2)}
+.q-exp.show{display:block}
+.q-exp b{color:var(--accent)}
+.q-score{text-align:center;font-size:13px;font-weight:700;margin:8px 0}
+.q-score em{color:var(--accent);font-size:18px;font-style:normal}
 
-.btn-row{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:4px;padding:8px 20px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer;background:var(--accent);color:#fff;font-family:inherit;transition:all .15s}
+.btn-row{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.btn{padding:8px 18px;border-radius:7px;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;background:var(--accent);color:#fff;transition:all .15s}
 .btn:hover{opacity:.9}.btn:active{transform:scale(.97)}
 .btn.ghost{background:var(--card);border:1px solid var(--border);color:var(--text2)}
 .btn.ghost:hover{background:var(--card2)}
+
+/* Vocab section */
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin:10px 0}
+.vocab-card{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px;cursor:pointer;transition:all .2s;text-align:center;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;user-select:none;position:relative}
+.vocab-card:hover{border-color:var(--accent)}
+.vocab-card .front{font-size:16px;font-weight:700;line-height:1.4}
+.vocab-card .back{display:none;font-size:18px;font-weight:700;line-height:1.4;color:var(--text)}
+.vocab-card .back .hint{font-size:12px;color:var(--accent);font-weight:600;margin-top:4px}
+.vocab-card .flip-hint{font-size:9px;color:var(--text3);position:absolute;bottom:6px;right:8px}
+.vocab-card.flipped .front{display:none}
+.vocab-card.flipped .back{display:block}
+.vocab-card.flipped .flip-hint{display:none}
+.vocab-card .recall-btns{display:none;margin-top:8px;gap:6px}
+.vocab-card.flipped .recall-btns{display:flex}
+.vocab-card .recall-btn{padding:3px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:10px;cursor:pointer;transition:all .15s}
+.vocab-card .recall-btn:hover{border-color:var(--green);color:var(--green)}
+.vocab-card .recall-btn.no:hover{border-color:var(--red);color:var(--red)}
+.vocab-card.known{border-color:rgba(63,185,80,.3)}
+.vocab-card.struggle{border-color:rgba(248,81,73,.3)}
+
+/* Scrollable tabs on mobile */
+@media(max-width:500px){
+  .tab-btn{font-size:10px;padding:7px 8px}
+  .card{padding:14px 16px}
+}
 </style>
 </head>
 <body>
 <div class="container">
 
 <div class="header">
-  <div class="icon">🦉</div>
-  <h1>西语语法速查</h1>
-  <p>Duolingo 配套 · 专治"为什么选这个不选那个"</p>
+  <h1>🇪🇸 西语 A2 学习手册</h1>
+  <p>语法速查 + 主题词汇 · DELE A2 考点全覆盖</p>
 </div>
 
-<div class="tabs" id="tab-bar">
-  <div class="tab active" data-tab="ser-estar">Ser vs Estar</div>
-  <div class="tab" data-tab="por-para">Por vs Para</div>
-  <div class="tab" data-tab="preterito-imperfecto">过去时选择</div>
-  <div class="tab" data-tab="saber-conocer">Saber vs Conocer</div>
+<div class="subtabs" id="mode-tabs">
+  <div class="subtab on" data-mode="grammar">📖 语法</div>
+  <div class="subtab" data-mode="vocab">📝 词汇</div>
 </div>
 
-<!-- ==================== SER vs ESTAR ==================== -->
-<div id="tab-ser-estar">
+<!-- ====== GRAMMAR MODE ====== -->
+<div id="mode-grammar">
 
+<div class="tab-row" id="grammar-tabs">
+  <div class="tab-btn on" data-gtab="serestar">Ser/Estar</div>
+  <div class="tab-btn" data-gtab="porpara">Por/Para</div>
+  <div class="tab-btn" data-gtab="preterito">过去时</div>
+  <div class="tab-btn" data-gtab="pronouns">宾格/与格</div>
+  <div class="tab-btn" data-gtab="imperativo">命令式</div>
+  <div class="tab-btn" data-gtab="futuro">将来时</div>
+  <div class="tab-btn" data-gtab="comparar">比较级</div>
+  <div class="tab-btn" data-gtab="subj">虚拟入门</div>
+</div>
+
+<!-- ===== Ser/Estar ===== -->
+<div id="gtab-serestar">
 <div class="card">
-<h3>⚡ Ser vs Estar — "是"的两个面孔</h3>
-<p>中文都翻译成"是"，但西语严格区分：<b>Ser = 本质/身份</b>，<b>Estar = 状态/位置</b>。用错会让句子意思完全不同。</p>
-
-<table class="compare-table">
-<tr><th style="color:var(--accent)">SER — 本质、永久</th><th style="color:var(--blue)">ESTAR — 状态、临时</th></tr>
-<tr><td>🎂 身份/职业：Soy profesor.<br><span class="muted">我是老师（我的职业）</span></td><td>😊 情绪/状态：Estoy cansado.<br><span class="muted">我累了（暂时的）</span></td></tr>
-<tr><td>📅 时间/日期：Hoy es lunes.<br><span class="muted">今天是周一</span></td><td>📍 位置：Estoy en casa.<br><span class="muted">我在家</span></td></tr>
-<tr><td>🏠 来源/材料：Es de madera.<br><span class="muted">是木头做的</span></td><td>🔄 进行时：Estoy comiendo.<br><span class="muted">我正在吃</span></td></tr>
-<tr><td>👤 特征：Eres muy alto.<br><span class="muted">你很高（天生）</span></td><td>👤 临时特征：Estás muy guapo.<br><span class="muted">你今天很帅（打扮了）</span></td></tr>
+<h3>Ser vs Estar — 两个"是"</h3>
+<p>Ser = <b>本质/身份/永久特征</b>。Estar = <b>状态/位置/临时情况</b>。中文都翻译成"是"，但用错会让意思完全相反。</p>
+<div class="warn">「我是开心的」— Soy feliz（我天性乐观）vs Estoy feliz（我现在开心）。一句"我很高兴"说 Soy feliz，西班牙人会以为你在表白人生哲学。</div>
+<table class="tbl">
+<tr><th style="color:var(--accent)">SER</th><th style="color:var(--blue)">ESTAR</th></tr>
+<tr><td>🎂 身份/职业：Soy estudiante.</td><td>😊 情绪/临时状态：Estoy cansado.</td></tr>
+<tr><td>📅 时间：Son las tres.</td><td>📍 位置：Está en la mesa.</td></tr>
+<tr><td>🏠 来源/材料：Es de China.</td><td>🔄 进行时：Estoy leyendo.</td></tr>
+<tr><td>👤 性格/外貌：Es alto.</td><td>👤 今天的状态：Hoy estás guapo.</td></tr>
 </table>
+<div class="tip">判断法：加"现在/今天"更顺 → Estar。下定义"是什么"→ Ser。</div>
+<div class="example"><div class="es">La sopa <b>es</b> salada. → La sopa <b>está</b> fría.</div><div class="zh">这汤是咸的（做法如此）→ 这汤凉了（现在状态）</div></div>
+</div>
+<div id="quiz-serestar"></div>
+</div>
 
-<div class="tip">一个词判断：如果加了"现在/今天/正在"更通顺 → 用 Estar。如果是在定义"是什么" → 用 Ser。</div>
+<!-- ===== Por/Para ===== -->
+<div id="gtab-porpara" style="display:none">
+<div class="card">
+<h3>Por vs Para — 两个"为了"</h3>
+<p>Para = <b>目的地/目标</b>（箭头 →）。Por = <b>原因/动机</b>（箭头 ←）。</p>
+<table class="tbl">
+<tr><th style="color:var(--accent)">PARA（目标）</th><th style="color:var(--blue)">POR（原因）</th></tr>
+<tr><td>🎯 目的：Estudio <b>para</b> aprender.</td><td>💭 原因：Lo hago <b>por</b> ti.</td></tr>
+<tr><td>📅 截止：<b>Para</b> el lunes.</td><td>⏰ 时间段：<b>Por</b> la mañana.</td></tr>
+<tr><td>🚗 方向：Voy <b>para</b> Madrid.</td><td>🛤️ 途径：Paso <b>por</b> Madrid.</td></tr>
+<tr><td>👤 接收者：Es <b>para</b> ti.</td><td>💰 交换：Lo compré <b>por</b> 10€.</td></tr>
+<tr><td>📐 对比：<b>Para</b> su edad...</td><td>🙏 感谢：Gracias <b>por</b> venir.</td></tr>
+</table>
+<div class="tip">Para = for the purpose of。Por = because of / through / in exchange for。</div>
+</div>
+<div id="quiz-porpara"></div>
+</div>
 
+<!-- ===== Preterito vs Imperfecto ===== -->
+<div id="gtab-preterito" style="display:none">
+<div class="card">
+<h3>简单过去时 vs 过去未完成时</h3>
+<p>A2 最大的坎。Indefinido = <b>完成的动作/事件</b>。Imperfecto = <b>背景/习惯/持续状态</b>。</p>
+<div class="warn">中文没有时态变形，所以中国学习者下意识用错了也感觉不到。关键训练：看到"了"、"完"→ Indefinido；看到"在"、"着"、"以前常常"→ Imperfecto。</div>
+<table class="tbl">
+<tr><th style="color:var(--accent)">INDEFINIDO（点）</th><th style="color:var(--blue)">IMPERFECTO（面）</th></tr>
+<tr><td>✅ 一次性完成：Ayer <b>fui</b> al cine.</td><td>🔄 习惯：<b>Iba</b> al cine cada día.</td></tr>
+<tr><td>📅 具体时刻：A las 8 <b>llegué</b>.</td><td>🌅 背景：<b>Eran</b> las 8, <b>hacía</b> sol.</td></tr>
+<tr><td>🔗 动作链：<b>Entré</b>, <b>miré</b>, <b>salí</b>.</td><td>⏸️ 同时进行：Mientras <b>comía</b>, <b>leía</b>.</td></tr>
+<tr><td>🧠 状态改变：<b>Supe</b> la verdad.（那一刻知道了）</td><td>🧠 持续状态：<b>Sabía</b> la verdad.（当时一直知道）</td></tr>
+</table>
+<div class="tip">电影思维：Indefinido = 镜头里发生的动作。Imperfecto = 镜头的背景和氛围。</div>
+<div class="example"><div class="es">Cuando <b>entré</b>, <b>llovía</b>.</div><div class="zh">我进来时（一个动作），天在下雨（持续背景）</div><div class="tag">同一句话里两时态配合 — A2 核心考点</div></div>
+</div>
+<div id="quiz-preterito"></div>
+</div>
+
+<!-- ===== Object Pronouns ===== -->
+<div id="gtab-pronouns" style="display:none">
+<div class="card">
+<h3>宾格代词 & 与格代词 — lo/la/le 到底怎么分</h3>
+<p>Duolingo 头号难题。简单说：<b>lo/la = 动作的直接对象（把谁怎么了）</b>，<b>le = 动作的间接对象（给谁/为谁）</b>。</p>
+<table class="tbl">
+<tr><th></th><th style="color:var(--accent)">宾格 (直接宾语)</th><th style="color:var(--blue)">与格 (间接宾语)</th></tr>
+<tr><td class="lbl">我</td><td>me</td><td>me</td></tr>
+<tr><td class="lbl">你</td><td>te</td><td>te</td></tr>
+<tr><td class="lbl">他/它</td><td><b>lo</b></td><td><b>le</b> (→ se 如果和 lo 连用)</td></tr>
+<tr><td class="lbl">她/它</td><td><b>la</b></td><td><b>le</b></td></tr>
+<tr><td class="lbl">我们</td><td>nos</td><td>nos</td></tr>
+<tr><td class="lbl">他们/它们</td><td><b>los / las</b></td><td><b>les</b> (→ se 如果和 lo 连用)</td></tr>
+</table>
+<div class="tip">记住：lo/la = 替代"什么"。le = 替代"给谁"。<br>¿El libro? <b>Lo</b> leí. / ¿A María? <b>Le</b> di el libro.</div>
+<div class="warn">中国学习者最常见的错误：该用 le 的地方用了 lo。比如 *Lo di el libro 是错误的（应该是 Le di el libro）。判断法：把宾语换成"他"→ 如果能变成"给他"就是 le，如果只是"他"就是 lo。</div>
+<div class="example"><div class="es"><b>Se lo</b> di.</div><div class="zh">我把它给他了。（le + lo → se lo，因为 le lo 发音别扭）</div><div class="tag">le + lo/la → se lo/la 是强制规则，不是可选的</div></div>
+</div>
+<div id="quiz-pronouns"></div>
+</div>
+
+<!-- ===== Imperativo ===== -->
+<div id="gtab-imperativo" style="display:none">
+<div class="card">
+<h3>命令式 — 怎么叫人做事情</h3>
+<p>A2 日常必需。点餐、问路、给指令都靠它。分<b>肯定命令</b>和<b>否定命令</b>，tú 和 usted 的变形规则完全不同。</p>
+<table class="tbl">
+<tr><th>人称</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (escribir)</th></tr>
+<tr><td class="lbl">tú (+)</td><td>habl<b>a</b></td><td>com<b>e</b></td><td>escrib<b>e</b></td></tr>
+<tr><td class="lbl">tú (−)</td><td><b>no</b> habl<b>es</b></td><td><b>no</b> com<b>as</b></td><td><b>no</b> escrib<b>as</b></td></tr>
+<tr><td class="lbl">usted (+)</td><td>habl<b>e</b></td><td>com<b>a</b></td><td>escrib<b>a</b></td></tr>
+<tr><td class="lbl">ustedes (+)</td><td>habl<b>en</b></td><td>com<b>an</b></td><td>escrib<b>an</b></td></tr>
+</table>
+<div class="tip">记忆口诀：tú 肯定 = 去掉 r（hablar→ habla，但 decir→ di 等不规则例外）。tú 否定 = 把现在时 yo 的 o 换成 as/es。usted = yo 形的 o 换成 e/a。</div>
 <div class="example">
-  <div class="es">Soy feliz. vs Estoy feliz.</div>
-  <div class="zh">我是幸福的人（性格乐观） vs 我现在很开心（遇上好事了）</div>
-  <div class="note">同样一个 feliz，用 ser 和 estar 意思完全不同！</div>
+<div class="es">¡<b>Come</b>! / ¡<b>No comas</b>!</div><div class="zh">吃！/ 别吃！</div>
+<div class="es" style="margin-top:6px">¡<b>Hable</b> más despacio, por favor.</div><div class="zh">请您说慢一点。（usted 命令，礼貌请求）</div>
 </div>
 </div>
-
-<div class="quiz-section"><h4>✏️ 小测 — Ser 还是 Estar？（5题）</h4><div id="quiz-se"></div>
-<div class="quiz-score">得分：<span class="n" id="score-se">-</span></div>
-<div class="btn-row">
-  <button class="btn" onclick="checkQuiz('se')">✅ 检查</button>
-  <button class="btn ghost" onclick="newQuiz('se')">🔄 换题</button>
-</div></div>
-
+<div id="quiz-imperativo"></div>
 </div>
 
-<!-- ==================== POR vs PARA ==================== -->
-<div id="tab-por-para" style="display:none">
-
+<!-- ===== Futuro ===== -->
+<div id="gtab-futuro" style="display:none">
 <div class="card">
-<h3>🧭 Por vs Para — 两个"为了"怎么分</h3>
-<p>最简单的记忆法：<b>Para = 目标/目的地（向前看）</b>，<b>Por = 原因/途径（回头看）</b></p>
-
-<table class="compare-table">
-<tr><th style="color:var(--accent)">PARA — 目的、终点</th><th style="color:var(--blue)">POR — 原因、途径</th></tr>
-<tr><td>🎯 目的：Estudio para aprender.<br><span class="muted">我学习是为了学会</span></td><td>💭 原因：Lo hago por ti.<br><span class="muted">我这么做是因为你</span></td></tr>
-<tr><td>📅 截止时间：Para el lunes.<br><span class="muted">周一之前</span></td><td>⏰ 时间段：Por la mañana.<br><span class="muted">在早上（泛指）</span></td></tr>
-<tr><td>🚗 方向/目的地：Voy para Madrid.<br><span class="muted">我去马德里</span></td><td>🛤️ 经过/途径：Paso por Madrid.<br><span class="muted">我经过马德里</span></td></tr>
-<tr><td>👤 接收者：Es para ti.<br><span class="muted">这是给你的</span></td><td>💰 交换：Lo compré por 10€.<br><span class="muted">我花 10 欧买的</span></td></tr>
-<tr><td>📐 对比标准：Para su edad...<br><span class="muted">考虑到他的年龄…</span></td><td>🙏 代办：Gracias por venir.<br><span class="muted">谢谢你来</span></td></tr>
+<h3>将来时 — ir a + infinitivo</h3>
+<p>A2 最实用的时态。比真正的将来时（comeré, hablarás）更日常、更简单：<b>ir 的现在时 + a + 动词原形</b>。</p>
+<table class="tbl">
+<tr><th>人称</th><th>ir 变位</th><th>例句</th></tr>
+<tr><td class="lbl">yo</td><td><b>voy</b> a</td><td>Voy a <b>estudiar</b>. 我要学习。</td></tr>
+<tr><td class="lbl">tú</td><td><b>vas</b> a</td><td>¿Vas a <b>venir</b>? 你要来吗？</td></tr>
+<tr><td class="lbl">él/ella</td><td><b>va</b> a</td><td>Va a <b>llover</b>. 要下雨了。</td></tr>
+<tr><td class="lbl">nosotros</td><td><b>vamos</b> a</td><td>Vamos a <b>comer</b>. 我们去吃饭。</td></tr>
+<tr><td class="lbl">ellos</td><td><b>van</b> a</td><td>Van a <b>llegar</b> tarde. 他们会迟到。</td></tr>
 </table>
-
-<div class="tip">Para = 箭头 → 指向未来目标。Por = 箭头 ← 回头看动机。</div>
+<div class="tip">千万别把 ir 变复杂了 — 它就是 voy/vas/va/vamos/vais/van，后面永远接 a + 动词原形。等于英语的 going to。</div>
+<div class="example"><div class="es">Este fin de semana <b>voy a</b> visitar a mis abuelos.</div><div class="zh">这个周末我要去看爷爷奶奶。</div></div>
+</div>
+<div id="quiz-futuro"></div>
 </div>
 
-<div class="quiz-section"><h4>✏️ 小测 — Por 还是 Para？（5题）</h4><div id="quiz-pp"></div>
-<div class="quiz-score">得分：<span class="n" id="score-pp">-</span></div>
-<div class="btn-row"><button class="btn" onclick="checkQuiz('pp')">✅ 检查</button><button class="btn ghost" onclick="newQuiz('pp')">🔄 换题</button></div></div>
-
-</div>
-
-<!-- ==================== PRETERITO vs IMPERFECTO ==================== -->
-<div id="tab-preterito-imperfecto" style="display:none">
-
+<!-- ===== Comparatives ===== -->
+<div id="gtab-comparar" style="display:none">
 <div class="card">
-<h3>⏳ 简单过去时 vs 过去未完成时</h3>
-<p>Duolingo 里最让人头疼的选择。一句话总结：<b>Indefinido = 完成的动作/事件</b>，<b>Imperfecto = 背景/习惯/进行中的状态</b></p>
-
-<table class="compare-table">
-<tr><th style="color:var(--accent)">INDEFINIDO (简单过去时)</th><th style="color:var(--blue)">IMPERFECTO (过去未完成时)</th></tr>
-<tr><td>✅ 一次性完成的动作：Ayer fui al cine.<br><span class="muted">昨天我去了电影院</span></td><td>🔄 过去的习惯：Iba al cine todos los días.<br><span class="muted">我以前每天去电影院</span></td></tr>
-<tr><td>📅 具体时间点：A las 8 llegué.<br><span class="muted">8 点我到了</span></td><td>🌅 背景描述：Eran las 8, hacía sol.<br><span class="muted">当时 8 点，天气晴朗</span></td></tr>
-<tr><td>🔗 连续动作链：Entré, miré, salí.<br><span class="muted">我进去，看了看，出来了</span></td><td>⏸️ 同时进行的动作：Mientras comía, leía.<br><span class="muted">他一边吃一边读</span></td></tr>
-<tr><td>🧠 状态改变（开始/结束）：Supe la verdad.<br><span class="muted">我知道了真相（那一刻）</span></td><td>🧠 持续状态：Sabía la verdad.<br><span class="muted">我（当时）知道真相</span></td></tr>
+<h3>比较级 & 最高级</h3>
+<p>结构非常规律：<b>más/menos + 形容词 + que</b> = 比…更/不如。</p>
+<table class="tbl">
+<tr><th>类型</th><th>结构</th><th>例句</th></tr>
+<tr><td class="lbl">更…</td><td>más + adj + que</td><td>Eres <b>más alto que</b> yo.</td></tr>
+<tr><td class="lbl">不如…</td><td>menos + adj + que</td><td>Es <b>menos caro que</b> ese.</td></tr>
+<tr><td class="lbl">一样…</td><td>tan + adj + como</td><td>Es <b>tan inteligente como</b> tú.</td></tr>
+<tr><td class="lbl">最多</td><td>el/la más + adj</td><td>Es <b>el más grande</b>.</td></tr>
 </table>
-
-<div class="tip">电影思维：Indefinido = 镜头里发生的"动作戏"。Imperfecto = 镜头里的"布景和氛围"。</div>
-
-<div class="example">
-  <div class="es">Cuando <b>entré</b>, <b>llovía</b>.</div>
-  <div class="zh">当我进来时（一个动作），天在下雨（持续背景）</div>
-  <div class="note">同一句话里两个时态配合：动作用 Indefinido，背景用 Imperfecto</div>
+<div class="warn">四个不规则比较词必须背：bueno → <b>mejor</b>（更好），malo → <b>peor</b>（更差），grande → <b>mayor</b>（更大/年长），pequeño → <b>menor</b>（更小/年幼）。Duolingo 经常考。</div>
 </div>
+<div id="quiz-comparar"></div>
 </div>
 
-<div class="quiz-section"><h4>✏️ 小测 — Indefinido 还是 Imperfecto？（5题）</h4><div id="quiz-pi"></div>
-<div class="quiz-score">得分：<span class="n" id="score-pi">-</span></div>
-<div class="btn-row"><button class="btn" onclick="checkQuiz('pi')">✅ 检查</button><button class="btn ghost" onclick="newQuiz('pi')">🔄 换题</button></div></div>
-
-</div>
-
-<!-- ==================== SABER vs CONOCER ==================== -->
-<div id="tab-saber-conocer" style="display:none">
-
+<!-- ===== Subjunctive intro ===== -->
+<div id="gtab-subj" style="display:none">
 <div class="card">
-<h3>🧠 Saber vs Conocer — 两个"知道"</h3>
-<p><b>Saber = 知道信息/会做某事</b>，<b>Conocer = 认识人/地方/事物</b>（有过接触了解）</p>
-
-<table class="compare-table">
-<tr><th style="color:var(--accent)">SABER — 知识、技能</th><th style="color:var(--blue)">CONOCER — 认识、熟悉</th></tr>
-<tr><td>📚 知道事实：Sé que es tarde.<br><span class="muted">我知道很晚了</span></td><td>👤 认识人：Conozco a María.<br><span class="muted">我认识 María</span></td></tr>
-<tr><td>🎵 会做某事 (saber + inf)：Sé nadar.<br><span class="muted">我会游泳</span></td><td>🏙️ 熟悉地方：Conozco Madrid.<br><span class="muted">我熟悉马德里（去过）</span></td></tr>
-<tr><td>📖 记得内容：¿Sabes la respuesta?<br><span class="muted">你知道答案吗？</span></td><td>📖 听说过/接触过：¿Conoces este libro?<br><span class="muted">你知道这本书吗？（读过/见过）</span></td></tr>
+<h3>虚拟语气入门 — A2 阶段只需知道这些</h3>
+<p>虚拟语气（subjuntivo）B1 才系统学，但 A2 已经遇到几个固定表达，先记住即可。</p>
+<table class="tbl">
+<tr><th>触发词</th><th>后面接</th><th>例句</th></tr>
+<tr><td class="lbl">Ojalá</td><td>虚拟现在时</td><td>¡Ojalá <b>llueva</b>! 但愿下雨！</td></tr>
+<tr><td class="lbl">Quizás / Tal vez</td><td>虚拟现在时</td><td>Quizás <b>venga</b> mañana. 也许他明天来。</td></tr>
+<tr><td class="lbl">Cuando + 将来</td><td>虚拟现在时</td><td>Cuando <b>tenga</b> dinero, viajaré. 等我有钱了就去旅行。</td></tr>
+<tr><td class="lbl">Para que</td><td>虚拟现在时</td><td>Te lo digo para que <b>sepas</b>. 我告诉你让你知道。</td></tr>
 </table>
-
-<div class="tip">Saber 后面可以接 que / si / 疑问词 / 动词不定式。Conocer 后面直接接名词或 a + 人。</div>
-
-<div class="example">
-  <div class="es">Sé quién es, pero no lo conozco.</div>
-  <div class="zh">我知道他是谁（有信息），但我不认识他（没接触过）</div>
-  <div class="note">同一句话里两个"知道"的区别一目了然</div>
+<div class="tip">A2 对策：记住这四个触发词，变形规则就是 -AR 用 -ER 词尾（hable/hables/hable…），-ER/-IR 用 -AR 词尾（coma/comas/coma…）。</div>
 </div>
+<div id="quiz-subj"></div>
 </div>
 
-<div class="quiz-section"><h4>✏️ 小测 — Saber 还是 Conocer？（5题）</h4><div id="quiz-sk"></div>
-<div class="quiz-score">得分：<span class="n" id="score-sk">-</span></div>
-<div class="btn-row"><button class="btn" onclick="checkQuiz('sk')">✅ 检查</button><button class="btn ghost" onclick="newQuiz('sk')">🔄 换题</button></div></div>
+</div><!-- /mode-grammar -->
 
+<!-- ====== VOCAB MODE ====== -->
+<div id="mode-vocab" style="display:none">
+
+<div class="tab-row" id="vocab-tabs">
+  <div class="tab-btn on" data-vtab="comida">🍽️ 饮食</div>
+  <div class="tab-btn" data-vtab="viajes">✈️ 旅行</div>
+  <div class="tab-btn" data-vtab="casa">🏠 家居</div>
+  <div class="tab-btn" data-vtab="trabajo">💼 工作</div>
+  <div class="tab-btn" data-vtab="cuerpo">🏥 健康</div>
+  <div class="tab-btn" data-vtab="emocion">😊 情绪</div>
+  <div class="tab-btn" data-vtab="tiempo">⏰ 时间</div>
+  <div class="tab-btn" data-vtab="numeros">🔢 数字</div>
+  <div class="tab-btn" data-vtab="clima">🌤️ 天气</div>
+  <div class="tab-btn" data-vtab="ropa">👕 服饰</div>
+  <div class="tab-btn" data-vtab="calle">🧭 问路</div>
 </div>
+
+<div style="margin:8px 0;display:flex;gap:6px;flex-wrap:wrap">
+  <button class="btn ghost" id="vocab-mode-btn" onclick="toggleVocabMode()" style="font-size:11px">📝 选择题模式</button>
+  <button class="btn ghost" id="dictation-btn" onclick="startDictation()" style="font-size:11px">✍️ 听写模式</button>
+  <button class="btn ghost" id="pronounce-btn" onclick="startPronunciation()" style="font-size:11px">🎤 跟读模式</button>
+</div>
+
+<div id="vocab-area"></div>
+
+</div><!-- /mode-vocab -->
 
 </div><!-- /container -->
 
+<div id="toast" style="position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:999;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:600;background:var(--card);border:1px solid var(--border);color:var(--text);opacity:0;transition:opacity .3s;pointer-events:none"></div>
+
 <script>
 'use strict';
+var $=function(id){return document.getElementById(id)};
 
-// ===== QUIZ DATA =====
+// ===== QUIZ ENGINE =====
 var quizBanks = {
-  'se': [ // Ser vs Estar
-    {q:'Mi hermano ___ médico.',blank:'___',opts:['es','está'],ans:0,hint:'职业用 ser（本质身份）'},
-    {q:'Hoy ___ muy contenta.',blank:'___',opts:['soy','estoy'],ans:1,hint:'"今天"说明是暂时的情绪 → estar'},
-    {q:'¿De dónde ___ tú?',blank:'___',opts:['eres','estás'],ans:0,hint:'来源/籍贯用 ser'},
-    {q:'La fiesta ___ en mi casa.',blank:'___',opts:['es','está'],ans:1,hint:'活动地点用 estar（事件位置）'},
-    {q:'Ella ___ muy inteligente.',blank:'___',opts:['es','está'],ans:0,hint:'性格特征（持久的）用 ser'},
-    {q:'Mis llaves ___ en la mesa.',blank:'___',opts:['son','están'],ans:1,hint:'物品位置用 estar'},
-    {q:'___ las tres de la tarde.',blank:'___',opts:['Son','Están'],ans:0,hint:'时间用 ser'},
-    {q:'La sopa ___ fría ya.',blank:'___',opts:['es','está'],ans:1,hint:'汤变冷了（状态变化）→ estar'},
-    {q:'Nosotros ___ de China.',blank:'___',opts:['somos','estamos'],ans:0,hint:'来源/国籍用 ser'},
-    {q:'¿___ cansado? Has trabajado mucho.',blank:'___',opts:['Eres','Estás'],ans:1,hint:'临时状态（累了）用 estar'},
+  serestar:[
+    {q:'Mi hermano ___ médico.',gap:'___',opts:['es','está'],ans:0,hint:'职业用 ser'},
+    {q:'Hoy ___ muy contenta.',gap:'___',opts:['soy','estoy'],ans:1,hint:'「今天」= 暂时 → estar'},
+    {q:'¿De dónde ___ ?',gap:'___',opts:['eres','estás'],ans:0,hint:'来源用 ser'},
+    {q:'La fiesta ___ en mi casa.',gap:'___',opts:['es','está'],ans:1,hint:'活动地点用 estar'},
+    {q:'Mis llaves ___ en la mesa.',gap:'___',opts:['son','están'],ans:1,hint:'物品位置用 estar'},
   ],
-  'pp': [ // Por vs Para
-    {q:'Estudio español ___ viajar a México.',blank:'___',opts:['por','para'],ans:1,hint:'目的（为了旅行）→ para'},
-    {q:'Gracias ___ tu ayuda.',blank:'___',opts:['por','para'],ans:0,hint:'感谢原因用 por'},
-    {q:'Este regalo es ___ ti.',blank:'___',opts:['por','para'],ans:1,hint:'接收者用 para'},
-    {q:'Cambié mi coche ___ uno nuevo.',blank:'___',opts:['por','para'],ans:0,hint:'交换用 por'},
-    {q:'___ ser tan joven, habla muy bien.',blank:'___',opts:['Por','Para'],ans:1,hint:'对比标准（考虑到…）用 para'},
-    {q:'Salimos ___ la puerta trasera.',blank:'___',opts:['por','para'],ans:0,hint:'通过/途径用 por'},
-    {q:'Necesito terminar esto ___ mañana.',blank:'___',opts:['por','para'],ans:1,hint:'截止时间用 para'},
-    {q:'Me pagan ___ hora.',blank:'___',opts:['por','para'],ans:0,hint:'单位/每…用 por'},
-    {q:'Trabajo ___ ganar dinero.',blank:'___',opts:['por','para'],ans:1,hint:'目的（为了赚钱）→ para'},
-    {q:'Lo hice ___ mis hijos.',blank:'___',opts:['por','para'],ans:0,hint:'原因/为了某人（动机）→ por'},
+  porpara:[
+    {q:'Estudio español ___ viajar.',gap:'___',opts:['por','para'],ans:1,hint:'目的 → para'},
+    {q:'Gracias ___ tu ayuda.',gap:'___',opts:['por','para'],ans:0,hint:'感谢原因 → por'},
+    {q:'Este regalo es ___ ti.',gap:'___',opts:['por','para'],ans:1,hint:'接收者 → para'},
+    {q:'Lo compré ___ 10 euros.',gap:'___',opts:['por','para'],ans:0,hint:'交换 → por'},
+    {q:'Necesito esto ___ mañana.',gap:'___',opts:['por','para'],ans:1,hint:'截止时间 → para'},
   ],
-  'pi': [ // Preterito vs Imperfecto
-    {q:'Ayer ___ al supermercado.',blank:'___',opts:['fui','iba'],ans:0,hint:'"昨天" + 一次性完成动作用 indefinido'},
-    {q:'Cuando era niño, siempre ___ al parque.',blank:'___',opts:['fui','iba'],ans:1,hint:'"siempre" + 过去习惯用 imperfecto'},
-    {q:'___ las 10 cuando llegó.',blank:'___',opts:['Fueron','Eran'],ans:1,hint:'背景时间（当时是10点）用 imperfecto'},
-    {q:'Ella ___ la puerta y salió.',blank:'___',opts:['abrió','abría'],ans:0,hint:'连续动作链中的一环用 indefinido'},
-    {q:'___ mucho frío aquel día.',blank:'___',opts:['Hizo','Hacía'],ans:1,hint:'背景描述（那天天气冷）用 imperfecto'},
-    {q:'De repente, ___ a llover.',blank:'___',opts:['empezó','empezaba'],ans:0,hint:'"de repente" + 突然开始用 indefinido'},
-    {q:'Mientras yo ___, él cocinaba.',blank:'___',opts:['estudié','estudiaba'],ans:1,hint:'"mientras" + 同时进行用 imperfecto'},
-    {q:'La conocí cuando ___ en Madrid.',blank:'___',opts:['viví','vivía'],ans:1,hint:'when I was living（持续状态）用 imperfecto'},
-    {q:'El año pasado ___ a España.',blank:'___',opts:['viajé','viajaba'],ans:0,hint:'"el año pasado" + 完成事件用 indefinido'},
-    {q:'___ sol y los pájaros cantaban.',blank:'___',opts:['Hizo','Hacía'],ans:1,hint:'天气背景描述用 imperfecto'},
+  preterito:[
+    {q:'Ayer ___ al supermercado.',gap:'___',opts:['fui','iba'],ans:0,hint:'「昨天」+ 完成动作 → indefinido'},
+    {q:'Cuando era niño, siempre ___ al parque.',gap:'___',opts:['fui','iba'],ans:1,hint:'过去习惯 → imperfecto'},
+    {q:'___ las 10 cuando llegó.',gap:'___',opts:['Fueron','Eran'],ans:1,hint:'背景时间 → imperfecto'},
+    {q:'De repente, ___ a llover.',gap:'___',opts:['empezó','empezaba'],ans:0,hint:'突然开始 → indefinido'},
+    {q:'___ sol y los pájaros cantaban.',gap:'___',opts:['Hizo','Hacía'],ans:1,hint:'背景描述 → imperfecto'},
   ],
-  'sk': [ // Saber vs Conocer
-    {q:'¿___ dónde está el banco?',blank:'___',opts:['Sabes','Conoces'],ans:0,hint:'知道信息（银行在哪）用 saber'},
-    {q:'___ a su hermana desde hace años.',blank:'___',opts:['Sé','Conozco'],ans:1,hint:'认识人用 conocer（+ a）'},
-    {q:'Ella ___ hablar tres idiomas.',blank:'___',opts:['sabe','conoce'],ans:0,hint:'会做某事（saber + inf）'},
-    {q:'No ___ bien esta ciudad todavía.',blank:'___',opts:['sé','conozco'],ans:1,hint:'熟悉地方用 conocer'},
-    {q:'¿___ que mañana es fiesta?',blank:'___',opts:['Sabes','Conoces'],ans:0,hint:'知道事实（saber + que）'},
-    {q:'Quiero ___ la verdad.',blank:'___',opts:['saber','conocer'],ans:0,hint:'想知道信息用 saber'},
-    {q:'¿___ este restaurante? Es nuevo.',blank:'___',opts:['Sabes','Conoces'],ans:1,hint:'听说过/知道这个地方用 conocer'},
-    {q:'Mi abuelo no ___ leer.',blank:'___',opts:['sabe','conoce'],ans:0,hint:'会技能（saber + inf）'},
-    {q:'___ a muchas personas famosas.',blank:'___',opts:['Sabe','Conoce'],ans:1,hint:'认识人用 conocer'},
-    {q:'¿___ cuánto cuesta?',blank:'___',opts:['Sabes','Conoces'],ans:0,hint:'知道信息（多少钱）用 saber'},
-  ]
+  pronouns:[
+    {q:'¿El libro? Sí, ___ leí.',gap:'___',opts:['lo','le','la'],ans:0,hint:'libro 是阳性直接宾语 → lo'},
+    {q:'___ di el regalo a María.',gap:'___',opts:['Lo','Le','La'],ans:1,hint:'给 María → 间接宾语 → le'},
+    {q:'___ vi ayer en el parque.',gap:'___',opts:['Lo','Le','Se'],ans:0,hint:'看见他 → 直接宾语 → lo'},
+    {q:'___ compré flores a mi madre.',gap:'___',opts:['Lo','Le','La'],ans:1,hint:'给妈妈买 → 间接宾语 → le'},
+    {q:'¿Las llaves? ___ puse en la mesa.',gap:'___',opts:['las','les','los'],ans:0,hint:'llaves 阴性复数直接宾语 → las'},
+  ],
+  imperativo:[
+    {q:'¡___! (tú, comer)',gap:'___',opts:['Come','Comes','Coma'],ans:0,hint:'tú 肯定命令 = 去掉 r → come'},
+    {q:'¡No ___! (tú, hablar)',gap:'___',opts:['hables','hablas','hable'],ans:0,hint:'tú 否定 = yo形 o→es → hables'},
+    {q:'Por favor, ___ usted. (sentarse)',gap:'___',opts:['siéntese','siéntate','sienta'],ans:0,hint:'usted 命令 + 自复代词 = siéntese'},
+    {q:'¡___ la ventana! (tú, abrir)',gap:'___',opts:['Abre','Abres','Abra'],ans:0,hint:'tú 肯定 = 去掉 r → abre'},
+    {q:'No ___ tarde. (tú, llegar)',gap:'___',opts:['llegues','llegas','llegue'],ans:0,hint:'tú 否定 = yo形 o→es → llegues'},
+  ],
+  futuro:[
+    {q:'Mañana ___ a estudiar.',gap:'___',opts:['voy','vas','va'],ans:0,hint:'yo → voy a + inf'},
+    {q:'¿___ a venir a la fiesta?',gap:'___',opts:['vas','voy','va'],ans:0,hint:'tú → vas a + inf'},
+    {q:'Ella ___ a ser médica.',gap:'___',opts:['va','vas','voy'],ans:0,hint:'ella → va a + inf'},
+    {q:'___ a comer juntos.',gap:'___',opts:['Vamos','Vais','Van'],ans:0,hint:'nosotros → vamos a + inf'},
+    {q:'Ellos ___ a llegar pronto.',gap:'___',opts:['van','vamos','va'],ans:0,hint:'ellos → van a + inf'},
+  ],
+  comparar:[
+    {q:'Eres ___ alto que yo.',gap:'___',opts:['más','tan','menos'],ans:0,hint:'更…= más + adj + que'},
+    {q:'Este libro es ___ interesante como aquel.',gap:'___',opts:['tan','más','menos'],ans:0,hint:'一样…= tan + adj + como'},
+    {q:'Mi hermano es ___ que yo.',gap:'___',opts:['mayor','más grande','más mayor'],ans:0,hint:'年龄更大用 mayor（不规则）'},
+    {q:'Esta película es ___ que la otra.',gap:'___',opts:['mejor','más buena','buena'],ans:0,hint:'更好用 mejor（不规则）'},
+    {q:'Hoy hace ___ frío que ayer.',gap:'___',opts:['menos','tan','más'],ans:0,hint:'不如…= menos + adj + que'},
+  ],
+  subj:[
+    {q:'Ojalá ___ mañana.',gap:'___',opts:['llueva','llueve','lloverá'],ans:0,hint:'Ojalá + 虚拟 → -AR用e词尾'},
+    {q:'Quizás ___ a la fiesta.',gap:'___',opts:['venga','viene','vendrá'],ans:0,hint:'Quizás + 虚拟 → -IR用a词尾'},
+    {q:'Cuando ___ dinero, viajaré.',gap:'___',opts:['tenga','tengo','tendré'],ans:0,hint:'Cuando+将来 → 虚拟'},
+    {q:'Te llamo cuando ___.',gap:'___',opts:['llegue','llego','llegaré'],ans:0,hint:'Cuando+将来动作 → 虚拟'},
+    {q:'Para que tú lo ___.',gap:'___',opts:['sepas','sabes','sabrás'],ans:0,hint:'Para que + 虚拟 → -ER用a词尾'},
+  ],
 };
-
-// Quiz state
-var picked = {};
-
-function newQuiz(key){
-  picked[key] = {};
-  var bank = quizBanks[key];
-  var items = bank.slice(); // All items
-  // Shuffle and pick 5
-  for(var i=items.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=items[i];items[i]=items[j];items[j]=t;}
-  items = items.slice(0,5);
-
-  var h = '';
-  items.forEach(function(item, i){
-    var qText = item.q.replace('___', '<span class="blank">'+item.blank+'</span>');
-    h += '<div class="quiz-item" id="qi-'+key+'-'+i+'">'+
-      '<div class="q">'+qText+'</div>'+
-      '<div class="opts">'+
-        item.opts.map(function(opt, oi){
-          return '<button class="opt" onclick="pickOpt(\''+key+'\','+i+','+oi+')">'+opt+'</button>';
-        }).join('')+
-      '</div>'+
-      '<div class="explain" id="explain-'+key+'-'+i+'"><b>👉 '+item.hint+'</b></div>'+
-    '</div>';
-  });
-  document.getElementById('quiz-'+key).innerHTML = h;
-  document.getElementById('score-'+key).textContent = '-';
-}
-
-function pickOpt(key, qi, oi){
-  if(picked[key][qi] !== undefined) return; // already answered
-  var item = document.getElementById('qi-'+key+'-'+qi);
-  var bank = quizBanks[key];
-  // Find the current question (need to store original question indices)
-  // Since we shuffled, we need to look up by DOM
-  var opts = item.querySelectorAll('.opt');
-  var correct = -1;
-  // Find correct answer by matching button text to opts
-  opts.forEach(function(opt, idx){
-    // Get hint from the explain div
-  });
-
-  picked[key][qi] = oi;
-  // Mark picked
-  opts.forEach(function(opt, idx){
-    opt.style.pointerEvents = 'none';
-  });
-  opts[oi].classList.add('picked');
-
-  // Find which option is correct - we need to track this
-  // Use the data from the DOM: the correct answer is embedded
-  var explainDiv = document.getElementById('explain-'+key+'-'+qi);
-  explainDiv.classList.add('show');
-}
-
-function checkQuiz(key){
-  var bank = quizBanks[key];
-  // Get the 5 displayed questions by finding the quiz items
-  var items = document.querySelectorAll('#quiz-'+key+' .quiz-item');
-  var score = 0;
-  items.forEach(function(item, i){
-    var opts = item.querySelectorAll('.opt');
-    var explainDiv = document.getElementById('explain-'+key+'-'+i);
-    // Determine correct answer from hint text
-    // Rebuild: need to track correct answer per displayed question
-
-    // Find which button was picked
-    var pickedIdx = picked[key][i];
-    if(pickedIdx === undefined) return;
-
-    // Determine correct answer by checking which option text matches expected
-    // We need the original question data. Let me restructure.
-  });
-}
-
-// For now, make check work by storing correct answer in a data attr
-// Actually let me restructure newQuiz to track correct answers
 var quizState = {};
 
-function newQuizV2(key){
-  quizState[key] = {answered:{}};
-  var bank = quizBanks[key];
-  var items = bank.slice();
+function buildQuiz(key){
+  var bank=quizBanks[key]||[],items=bank.slice();
   for(var i=items.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=items[i];items[i]=items[j];items[j]=t;}
-  items = items.slice(0,5);
-  quizState[key].items = items;
-  quizState[key].picked = {};
-
-  var h = '';
-  items.forEach(function(item, i){
-    var qText = item.q.replace('___', '<span class="blank">'+item.blank+'</span>');
-    h += '<div class="quiz-item" id="qi-'+key+'-'+i+'">'+
-      '<div class="q">'+qText+'</div>'+
-      '<div class="opts">'+
-        item.opts.map(function(opt, oi){
-          return '<button class="opt" onclick="pickOptV2(\''+key+'\','+i+','+oi+')">'+opt+'</button>';
-        }).join('')+
-      '</div>'+
-      '<div class="explain" id="explain-'+key+'-'+i+'"><b>👉 '+item.hint+'</b></div>'+
-    '</div>';
+  var qs=items.slice(0,5);
+  // Shuffle options for each question and track correct position
+  qs.forEach(function(q){
+    var orig=q.opts.slice(),correctVal=orig[q.ans];
+    // Fisher-Yates shuffle
+    for(var i2=orig.length-1;i2>0;i2--){var j2=Math.floor(Math.random()*(i2+1));var t2=orig[i2];orig[i2]=orig[j2];orig[j2]=t2;}
+    q.shuffled=orig;
+    q.ansNew=orig.indexOf(correctVal);
   });
-  document.getElementById('quiz-'+key).innerHTML = h;
-  document.getElementById('score-'+key).textContent = '-';
+  quizState[key]={items:qs,picked:{}};
+  var h='<div class="quiz-section"><h4>✏️ 小测（5题）</h4>';
+  qs.forEach(function(q,i){
+    var txt=q.q.replace('___','<span class="gap">'+q.gap+'</span>');
+    h+='<div class="q-item" id="qi-'+key+'-'+i+'"><div class="q-txt">'+txt+'</div><div class="q-opts">'+
+      q.shuffled.map(function(o,oi){return '<button class="q-opt" onclick="pick(\''+key+'\','+i+','+oi+')">'+o+'</button>'}).join('')+
+      '</div><div class="q-exp" id="qexp-'+key+'-'+i+'"><b>👉 '+q.hint+'</b></div></div>';
+  });
+  h+='<div class="q-score">得分：<em id="score-'+key+'">-</em></div><div class="btn-row"><button class="btn" onclick="check(\''+key+'\')">✅ 检查</button><button class="btn ghost" onclick="buildQuiz(\''+key+'\')">🔄 换题</button></div></div>';
+  $('quiz-'+key).innerHTML=h;
 }
-
-function pickOptV2(key, qi, oi){
-  var st = quizState[key];
-  if(st.picked[qi] !== undefined) return;
-  st.picked[qi] = oi;
-
-  var item = document.getElementById('qi-'+key+'-'+qi);
-  var opts = item.querySelectorAll('.opt');
-  var correctAns = st.items[qi].ans;
-
+function pick(key,qi,oi){
+  var st=quizState[key];if(!st||st.picked[qi]!==undefined)return;
+  st.picked[qi]=oi;
+  var el=$('qi-'+key+'-'+qi),opts=el.querySelectorAll('.q-opt'),correct=st.items[qi].ansNew;
   opts.forEach(function(o){o.style.pointerEvents='none'});
-
-  if(oi === correctAns){
-    opts[oi].classList.add('right');
-  } else {
-    opts[oi].classList.add('wrong');
-    opts[correctAns].classList.add('right');
-  }
-
-  var explainDiv = document.getElementById('explain-'+key+'-'+qi);
-  explainDiv.classList.add('show');
+  opts[oi].classList.add('picked');
+  if(oi===correct){opts[oi].classList.add('ok')}else{opts[oi].classList.add('bad');opts[correct].classList.add('ok')}
+  $('qexp-'+key+'-'+qi).classList.add('show');
 }
-
-function checkQuizV2(key){
-  var st = quizState[key];
-  if(!st) return;
-  var score = 0;
-  st.items.forEach(function(item, i){
-    if(st.picked[i] === item.ans) score++;
+function check(key){
+  var st=quizState[key];if(!st)return;var s=0;
+  st.items.forEach(function(q,i){
+    if(st.picked[i]===q.ansNew)s++;else{var el=$('qi-'+key+'-'+i);if(el){el.querySelectorAll('.q-opt').forEach(function(o){o.style.pointerEvents='none'});el.querySelectorAll('.q-opt')[q.ansNew].classList.add('ok')}$('qexp-'+key+'-'+i).classList.add('show')}
   });
-  document.getElementById('score-'+key).textContent = score + '/' + st.items.length;
-  // Reveal all explanations
-  st.items.forEach(function(item, i){
-    var explainDiv = document.getElementById('explain-'+key+'-'+i);
-    if(explainDiv) explainDiv.classList.add('show');
-    // Mark unpicked
-    if(st.picked[i] === undefined){
-      var itemEl = document.getElementById('qi-'+key+'-'+i);
-      if(itemEl){
-        var opts = itemEl.querySelectorAll('.opt');
-        opts[item.ans].classList.add('right');
-        opts.forEach(function(o){o.style.pointerEvents='none'});
-      }
-    }
-  });
+  $('score-'+key).textContent=s+'/'+st.items.length;
 }
-
-// Replace old functions
-var newQuiz = newQuizV2;
-var pickOpt = pickOptV2;
-var checkQuiz = checkQuizV2;
 
 // ===== TABS =====
-document.querySelectorAll('#tab-bar .tab').forEach(function(tab){
-  tab.addEventListener('click', function(){
-    var t = this.dataset.tab;
-    document.querySelectorAll('#tab-bar .tab').forEach(function(el){el.classList.remove('active')});
-    this.classList.add('active');
-    ['ser-estar','por-para','preterito-imperfecto','saber-conocer'].forEach(function(id){
-      var el = document.getElementById('tab-'+id);
-      if(el) el.style.display = (id===t)?'block':'none';
+function switchGTab(t){
+  document.querySelectorAll('#grammar-tabs .tab-btn').forEach(function(e){e.classList.remove('on')});
+  document.querySelector('#grammar-tabs [data-gtab="'+t+'"]').classList.add('on');
+  ['serestar','porpara','preterito','pronouns','imperativo','futuro','comparar','subj'].forEach(function(id){
+    var el=$('gtab-'+id);if(el)el.style.display=(id===t)?'block':'none';
+  });
+}
+document.querySelectorAll('#grammar-tabs .tab-btn').forEach(function(tab){
+  tab.addEventListener('click',function(){switchGTab(this.dataset.gtab)});
+});
+
+// Mode tabs
+document.querySelectorAll('#mode-tabs .subtab').forEach(function(tab){
+  tab.addEventListener('click',function(){
+    var m=this.dataset.mode;
+    document.querySelectorAll('#mode-tabs .subtab').forEach(function(e){e.classList.remove('on')});
+    this.classList.add('on');
+    $('mode-grammar').style.display=(m==='grammar')?'block':'none';
+    $('mode-vocab').style.display=(m==='vocab')?'block':'none';
+    if(m==='vocab')renderVocab(currentVTab);
+  });
+});
+
+// ===== VOCAB =====
+var vocabData = {
+  comida:[
+    {es:'el arroz',zh:'米饭'},{es:'el pan',zh:'面包'},{es:'el pollo',zh:'鸡肉'},
+    {es:'el pescado',zh:'鱼肉'},{es:'la carne',zh:'肉'},{es:'la verdura',zh:'蔬菜'},
+    {es:'la fruta',zh:'水果'},{es:'el huevo',zh:'鸡蛋'},{es:'la leche',zh:'牛奶'},
+    {es:'el queso',zh:'奶酪'},{es:'el aceite',zh:'油'},{es:'la sal',zh:'盐'},
+    {es:'el azúcar',zh:'糖'},{es:'el agua',zh:'水'},{es:'la cerveza',zh:'啤酒'},
+    {es:'el vino',zh:'葡萄酒'},{es:'el café',zh:'咖啡'},{es:'el té',zh:'茶'},
+    {es:'la sopa',zh:'汤'},{es:'la ensalada',zh:'沙拉'},
+  ],
+  viajes:[
+    {es:'el aeropuerto',zh:'机场'},{es:'la estación',zh:'车站'},{es:'el billete',zh:'票'},
+    {es:'la maleta',zh:'行李箱'},{es:'el hotel',zh:'酒店'},{es:'la habitación',zh:'房间'},
+    {es:'la reserva',zh:'预订'},{es:'el pasaporte',zh:'护照'},{es:'la playa',zh:'海滩'},
+    {es:'el museo',zh:'博物馆'},{es:'la calle',zh:'街道'},{es:'la plaza',zh:'广场'},
+    {es:'el mapa',zh:'地图'},{es:'la maleta',zh:'行李箱'},{es:'el viaje',zh:'旅行'},
+    {es:'la salida',zh:'出口'},{es:'la llegada',zh:'到达'},{es:'el tren',zh:'火车'},
+    {es:'el autobús',zh:'公交车'},{es:'el taxi',zh:'出租车'},
+  ],
+  casa:[
+    {es:'la cocina',zh:'厨房'},{es:'el baño',zh:'卫生间'},{es:'el dormitorio',zh:'卧室'},
+    {es:'la mesa',zh:'桌子'},{es:'la silla',zh:'椅子'},{es:'la cama',zh:'床'},
+    {es:'la ventana',zh:'窗户'},{es:'la puerta',zh:'门'},{es:'el espejo',zh:'镜子'},
+    {es:'la lámpara',zh:'灯'},{es:'el sofá',zh:'沙发'},{es:'la nevera',zh:'冰箱'},
+    {es:'el horno',zh:'烤箱'},{es:'la ducha',zh:'淋浴'},{es:'la toalla',zh:'毛巾'},
+    {es:'la almohada',zh:'枕头'},{es:'el armario',zh:'衣柜'},{es:'el suelo',zh:'地板'},
+    {es:'la escalera',zh:'楼梯'},{es:'el jardín',zh:'花园'},
+  ],
+  trabajo:[
+    {es:'el trabajo',zh:'工作'},{es:'la oficina',zh:'办公室'},{es:'el jefe',zh:'老板'},
+    {es:'el compañero',zh:'同事'},{es:'la reunión',zh:'会议'},{es:'el correo',zh:'邮件'},
+    {es:'el teléfono',zh:'电话'},{es:'la computadora',zh:'电脑'},{es:'el dinero',zh:'钱'},
+    {es:'el banco',zh:'银行'},{es:'la tarjeta',zh:'卡'},{es:'la cuenta',zh:'账户'},
+    {es:'el sueldo',zh:'工资'},{es:'la entrevista',zh:'面试'},{es:'el negocio',zh:'生意'},
+    {es:'la empresa',zh:'公司'},{es:'el cliente',zh:'客户'},{es:'la firma',zh:'签名'},
+    {es:'el contrato',zh:'合同'},{es:'la factura',zh:'发票'},
+  ],
+  cuerpo:[
+    {es:'la cabeza',zh:'头'},{es:'el ojo',zh:'眼睛'},{es:'la nariz',zh:'鼻子'},
+    {es:'la boca',zh:'嘴'},{es:'la oreja',zh:'耳朵'},{es:'el brazo',zh:'手臂'},
+    {es:'la mano',zh:'手'},{es:'el dedo',zh:'手指'},{es:'la pierna',zh:'腿'},
+    {es:'el pie',zh:'脚'},{es:'el estómago',zh:'胃'},{es:'la espalda',zh:'背'},
+    {es:'el médico',zh:'医生'},{es:'la farmacia',zh:'药房'},{es:'la medicina',zh:'药'},
+    {es:'el dolor',zh:'疼痛'},{es:'la fiebre',zh:'发烧'},{es:'la cita',zh:'预约'},
+    {es:'la receta',zh:'处方'},{es:'el hospital',zh:'医院'},
+  ],
+  emocion:[
+    {es:'feliz',zh:'开心的'},{es:'triste',zh:'伤心的'},{es:'cansado',zh:'累的'},
+    {es:'preocupado',zh:'担心的'},{es:'enfadado',zh:'生气的'},{es:'aburrido',zh:'无聊的'},
+    {es:'nervioso',zh:'紧张的'},{es:'tranquilo',zh:'平静的'},{es:'contento',zh:'满意的'},
+    {es:'sorprendido',zh:'惊讶的'},{es:'asustado',zh:'害怕的'},{es:'emocionado',zh:'兴奋的'},
+    {es:'confundido',zh:'困惑的'},{es:'orgulloso',zh:'自豪的'},{es:'avergonzado',zh:'尴尬的'},
+    {es:'el amor',zh:'爱'},{es:'la alegría',zh:'快乐'},{es:'la tristeza',zh:'悲伤'},
+    {es:'el miedo',zh:'恐惧'},{es:'la sorpresa',zh:'惊喜'},
+  ],
+  tiempo:[
+    {es:'hoy',zh:'今天'},{es:'mañana',zh:'明天'},{es:'ayer',zh:'昨天'},
+    {es:'ahora',zh:'现在'},{es:'después',zh:'之后'},{es:'antes',zh:'之前'},
+    {es:'siempre',zh:'总是'},{es:'nunca',zh:'从不'},{es:'a veces',zh:'有时'},
+    {es:'pronto',zh:'很快'},{es:'tarde',zh:'晚'},{es:'temprano',zh:'早'},
+    {es:'la semana',zh:'周'},{es:'el mes',zh:'月'},{es:'el año',zh:'年'},
+    {es:'el lunes',zh:'周一'},{es:'el fin de semana',zh:'周末'},
+    {es:'la mañana',zh:'早上'},{es:'la tarde',zh:'下午'},{es:'la noche',zh:'晚上'},
+  ],
+  numeros:[
+    {es:'uno',zh:'一'},{es:'dos',zh:'二'},{es:'tres',zh:'三'},{es:'cuatro',zh:'四'},{es:'cinco',zh:'五'},
+    {es:'seis',zh:'六'},{es:'siete',zh:'七'},{es:'ocho',zh:'八'},{es:'nueve',zh:'九'},{es:'diez',zh:'十'},
+    {es:'once',zh:'十一'},{es:'doce',zh:'十二'},{es:'trece',zh:'十三'},{es:'catorce',zh:'十四'},{es:'quince',zh:'十五'},
+    {es:'veinte',zh:'二十'},{es:'treinta',zh:'三十'},{es:'cuarenta',zh:'四十'},{es:'cincuenta',zh:'五十'},
+    {es:'sesenta',zh:'六十'},{es:'setenta',zh:'七十'},{es:'ochenta',zh:'八十'},{es:'noventa',zh:'九十'},
+    {es:'cien',zh:'一百'},{es:'mil',zh:'一千'},{es:'primero',zh:'第一'},{es:'segundo',zh:'第二'},
+    {es:'la mitad',zh:'一半'},{es:'todo',zh:'全部'},{es:'nada',zh:'没有'},
+  ],
+  clima:[
+    {es:'hace sol',zh:'晴天'},{es:'hace calor',zh:'热'},{es:'hace frío',zh:'冷'},
+    {es:'hace viento',zh:'刮风'},{es:'hace buen tiempo',zh:'好天气'},{es:'hace mal tiempo',zh:'坏天气'},
+    {es:'llueve',zh:'下雨'},{es:'nieva',zh:'下雪'},{es:'está nublado',zh:'多云'},
+    {es:'la lluvia',zh:'雨'},{es:'la nieve',zh:'雪'},{es:'el sol',zh:'太阳'},
+    {es:'la nube',zh:'云'},{es:'la temperatura',zh:'温度'},{es:'el grado',zh:'度'},
+    {es:'la primavera',zh:'春天'},{es:'el verano',zh:'夏天'},{es:'el otoño',zh:'秋天'},{es:'el invierno',zh:'冬天'},
+  ],
+  ropa:[
+    {es:'la camisa',zh:'衬衫'},{es:'el pantalón',zh:'裤子'},{es:'el vestido',zh:'连衣裙'},
+    {es:'la chaqueta',zh:'外套'},{es:'los zapatos',zh:'鞋'},{es:'el sombrero',zh:'帽子'},
+    {es:'la falda',zh:'裙子'},{es:'el abrigo',zh:'大衣'},{es:'la bufanda',zh:'围巾'},
+    {es:'los calcetines',zh:'袜子'},{es:'el traje',zh:'西装'},{es:'la camiseta',zh:'T恤'},
+    {es:'el suéter',zh:'毛衣'},{es:'las gafas',zh:'眼镜'},{es:'el reloj',zh:'手表'},
+    {es:'el bolsillo',zh:'口袋'},{es:'el cinturón',zh:'腰带'},{es:'el paraguas',zh:'雨伞'},
+    {es:'el bolso',zh:'包'},{es:'la talla',zh:'尺码'},
+  ],
+  calle:[
+    {es:'a la derecha',zh:'向右'},{es:'a la izquierda',zh:'向左'},{es:'todo recto',zh:'直走'},
+    {es:'cerca',zh:'近'},{es:'lejos',zh:'远'},{es:'al lado de',zh:'在…旁边'},
+    {es:'enfrente de',zh:'在…对面'},{es:'detrás de',zh:'在…后面'},{es:'delante de',zh:'在…前面'},
+    {es:'entre',zh:'在…之间'},{es:'la esquina',zh:'拐角'},{es:'el semáforo',zh:'红绿灯'},
+    {es:'cruzar',zh:'穿过'},{es:'girar',zh:'转弯'},{es:'seguir',zh:'继续'},
+    {es:'la dirección',zh:'地址'},{es:'la parada',zh:'车站'},{es:'perdido',zh:'迷路的'},
+    {es:'¿Dónde está...?',zh:'…在哪里？'},{es:'¿Cómo llego a...?',zh:'怎么去…？'},
+  ],
+};
+
+var vocabQuizMode=false, vocabQuizState={};
+function toggleVocabMode(){
+  vocabQuizMode=!vocabQuizMode;
+  $('vocab-mode-btn').textContent=vocabQuizMode?'📖 切换回卡片模式':'📝 切换到测试模式';
+  vocabQuizState={};
+  renderVocab(currentVTab);
+}
+var currentVTab='comida';
+
+function renderVocab(tab){
+  currentVTab=tab||currentVTab;
+  var words=vocabData[currentVTab]||[];
+  var h='<div class="card"><h3>'+document.querySelector('[data-vtab="'+currentVTab+'"]').textContent+'</h3>';
+
+  if(vocabQuizMode){
+    h+='<p style="font-size:11px;color:var(--text3)">选择正确的中文释义</p>';
+    // Pick 8 random words for quiz
+    var qWords=words.slice();
+    for(var i=qWords.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=qWords[i];qWords[i]=qWords[j];qWords[j]=t;}
+    qWords=qWords.slice(0,Math.min(8,words.length));
+    // For each, generate 4 options (1 correct + 3 random from same topic)
+    qWords.forEach(function(w,wi){
+      var wrongs=words.filter(function(x){return x.zh!==w.zh});
+      for(var i2=wrongs.length-1;i2>0;i2--){var j2=Math.floor(Math.random()*(i2+1));var t2=wrongs[i2];wrongs[i2]=wrongs[j2];wrongs[j2]=t2;}
+      var opts=wrongs.slice(0,3).map(function(x){return x.zh});
+      opts.push(w.zh);
+      for(var i3=opts.length-1;i3>0;i3--){var j3=Math.floor(Math.random()*(i3+1));var t3=opts[i3];opts[i3]=opts[j3];opts[j3]=t3;}
+      w.quizOpts=opts;
+      w.quizAns=opts.indexOf(w.zh);
     });
+    vocabQuizState.items=qWords;
+    vocabQuizState.picked={};
+    h+='<div class="quiz-score">得分：<em id="vscore">-</em></div>';
+    qWords.forEach(function(w,wi){
+      h+='<div class="q-item" id="vq-'+wi+'"><div class="q-txt"><b style="color:var(--accent)">'+w.es+'</b></div><div class="q-opts">'+
+        w.quizOpts.map(function(o,oi){return '<button class="q-opt" onclick="vpick('+wi+','+oi+')">'+o+'</button>'}).join('')+
+        '</div><div class="q-exp" id="vqexp-'+wi+'"><b>👉 '+w.es+' = '+w.zh+'</b></div></div>';
+    });
+    h+='<div class="btn-row"><button class="btn" onclick="vcheck()">✅ 检查</button><button class="btn ghost" onclick="renderVocab(currentVTab)">🔄 换题</button></div>';
+  } else {
+    h+='<p style="font-size:11px;color:var(--text3)">点击卡片翻转 · 正面只看西语，翻面看中文 · 翻面后自评记得/忘了</p><div class="vocab-grid">';
+    words.forEach(function(w,i){
+      h+='<div class="vocab-card" id="vc-'+i+'" onclick="flip(event,'+i+')"><div class="front">'+w.es+'<div style="margin-top:6px"><button class="recall-btn" onclick="event.stopPropagation();speak(\''+w.es.replace(/'/g,"\\'")+'\')" title="听发音">🔊</button></div></div><div class="back"><div>'+w.zh+'</div><div class="hint">'+w.es+'</div><div class="recall-btns"><button class="recall-btn" onclick="event.stopPropagation();markKnown('+i+',true)">✅ 记得</button><button class="recall-btn no" onclick="event.stopPropagation();markKnown('+i+',false)">❌ 忘了</button><button class="recall-btn" onclick="event.stopPropagation();speak(\''+w.es.replace(/'/g,"\\'")+'\')" style="margin-left:4px">🔊</button></div></div><div class="flip-hint">点击翻转</div></div>';
+    });
+    h+='</div><div class="btn-row" style="margin-top:12px"><button class="btn ghost" onclick="renderVocab(currentVTab)">🔄 全部翻回</button><button class="btn ghost" onclick="filterStruggled()">📌 只看易错词</button></div>';
+  }
+  h+='</div>';
+  $('vocab-area').innerHTML=h;
+}
+function vpick(wi,oi){
+  var st=vocabQuizState;if(!st||st.picked[wi]!==undefined)return;
+  st.picked[wi]=oi;
+  var el=$('vq-'+wi),opts=el.querySelectorAll('.q-opt'),correct=st.items[wi].quizAns;
+  opts.forEach(function(o){o.style.pointerEvents='none'});
+  opts[oi].classList.add('picked');
+  if(oi===correct){opts[oi].classList.add('ok')}else{opts[oi].classList.add('bad');opts[correct].classList.add('ok')}
+  $('vqexp-'+wi).classList.add('show');
+}
+function vcheck(){
+  var st=vocabQuizState;if(!st)return;var s=0;
+  st.items.forEach(function(w,i){
+    if(st.picked[i]===w.quizAns)s++;
+    else{var el=$('vq-'+i);if(el){el.querySelectorAll('.q-opt').forEach(function(o){o.style.pointerEvents='none'});el.querySelectorAll('.q-opt')[w.quizAns].classList.add('ok')}$('vqexp-'+i).classList.add('show')}
+  });
+  $('vscore').textContent=s+'/'+st.items.length;
+}
+var vcRecall = {}; // {tab: {index: true/false}} — track struggled words
+function flip(ev,i){
+  var el=$('vc-'+i);if(!el)return;
+  if(ev.target.classList.contains('recall-btn'))return;
+  el.classList.toggle('flipped');
+}
+
+// ==== TTS ====
+function speak(text){
+  if(!window.speechSynthesis){alert('浏览器不支持语音合成');return}
+  window.speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(text);
+  u.lang='es-ES';u.rate=0.85;
+  // Try to pick a Spanish voice
+  var voices=window.speechSynthesis.getVoices();
+  var esVoice=voices.find(function(v){return v.lang.startsWith('es')});
+  if(esVoice)u.voice=esVoice;
+  window.speechSynthesis.speak(u);
+}
+
+// ==== Dictation Mode ====
+var dictState=null;
+function startDictation(){
+  vocabQuizMode=false;$('vocab-mode-btn').textContent='📝 选择题模式';
+  var words=vocabData[currentVTab]||[];
+  var picks=words.slice();
+  for(var i=picks.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=picks[i];picks[i]=picks[j];picks[j]=t;}
+  picks=picks.slice(0,8);
+  dictState={items:picks,idx:0,correct:0};
+  renderDictationQ();
+}
+function renderDictationQ(){
+  var st=dictState;if(!st||st.idx>=st.items.length){
+    var h='<div class="card"><h3>✍️ 听写完成</h3><p>正确 <b style="color:var(--accent)">'+st.correct+'</b> / '+st.items.length+'</p><p style="font-size:11px;color:var(--text3)">';
+    st.items.forEach(function(w,i){h+=w.es+' = '+w.zh+(i<st.items.length-1?' · ':'')});
+    h+='</p><div class="btn-row"><button class="btn" onclick="startDictation()">🔄 再来一轮</button><button class="btn ghost" onclick="renderVocab(currentVTab)">↩ 返回</button></div></div>';
+    $('vocab-area').innerHTML=h;dictState=null;return;
+  }
+  var w=st.items[st.idx];
+  var h='<div class="card"><h3>✍️ 听写 — '+document.querySelector('[data-vtab="'+currentVTab+'"]').textContent+' ('+(st.idx+1)+'/'+st.items.length+')</h3>';
+  h+='<p style="font-size:13px;color:var(--text2);margin-bottom:12px">点击 🔊 听发音，输入你听到的单词</p>';
+  h+='<div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><button class="btn" style="font-size:18px;padding:10px 18px" onclick="speak(\''+w.es.replace(/'/g,"\\'")+'\')">🔊 播放</button><span style="font-size:11px;color:var(--text3)">可重复播放</span></div>';
+  h+='<input type="text" id="dict-input" style="width:100%;padding:10px;font-size:15px;border-radius:8px;background:var(--card2);border:2px solid var(--border);color:var(--text);outline:none;font-family:inherit" placeholder="输入你听到的..." onkeydown="if(event.key===\'Enter\')checkDictation()">';
+  h+='<div id="dict-fb" style="margin-top:8px;font-size:13px;min-height:24px"></div>';
+  h+='<div class="btn-row" style="margin-top:8px"><button class="btn accent" onclick="checkDictation()">✅ 提交</button><button class="btn ghost" onclick="skipDictation()">⏭ 跳过</button><button class="btn ghost" onclick="renderVocab(currentVTab)">↩ 退出</button></div></div>';
+  $('vocab-area').innerHTML=h;
+  // Auto-play after render
+  setTimeout(function(){speak(w.es)},400);
+}
+function checkDictation(){
+  var st=dictState;if(!st)return;
+  var input=($('dict-input')?$('dict-input').value.trim():'').toLowerCase();
+  var correct=st.items[st.idx].es.toLowerCase();
+  var fb=$('dict-fb');if(!fb)return;
+  if(input===correct||input===correct.replace(/[¿?¡!.,]/g,'').trim()){
+    fb.innerHTML='<span style="color:var(--green)">✅ 正确！</span>';
+    st.correct++;
+  }else{
+    fb.innerHTML='<span style="color:var(--red)">❌ 正确答案：<b>'+st.items[st.idx].es+'</b>（'+st.items[st.idx].zh+'）</span>';
+  }
+  st.idx++;
+  setTimeout(function(){renderDictationQ()},1200);
+}
+function skipDictation(){
+  if(!dictState)return;
+  dictState.idx++;
+  renderDictationQ();
+}
+
+// ==== Pronunciation Mode ====
+var pronState=null;
+function startPronunciation(){
+  if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){
+    alert('你的浏览器不支持语音识别。\n\n推荐使用 Chrome 浏览器打开此页面。');return;
+  }
+  vocabQuizMode=false;$('vocab-mode-btn').textContent='📝 选择题模式';
+  var words=vocabData[currentVTab]||[];
+  var picks=words.slice();
+  for(var i=picks.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=picks[i];picks[i]=picks[j];picks[j]=t;}
+  picks=picks.slice(0,8);
+  pronState={items:picks,idx:0};
+  renderPronunciationQ();
+}
+function renderPronunciationQ(){
+  var st=pronState;if(!st||st.idx>=st.items.length){
+    var h='<div class="card"><h3>🎤 跟读完成！</h3><p>练习了 '+st.items.length+' 个单词</p><div class="btn-row"><button class="btn" onclick="startPronunciation()">🔄 再来一轮</button><button class="btn ghost" onclick="renderVocab(currentVTab)">↩ 返回</button></div></div>';
+    $('vocab-area').innerHTML=h;pronState=null;return;
+  }
+  var w=st.items[st.idx];
+  var h='<div class="card"><h3>🎤 跟读 — '+document.querySelector('[data-vtab="'+currentVTab+'"]').textContent+' ('+(st.idx+1)+'/'+st.items.length+')</h3>';
+  h+='<p style="font-size:18px;font-weight:700;color:var(--accent);margin:12px 0">'+w.es+'</p>';
+  h+='<p style="font-size:12px;color:var(--text3)">（'+w.zh+'）</p>';
+  h+='<div class="btn-row" style="margin:12px 0"><button class="btn" onclick="speak(\''+w.es.replace(/'/g,"\\'")+'\')">🔊 听标准发音</button></div>';
+  h+='<p style="font-size:11px;color:var(--text2);margin:8px 0">点击下方按钮，对着麦克风朗读上方单词</p>';
+  h+='<div class="btn-row"><button class="btn accent" id="pron-listen-btn" onclick="listenPronunciation()">🎤 开始录音</button><button class="btn ghost" onclick="nextPronunciation()">⏭ 跳过</button><button class="btn ghost" onclick="renderVocab(currentVTab)">↩ 退出</button></div>';
+  h+='<div id="pron-fb" style="margin-top:8px;font-size:13px;min-height:24px"></div></div>';
+  $('vocab-area').innerHTML=h;
+}
+function listenPronunciation(){
+  var st=pronState;if(!st)return;
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  var rec=new SR();
+  rec.lang='es-ES';
+  rec.interimResults=false;
+  rec.maxAlternatives=1;
+  $('pron-listen-btn').textContent='🔴 正在听...';$('pron-listen-btn').disabled=true;
+  rec.start();
+  rec.onresult=function(e){
+    var spoken=e.results[0][0].transcript.toLowerCase().trim();
+    var target=st.items[st.idx].es.toLowerCase();
+    var fb=$('pron-fb');if(!fb)return;
+    if(spoken===target){
+      fb.innerHTML='<span style="color:var(--green)">✅ 完美！系统听到：「'+spoken+'」</span>';
+    }else{
+      fb.innerHTML='<span style="color:var(--accent)">🔊 系统听到：「'+spoken+'」<br>📝 目标单词：「'+st.items[st.idx].es+'」<br><span style="color:var(--text3)">别灰心，点击 🔊 再听一遍，然后重试</span></span>';
+    }
+  };
+  rec.onerror=function(e){
+    var fb=$('pron-fb');if(!fb)return;
+    fb.innerHTML='<span style="color:var(--red)">❌ 录音失败：'+e.error+'。<br>请允许麦克风权限后重试（浏览器地址栏左侧🔒图标）</span>';
+  };
+  rec.onend=function(){$('pron-listen-btn').textContent='🎤 再试一次';$('pron-listen-btn').disabled=false};
+}
+function nextPronunciation(){
+  if(!pronState)return;
+  pronState.idx++;
+  renderPronunciationQ();
+}
+function markKnown(i,known){
+  var el=$('vc-'+i);if(!el)return;
+  el.classList.remove('known','struggle');
+  el.classList.add(known?'known':'struggle');
+  if(!vcRecall[currentVTab])vcRecall[currentVTab]={};
+  vcRecall[currentVTab][i]=!known; // true = struggled
+}
+function filterStruggled(){
+  var tab=currentVTab,words=vocabData[tab]||[];
+  var struggled=[];
+  if(vcRecall[tab]){
+    for(var i in vcRecall[tab]){if(vcRecall[tab][i])struggled.push(parseInt(i))}
+  }
+  if(struggled.length===0){alert('没有标记为"忘了"的词汇，先翻牌标记一下');return}
+  var h='<div class="card"><h3>📌 易错词复习 — '+document.querySelector('[data-vtab="'+tab+'"]').textContent+'</h3><p style="font-size:11px;color:var(--text3)">只显示你标记为"忘了"的词</p><div class="vocab-grid">';
+  struggled.forEach(function(i){
+    var w=words[i];if(!w)return;
+    h+='<div class="vocab-card struggle" id="vcs-'+i+'" onclick="flip(event,'+i+');this.classList.toggle(\'flipped\')"><div class="front">'+w.es+'</div><div class="back"><div>'+w.zh+'</div><div class="hint">'+w.es+'</div></div><div class="flip-hint">点击翻转</div></div>';
+  });
+  h+='</div><div class="btn-row" style="margin-top:8px"><button class="btn ghost" onclick="renderVocab(currentVTab)">↩ 返回全部</button></div></div>';
+  $('vocab-area').innerHTML=h;
+}
+document.querySelectorAll('#vocab-tabs .tab-btn').forEach(function(tab){
+  tab.addEventListener('click',function(){
+    var t=this.dataset.vtab;
+    document.querySelectorAll('#vocab-tabs .tab-btn').forEach(function(e){e.classList.remove('on')});
+    this.classList.add('on');
+    renderVocab(t);
   });
 });
 
 // ===== INIT =====
-newQuiz('se');newQuiz('pp');newQuiz('pi');newQuiz('sk');
+var grammarKeys=['serestar','porpara','preterito','pronouns','imperativo','futuro','comparar','subj'];
+grammarKeys.forEach(function(k){buildQuiz(k)});
+renderVocab('comida');
 </script>
 </body>
 </html>
