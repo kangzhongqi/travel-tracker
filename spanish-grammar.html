@@ -101,6 +101,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 <div class="header">
   <h1>🇪🇸 西语 A2 学习手册</h1>
   <p>语法速查 + 主题词汇 · DELE A2 考点全覆盖</p>
+  <div style="margin-top:10px;display:flex;gap:4px;justify-content:center;overflow-x:auto">
+    <a href="spanish-verbs.html" style="padding:5px 12px;border-radius:6px;border:1px solid var(--border);color:var(--muted);font-size:10px;font-weight:600;text-decoration:none;white-space:nowrap">动词变位</a>
+    <a href="spanish-grammar.html" style="padding:5px 12px;border-radius:6px;border:1px solid var(--accent);color:var(--accent);font-size:10px;font-weight:600;text-decoration:none;white-space:nowrap;background:rgba(240,136,62,.06)">A2 手册</a>
+    <a href="spanish-practice.html" style="padding:5px 12px;border-radius:6px;border:1px solid var(--border);color:var(--muted);font-size:10px;font-weight:600;text-decoration:none;white-space:nowrap">练习</a>
+  </div>
 </div>
 
 <div class="subtabs" id="mode-tabs">
@@ -292,10 +297,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
   <div class="tab-btn" data-vtab="calle">🧭 问路</div>
 </div>
 
-<div style="margin:8px 0;display:flex;gap:6px;flex-wrap:wrap">
+<div style="margin:8px 0">
   <button class="btn ghost" id="vocab-mode-btn" onclick="toggleVocabMode()" style="font-size:11px">📝 选择题模式</button>
-  <button class="btn ghost" id="dictation-btn" onclick="startDictation()" style="font-size:11px">✍️ 听写模式</button>
-  <button class="btn ghost" id="pronounce-btn" onclick="startPronunciation()" style="font-size:11px">🎤 跟读模式</button>
 </div>
 
 <div id="vocab-area"></div>
@@ -579,7 +582,7 @@ function renderVocab(tab){
   } else {
     h+='<p style="font-size:11px;color:var(--text3)">点击卡片翻转 · 正面只看西语，翻面看中文 · 翻面后自评记得/忘了</p><div class="vocab-grid">';
     words.forEach(function(w,i){
-      h+='<div class="vocab-card" id="vc-'+i+'" onclick="flip(event,'+i+')"><div class="front">'+w.es+'<div style="margin-top:6px"><button class="recall-btn" onclick="event.stopPropagation();speak(\''+w.es.replace(/'/g,"\\'")+'\')" title="听发音">🔊</button></div></div><div class="back"><div>'+w.zh+'</div><div class="hint">'+w.es+'</div><div class="recall-btns"><button class="recall-btn" onclick="event.stopPropagation();markKnown('+i+',true)">✅ 记得</button><button class="recall-btn no" onclick="event.stopPropagation();markKnown('+i+',false)">❌ 忘了</button><button class="recall-btn" onclick="event.stopPropagation();speak(\''+w.es.replace(/'/g,"\\'")+'\')" style="margin-left:4px">🔊</button></div></div><div class="flip-hint">点击翻转</div></div>';
+      h+='<div class="vocab-card" id="vc-'+i+'" onclick="flip(event,'+i+')"><div class="front">'+w.es+'<div style="margin-top:6px;font-size:9px;color:var(--text3)">点击翻转</div></div><div class="back"><div>'+w.zh+'</div><div class="hint">'+w.es+'</div><div class="recall-btns"><button class="recall-btn" onclick="event.stopPropagation();markKnown('+i+',true)">✅ 记得</button><button class="recall-btn no" onclick="event.stopPropagation();markKnown('+i+',false)">❌ 忘了</button></div></div></div>';
     });
     h+='</div><div class="btn-row" style="margin-top:12px"><button class="btn ghost" onclick="renderVocab(currentVTab)">🔄 全部翻回</button><button class="btn ghost" onclick="filterStruggled()">📌 只看易错词</button></div>';
   }
@@ -610,127 +613,6 @@ function flip(ev,i){
   el.classList.toggle('flipped');
 }
 
-// ==== TTS ====
-function speak(text){
-  if(!window.speechSynthesis){alert('浏览器不支持语音合成');return}
-  window.speechSynthesis.cancel();
-  var u=new SpeechSynthesisUtterance(text);
-  u.lang='es-ES';u.rate=0.85;
-  // Try to pick a Spanish voice
-  var voices=window.speechSynthesis.getVoices();
-  var esVoice=voices.find(function(v){return v.lang.startsWith('es')});
-  if(esVoice)u.voice=esVoice;
-  window.speechSynthesis.speak(u);
-}
-
-// ==== Dictation Mode ====
-var dictState=null;
-function startDictation(){
-  vocabQuizMode=false;$('vocab-mode-btn').textContent='📝 选择题模式';
-  var words=vocabData[currentVTab]||[];
-  var picks=words.slice();
-  for(var i=picks.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=picks[i];picks[i]=picks[j];picks[j]=t;}
-  picks=picks.slice(0,8);
-  dictState={items:picks,idx:0,correct:0};
-  renderDictationQ();
-}
-function renderDictationQ(){
-  var st=dictState;if(!st||st.idx>=st.items.length){
-    var h='<div class="card"><h3>✍️ 听写完成</h3><p>正确 <b style="color:var(--accent)">'+st.correct+'</b> / '+st.items.length+'</p><p style="font-size:11px;color:var(--text3)">';
-    st.items.forEach(function(w,i){h+=w.es+' = '+w.zh+(i<st.items.length-1?' · ':'')});
-    h+='</p><div class="btn-row"><button class="btn" onclick="startDictation()">🔄 再来一轮</button><button class="btn ghost" onclick="renderVocab(currentVTab)">↩ 返回</button></div></div>';
-    $('vocab-area').innerHTML=h;dictState=null;return;
-  }
-  var w=st.items[st.idx];
-  var h='<div class="card"><h3>✍️ 听写 — '+document.querySelector('[data-vtab="'+currentVTab+'"]').textContent+' ('+(st.idx+1)+'/'+st.items.length+')</h3>';
-  h+='<p style="font-size:13px;color:var(--text2);margin-bottom:12px">点击 🔊 听发音，输入你听到的单词</p>';
-  h+='<div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><button class="btn" style="font-size:18px;padding:10px 18px" onclick="speak(\''+w.es.replace(/'/g,"\\'")+'\')">🔊 播放</button><span style="font-size:11px;color:var(--text3)">可重复播放</span></div>';
-  h+='<input type="text" id="dict-input" style="width:100%;padding:10px;font-size:15px;border-radius:8px;background:var(--card2);border:2px solid var(--border);color:var(--text);outline:none;font-family:inherit" placeholder="输入你听到的..." onkeydown="if(event.key===\'Enter\')checkDictation()">';
-  h+='<div id="dict-fb" style="margin-top:8px;font-size:13px;min-height:24px"></div>';
-  h+='<div class="btn-row" style="margin-top:8px"><button class="btn accent" onclick="checkDictation()">✅ 提交</button><button class="btn ghost" onclick="skipDictation()">⏭ 跳过</button><button class="btn ghost" onclick="renderVocab(currentVTab)">↩ 退出</button></div></div>';
-  $('vocab-area').innerHTML=h;
-  // Auto-play after render
-  setTimeout(function(){speak(w.es)},400);
-}
-function checkDictation(){
-  var st=dictState;if(!st)return;
-  var input=($('dict-input')?$('dict-input').value.trim():'').toLowerCase();
-  var correct=st.items[st.idx].es.toLowerCase();
-  var fb=$('dict-fb');if(!fb)return;
-  if(input===correct||input===correct.replace(/[¿?¡!.,]/g,'').trim()){
-    fb.innerHTML='<span style="color:var(--green)">✅ 正确！</span>';
-    st.correct++;
-  }else{
-    fb.innerHTML='<span style="color:var(--red)">❌ 正确答案：<b>'+st.items[st.idx].es+'</b>（'+st.items[st.idx].zh+'）</span>';
-  }
-  st.idx++;
-  setTimeout(function(){renderDictationQ()},1200);
-}
-function skipDictation(){
-  if(!dictState)return;
-  dictState.idx++;
-  renderDictationQ();
-}
-
-// ==== Pronunciation Mode ====
-var pronState=null;
-function startPronunciation(){
-  if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){
-    alert('你的浏览器不支持语音识别。\n\n推荐使用 Chrome 浏览器打开此页面。');return;
-  }
-  vocabQuizMode=false;$('vocab-mode-btn').textContent='📝 选择题模式';
-  var words=vocabData[currentVTab]||[];
-  var picks=words.slice();
-  for(var i=picks.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=picks[i];picks[i]=picks[j];picks[j]=t;}
-  picks=picks.slice(0,8);
-  pronState={items:picks,idx:0};
-  renderPronunciationQ();
-}
-function renderPronunciationQ(){
-  var st=pronState;if(!st||st.idx>=st.items.length){
-    var h='<div class="card"><h3>🎤 跟读完成！</h3><p>练习了 '+st.items.length+' 个单词</p><div class="btn-row"><button class="btn" onclick="startPronunciation()">🔄 再来一轮</button><button class="btn ghost" onclick="renderVocab(currentVTab)">↩ 返回</button></div></div>';
-    $('vocab-area').innerHTML=h;pronState=null;return;
-  }
-  var w=st.items[st.idx];
-  var h='<div class="card"><h3>🎤 跟读 — '+document.querySelector('[data-vtab="'+currentVTab+'"]').textContent+' ('+(st.idx+1)+'/'+st.items.length+')</h3>';
-  h+='<p style="font-size:18px;font-weight:700;color:var(--accent);margin:12px 0">'+w.es+'</p>';
-  h+='<p style="font-size:12px;color:var(--text3)">（'+w.zh+'）</p>';
-  h+='<div class="btn-row" style="margin:12px 0"><button class="btn" onclick="speak(\''+w.es.replace(/'/g,"\\'")+'\')">🔊 听标准发音</button></div>';
-  h+='<p style="font-size:11px;color:var(--text2);margin:8px 0">点击下方按钮，对着麦克风朗读上方单词</p>';
-  h+='<div class="btn-row"><button class="btn accent" id="pron-listen-btn" onclick="listenPronunciation()">🎤 开始录音</button><button class="btn ghost" onclick="nextPronunciation()">⏭ 跳过</button><button class="btn ghost" onclick="renderVocab(currentVTab)">↩ 退出</button></div>';
-  h+='<div id="pron-fb" style="margin-top:8px;font-size:13px;min-height:24px"></div></div>';
-  $('vocab-area').innerHTML=h;
-}
-function listenPronunciation(){
-  var st=pronState;if(!st)return;
-  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  var rec=new SR();
-  rec.lang='es-ES';
-  rec.interimResults=false;
-  rec.maxAlternatives=1;
-  $('pron-listen-btn').textContent='🔴 正在听...';$('pron-listen-btn').disabled=true;
-  rec.start();
-  rec.onresult=function(e){
-    var spoken=e.results[0][0].transcript.toLowerCase().trim();
-    var target=st.items[st.idx].es.toLowerCase();
-    var fb=$('pron-fb');if(!fb)return;
-    if(spoken===target){
-      fb.innerHTML='<span style="color:var(--green)">✅ 完美！系统听到：「'+spoken+'」</span>';
-    }else{
-      fb.innerHTML='<span style="color:var(--accent)">🔊 系统听到：「'+spoken+'」<br>📝 目标单词：「'+st.items[st.idx].es+'」<br><span style="color:var(--text3)">别灰心，点击 🔊 再听一遍，然后重试</span></span>';
-    }
-  };
-  rec.onerror=function(e){
-    var fb=$('pron-fb');if(!fb)return;
-    fb.innerHTML='<span style="color:var(--red)">❌ 录音失败：'+e.error+'。<br>请允许麦克风权限后重试（浏览器地址栏左侧🔒图标）</span>';
-  };
-  rec.onend=function(){$('pron-listen-btn').textContent='🎤 再试一次';$('pron-listen-btn').disabled=false};
-}
-function nextPronunciation(){
-  if(!pronState)return;
-  pronState.idx++;
-  renderPronunciationQ();
-}
 function markKnown(i,known){
   var el=$('vc-'+i);if(!el)return;
   el.classList.remove('known','struggle');
