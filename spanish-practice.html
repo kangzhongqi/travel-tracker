@@ -170,12 +170,13 @@ var specialChars=['á','é','í','ó','ú','ü','ñ','Á','É','Í','Ó','Ú','�
 var charHTML='';
 specialChars.forEach(function(c){charHTML+='<button class="char-btn" onclick="insertChar(\''+c+'\')">'+c+'</button>'});
 $('char-bar').innerHTML='<span style="font-size:10px;color:var(--text3);margin-right:4px;align-self:center">特殊字符：</span>'+charHTML;
+var lastInput=null;
+document.addEventListener('focusin',function(e){if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')lastInput=e.target});
 function insertChar(c){
-  var el=document.activeElement;
-  if(el&&(el.tagName==='INPUT'||el.tagName==='TEXTAREA')){
-    var s=el.selectionStart,e=el.selectionEnd,v=el.value;
-    el.value=v.substring(0,s)+c+v.substring(e);el.selectionStart=el.selectionEnd=s+1;el.focus();
-  }
+  var el=lastInput||document.activeElement;
+  if(!el||(el.tagName!=='INPUT'&&el.tagName!=='TEXTAREA'))return;
+  var s=el.selectionStart,e=el.selectionEnd,v=el.value;
+  el.value=v.substring(0,s)+c+v.substring(e);el.selectionStart=el.selectionEnd=s+1;el.focus();
 }
 
 // ===== NORMALIZE: lenient comparison =====

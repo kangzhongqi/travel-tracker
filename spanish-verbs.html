@@ -310,6 +310,7 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
+<div style="display:flex;gap:3px;flex-wrap:wrap;margin:6px 0" id="char-bar"><span style="font-size:9px;color:var(--muted);align-self:center;margin-right:2px">特殊字符：</span></div>
 <div id="quiz-area"></div>
 
 <div class="btn-row">
@@ -685,6 +686,10 @@ var verbBank = [
 var quizQuestions = [], quizChecked = false;
 var timerSec = 0, timerInterval = null;
 var currentTab = 'presente';
+// Special char bar
+var lastInput=null;
+document.addEventListener('focusin',function(e){if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')lastInput=e.target});
+function insertChar(c){var el=lastInput||document.activeElement;if(!el||(el.tagName!=='INPUT'&&el.tagName!=='TEXTAREA'))return;var s=el.selectionStart,e=el.selectionEnd,v=el.value;el.value=v.substring(0,s)+c+v.substring(e);el.selectionStart=el.selectionEnd=s+1;el.focus()}
 
 // ======== HELPERS ========
 function $(id){return document.getElementById(id)}
@@ -915,6 +920,8 @@ document.addEventListener('keydown',function(e){
 // Close modal on click outside
 $('modal').addEventListener('click',function(e){if(e.target===$('modal'))closeModal()});
 
+// Populate char bar
+(function(){var chars=['á','é','í','ó','ú','ü','ñ','Á','É','Í','Ó','Ú','Ü','Ñ','¿','¡'];var bar=document.getElementById('char-bar');chars.forEach(function(c){var b=document.createElement('button');b.textContent=c;b.style.cssText='padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:var(--card2);color:var(--text2);cursor:pointer;font-size:13px;font-family:monospace';b.onclick=function(){insertChar(c)};bar.appendChild(b)})})();
 // Start
 switchTab('presente');
 </script>
