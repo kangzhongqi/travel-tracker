@@ -214,6 +214,9 @@ function dailyDone(){
   }catch(e){}
 }
 showDaily();
+// Quick start recommendation
+(function(){try{var r=localStorage.getItem("sp_history"),h=JSON.parse(r),t={};h.forEach(function(x){if(!t[x.type])t[x.type]={c:0,n:0};t[x.type].n++;if(x.correct===x.total)t[x.type].c++});var w=null,wp=100;for(var k in t){var p=Math.round(t[k].c/t[k].n*100);if(p<wp){wp=p;w=k}}var l=w?parseInt(w.charAt(1)):1;var lb={1:"L1填空",2:"L2组句",3:"L3翻译",4:"L4阅读"};document.getElementById("quick-start-row").innerHTML=w?"<button class=\"btn accent\" onclick=\"document.querySelector('#main-tabs [data-tab=sentences]').click();setLevel("+l+")\" style=\"font-size:11px\">🎯 建议："+lb[l]+"（正确率"+wp+"%）</button>":"<button class=\"btn accent\" onclick=\"document.querySelector('#main-tabs [data-tab=sentences]').click();setLevel(1)\" style=\"font-size:11px\">🎯 开始练习</button>"}catch(e){document.getElementById("quick-start-row").innerHTML="<button class=\"btn accent\" onclick=\"document.querySelector('#main-tabs [data-tab=sentences]').click();setLevel(1)\" style=\"font-size:11px\">🎯 开始练习</button>"}})();
+
 
 // ===== TRAVEL =====
 var travelData={
@@ -224,12 +227,18 @@ var travelData={
   '🏥 紧急':[{es:'Necesito un médico.',zh:'我需要医生'},{es:'¿Dónde está la farmacia más cercana?',zh:'最近的药房在哪？'},{es:'Me duele aquí.',zh:'我这里疼'},{es:'¿Habla inglés o chino?',zh:'你会说英语或中文吗？'},{es:'Llame a una ambulancia, por favor.',zh:'请叫救护车'},{es:'Me han robado el bolso.',zh:'我的包被偷了'},{es:'¿Dónde está la comisaría?',zh:'警察局在哪？'},{es:'Soy alérgico a...',zh:'我对…过敏'}],
   '👋 社交':[{es:'Mucho gusto.',zh:'很高兴认识你'},{es:'¿Cómo estás?',zh:'你好吗？'},{es:'¿De dónde eres?',zh:'你是哪里人？'},{es:'¿Qué te gusta hacer en tu tiempo libre?',zh:'你空闲时间喜欢做什么？'},{es:'Lo siento.',zh:'对不起'},{es:'No te preocupes.',zh:'没关系'},{es:'¡Qué bonito!',zh:'好漂亮！'},{es:'¿Nos tomamos un café?',zh:'一起喝杯咖啡？'}],
 };
+var tqState=null;
+function startTQ(name){var p=travelData[name]||[],it=p.slice();for(var i=it.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=it[i];it[i]=it[j];it[j]=t;}it=it.slice(0,4);tqState={items:it,picked:{}};var h="<div class=\"card\"><h3>🧪 "+name+" 小测</h3><p style=\"font-size:11px;color:var(--text3)\">看中文选西语</p>";it.forEach(function(q,qi){var w=p.filter(function(x){return x.es!==q.es});for(var i2=w.length-1;i2>0;i2--){var j2=Math.floor(Math.random()*(i2+1));var t2=w[i2];w[i2]=w[j2];w[j2]=t2;}var o=w.slice(0,3).map(function(x){return x.es});o.push(q.es);for(var i3=o.length-1;i3>0;i3--){var j3=Math.floor(Math.random()*(i3+1));var t3=o[i3];o[i3]=o[j3];o[j3]=t3;}q.qo=o;q.qa=o.indexOf(q.es);h+="<div class=\"sent-box\"><div class=\"prompt\">🇨🇳 <b>"+q.zh+"</b></div><div class=\"btn-row\">"+o.map(function(opt,oi){return "<button class=\"btn ghost\" style=\"font-size:11px\" id=\"tq-"+qi+"-"+oi+"\" onclick=\"pickTQ("+qi+","+oi+")\">"+opt+"</button>"}).join("")+"</div><div class=\"fb\" id=\"tqfb-"+qi+"\"></div></div>"});h+="<div class=\"btn-row\"><button class=\"btn accent\" onclick=\"checkTQ()\">✅ 检查</button><button class=\"btn ghost\" onclick=\"showPhrases(\\'"+name+"\\')\">↩ 返回</button></div></div>";document.getElementById("travel-phrases").innerHTML=h}
+function pickTQ(qi,oi){var s=tqState;if(!s||s.picked[qi]!==undefined)return;s.picked[qi]=oi;var a=s.items[qi].qa;document.querySelectorAll("#tq-"+qi+"-"+oi).forEach(function(b){b.classList.add("picked")});if(oi===a){document.getElementById("tq-"+qi+"-"+oi).classList.add("ok")}else{document.getElementById("tq-"+qi+"-"+oi).classList.add("bad");document.getElementById("tq-"+qi+"-"+a).classList.add("ok")}document.getElementById("tqfb-"+qi).className="fb show ok";document.getElementById("tqfb-"+qi).textContent="✅ "+s.items[qi].es+" = "+s.items[qi].zh}
+function checkTQ(){var s=tqState;if(!s)return;var c=0;s.items.forEach(function(q,qi){if(s.picked[qi]===q.qa)c++;else{document.getElementById("tqfb-"+qi).className="fb show err";document.getElementById("tqfb-"+qi).textContent="❌ "+q.es+" = "+q.zh}});saveRecord("旅行手册",c===s.items.length?1:0,1);alert("得分："+c+"/"+s.items.length)}
+
 function renderScenarios(){
   var h='';
   for(var name in travelData){h+='<div class="scenario-card" onclick="showPhrases(\''+name+'\')"><div class="icon">'+name.slice(0,2)+'</div><h4>'+name.slice(3)+'</h4><div class="count">'+travelData[name].length+' 句</div></div>'}
   $('travel-scenarios').innerHTML=h;$('travel-phrases').innerHTML='';
 }
 function showPhrases(name){
+  h+='<button class="btn accent" style="font-size:10px;margin-left:6px" onclick="startTQ(\''+name.replace(/'/g,"\\'")+'\')">🧪 小测</button>';
   var phrases=travelData[name]||[],h='<div class="card"><h3>'+name+'</h3><button class="btn ghost" style="margin-bottom:8px;font-size:10px" onclick="renderScenarios()">↩ 返回</button>';
   phrases.forEach(function(p){h+='<div class="phrase-item"><span class="es">'+p.es+'</span><span class="zh">'+p.zh+'</span></div>'});
   h+='</div>';$('travel-phrases').innerHTML=h;
