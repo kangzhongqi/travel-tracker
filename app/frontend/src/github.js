@@ -114,11 +114,12 @@ async function pairFileMeta(code, owner) {
   return `handshake/pair-${hash.slice(0, 20)}.json`
 }
 
-// 旧设备：把 token 用配对码加密写入自己的公开中转仓
+// 旧设备：把 token 用配对码加密写入自己的公开中转仓（仓不存在时自动补建，兼容早期绑定）
 export async function authorizePair(code) {
   const token = getToken()
   const owner = getOwner()
   if (!token || !owner) throw new Error('本设备未登录')
+  try { await ensureOneRepo(token, owner, GH.pairRepo, false) } catch (e) { /* 已存在或无权限时交由后续写入报具体错误 */ }
   const key = await pairKey(code, owner)
   const iv = crypto.getRandomValues(new Uint8Array(12))
   const enc = new TextEncoder()
