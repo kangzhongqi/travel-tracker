@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import DeviceAuthPanel from './components/DeviceAuthPanel.vue'
+import PairAuthorizePanel from './components/PairAuthorizePanel.vue'
 import FinanceModule from './components/FinanceModule.vue'
 import SpanishModule from './components/SpanishModule.vue'
 import { store, uploadCloud, pullCloud, setSyncMsg, LS_KEYS, lsGet } from './store.js'
@@ -8,6 +9,7 @@ import { GH, getToken, getUsername, clearSession, fetchUser } from './github.js'
 
 const tab = ref('finance')
 const showAuth = ref(false)
+const showPair = ref(false)
 const logged = computed(() => store.cloud === 'on' && store.username)
 const configured = computed(() => GH.configured)
 
@@ -61,10 +63,11 @@ function learnStatus() {
           <span class="uname">👤 {{ store.username }}</span>
           <button class="btn ghost" @click="manualUpload">⬆️ 立即上传</button>
           <button class="btn ghost" @click="manualPull">⬇️ 云端拉取</button>
+          <button class="btn ghost" @click="showPair = true">🤝 授权新设备</button>
           <button class="btn ghost" @click="logout">登出</button>
         </template>
         <template v-else-if="configured">
-          <button class="btn" @click="showAuth = true">登录 · GitHub 授权</button>
+          <button class="btn" @click="showAuth = true">登录 · 接力/首次绑定</button>
         </template>
         <template v-else>
           <span class="offbadge">☁️ 待配置（见首页指引）</span>
@@ -79,6 +82,7 @@ function learnStatus() {
     </p>
 
     <DeviceAuthPanel v-if="showAuth" @close="onAuthClose" />
+    <PairAuthorizePanel v-if="showPair" @close="showPair = false" />
 
     <div class="tabs">
       <button class="tab" :class="{ on: tab === 'finance' }" @click="tab = 'finance'">💰 金融知识测评</button>
@@ -88,7 +92,7 @@ function learnStatus() {
     <FinanceModule v-show="tab === 'finance'" />
     <SpanishModule v-show="tab === 'spanish'" />
 
-    <p class="note">🤖 Agent 版架构：Vue 3 前端（GitHub Pages 托管）+ GitHub 私有仓库数据层 · 设备授权码登录 · 数据自动同步<br>
+    <p class="note">🤖 Agent 版架构：Vue 3 前端（GitHub Pages 托管）+ GitHub 私有仓库数据层（零服务器）· 接力码登录 · 数据自动同步<br>
     All data stored in your own private GitHub repo · No third-party servers · No tracking</p>
   </div>
 </template>

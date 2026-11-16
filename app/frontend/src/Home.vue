@@ -75,14 +75,18 @@ function logout() {
       <span class="lgout" @click="logout">退出</span>
     </div>
     <div v-else-if="cloud === 'off'" class="cloudbar">
-      ☁️ 跨设备云同步已就绪 · <a href="study.html">用 GitHub 账号授权登录 →</a>（登录一次，所有设备自动同步；不登录可单机使用）
+      ☁️ 跨设备云同步已就绪 · <a href="study.html">登录学习中心 →</a>（首台设备一次性绑定，之后新设备接力登录，无需粘贴；不登录可单机使用）
     </div>
     <div v-else-if="cloud === 'notconfig'" class="cloudbar off">
-      ☁️ <b>云同步上线只需三步（一次配置，5 分钟）：</b>
-      ① 在 GitHub 新建私有仓库 <code>travel-tracker-data</code> ；
-      ② 在 GitHub → Settings → Developer settings → OAuth Apps 新建应用，拿到 <code>Client ID</code>；
-      ③ 把 Client ID 填进网站仓库根目录的 <code>config.js</code> 保存推送即可。
-      配置完成前，学习中心可正常单机使用（数据存本机浏览器）。
+      ☁️ <b>开启跨设备同步只需一次绑定（约 2 分钟，仅首台设备需要）：</b><br>
+      ① 打开 <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a>（细粒度令牌页）<br>
+      ② 令牌名随意填（如 myspace）；Resource owner 选 <code>kangzhongqi</code>；Repository access 选「All repositories」或以后新建仓库；权限选 <code>Repositories → Administration: Read and write</code>（建仓）+ <code>Contents: Read and write</code>（存数据）；生成并复制<br>
+      ③ 打开 <a href="study.html">学习中心</a> → 登录 → 首次绑定 → 粘贴一次令牌，数据仓库自动创建，完成<br>
+      之后所有新设备（Windows / iPhone）：接力登录，输入 8 位配对码即可，无任何粘贴。<br>
+      绑定前学习中心可正常单机使用（数据存本机浏览器）。
+    </div>
+    <div v-else class="cloudbar">
+      ☁️ 正在检查云同步状态…
     </div>
 
     <div v-for="sec in sections" :key="sec.title" class="section">
