@@ -115,9 +115,11 @@ onUnmounted(() => { cancelled = true; clearInterval(timer) })
       <template v-else>
         <h3>首次绑定（仅此一次）</h3>
         <div class="mode">
-          在 GitHub 生成「细粒度访问令牌」并粘贴到下面。绑定后：<br>
-          · 数据仓库会<b>自动创建</b>（无需手动建）<br>
-          · 以后所有新设备都用接力码登录，<b>不再粘贴任何字符</b>
+          点击 <a :href="'https://github.com/settings/personal-access-tokens/new'" target="_blank" rel="noopener" style="color:var(--accent2);font-weight:700">生成新令牌 →</a> ：令牌名随意（如 myspace）；Resource owner 选 <b>kangzhongqi</b>；
+          Repository access 选「<b>All repositories</b>」（自动建仓需要）；
+          权限勾 <b>Repositories → Administration: Read and write</b>（建仓）与 <b>Contents: Read and write</b>（存数据）
+          → 生成后复制，粘贴到下面。
+          绑定后：数据仓库<b>自动创建</b>，以后所有新设备用接力码登录，<b>不再粘贴任何字符</b>。
         </div>
         <input v-model="patInput" type="password" placeholder="粘贴 github_pat_ 开头的令牌（仅存本机浏览器）" style="font-size:12px">
         <div class="auth-err">{{ bindErr }}</div>

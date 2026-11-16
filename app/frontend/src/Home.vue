@@ -75,7 +75,9 @@ function logout() {
       <span class="lgout" @click="logout">退出</span>
     </div>
     <div v-else-if="cloud === 'off'" class="cloudbar">
-      ☁️ 跨设备云同步已就绪 · <a href="study.html">登录学习中心 →</a>（首台设备一次性绑定，之后新设备接力登录，无需粘贴；不登录可单机使用）
+      ☁️ 跨设备云同步已就绪 · <a href="study.html">登录学习中心 →</a>（首台设备需一次性绑定
+      <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">生成令牌→粘贴</a>，约 2 分钟；
+      之后所有新设备接力登录，无需粘贴；不登录可单机使用）
     </div>
     <div v-else-if="cloud === 'notconfig'" class="cloudbar off">
       ☁️ <b>开启跨设备同步只需一次绑定（约 2 分钟，仅首台设备需要）：</b><br>
