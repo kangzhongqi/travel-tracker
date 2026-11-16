@@ -1,32 +1,36 @@
-// GitHub 数据层客户端：PAT 首次绑定 + 设备接力配对 + 私有仓库 JSON 读写
-// 架构：GitHub Pages 托管前端 → api.github.com 当数据库，零服务器
+// GitHub 数据层客户端（多用户自助版）：PAT 首次绑定 + 设备接力配对 + 私有仓库 JSON 读写
+// 每个用户绑定自己的 GitHub：数据/令牌/仓库全在用户自己账号下，天然隔离
 
 const TOKEN_KEY = 'ag_token'
 const USER_KEY = 'ag_username'
+const OWNER_KEY = 'ag_owner'
 
 export function getToken() { return localStorage.getItem(TOKEN_KEY) || '' }
 export function getUsername() { return localStorage.getItem(USER_KEY) || '' }
+export function getOwner() { return localStorage.getItem(OWNER_KEY) || getUsername() || '' }
 
 export function saveSession(token, username) {
   localStorage.setItem(TOKEN_KEY, token)
-  if (username) localStorage.setItem(USER_KEY, username)
+  if (username) {
+    localStorage.setItem(USER_KEY, username)
+    localStorage.setItem(OWNER_KEY, username)
+  }
 }
 
 export function clearSession() {
   localStorage.removeItem(TOKEN_KEY)
   localStorage.removeItem(USER_KEY)
+  localStorage.removeItem(OWNER_KEY)
 }
 
-// ===== 配置（由仓库根 config.js 注入）=====
+// ===== 配置 =====
+const cfg = typeof window !== 'undefined' ? window : {}
 export const GH = {
-  owner: (typeof window !== 'undefined' && window.AG_GH_OWNER) || '',
-  repo: (typeof window !== 'undefined' && window.AG_GH_REPO) || '',
-  dataPath: (typeof window !== 'undefined' && window.AG_GH_DATA_PATH) || 'data/learning-data.json',
-  pairRepo: (typeof window !== 'undefined' && window.AG_GH_PAIR_REPO) || '',
-  configured: false
+  repo: cfg.AG_GH_REPO || 'travel-tracker-data',            // 私有数据仓（自动创建于用户账号下）
+  dataPath: cfg.AG_GH_DATA_PATH || 'data/learning-data.json',
+  pairRepo: cfg.AG_GH_PAIR_REPO || 'travel-tracker-handshake', // 公开接力中转仓（自动创建于用户账号下）
+  configured: !!(cfg.AG_GH_REPO || 'travel-tracker-data')
 }
-GH.configured = !!(GH.owner && GH.repo && GH.pairRepo)
-const PAIR_TTL = 5 * 60 * 1000 // 配对码有效期 5 分钟
 
 const API = 'https://api.github.com'
 
@@ -47,49 +51,56 @@ export async function fetchUser(token) {
   return res.json()
 }
 
-// ===== 确保数据仓库存在（首次绑定时自动创建，用户无需手动建仓库）=====
-export async function ensureRepo(token) {
-  const res = await fetch(`${API}/repos/${GH.owner}/${GH.repo}`, { headers: ghHeaders(token) })
+// ===== 确保仓库存在（首次绑定时自动创建）=====
+async function ensureOneRepo(token, owner, name, isPrivate) {
+  const res = await fetch(`${API}/repos/${owner}/${name}`, { headers: ghHeaders(token) })
   if (res.status === 200) return { created: false }
   if (res.status === 404) {
     const create = await fetch(`${API}/user/repos`, {
       method: 'POST',
       headers: ghHeaders(token, { 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ name: GH.repo, private: true, description: 'My Space 学习中心私有数据仓库（Agent 版自动创建）' })
+      body: JSON.stringify({
+        name,
+        private: isPrivate,
+        description: isPrivate
+          ? 'My Space 学习中心私有数据仓库（Agent 版自动创建）'
+          : 'My Space 学习中心设备接力中转仓库（内容全程 AES 加密、用后即删）'
+      })
     })
     if (create.status === 201) return { created: true }
-    if (create.status === 403 || create.status === 404) throw new Error('令牌缺少「创建仓库」权限，请重新生成并勾选 Repositories 权限')
+    if (create.status === 403 || create.status === 404) throw new Error('令牌缺少「创建仓库」权限，请生成时勾选 Repositories 权限')
     throw new Error('自动创建仓库失败（' + create.status + '）')
   }
   if (res.status === 401) throw new Error('令牌无效或已过期')
   const err = new Error('无法访问仓库'); err.isNetwork = true; throw err
 }
 
-// ===== 首次绑定（粘贴 PAT 一次，之后所有设备走接力）=====
+// ===== 首次绑定（粘贴 PAT 一次；之后所有设备走接力）=====
 export async function bindToken(token) {
-  const user = await fetchUser(token)
-  await ensureRepo(token)
+  const user = await fetchUser(token)          // 自动识别用户身份，无需输入用户名
+  const owner = user.login
+  await ensureOneRepo(token, owner, GH.repo, true)       // 私有数据仓
+  await ensureOneRepo(token, owner, GH.pairRepo, false)  // 公开接力中转仓
   saveSession(token, user.login)
   return user.login
 }
 
 // ===== 设备接力配对（8 位码，跨设备零粘贴）=====
 const PAIR_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+const PAIR_TTL = 5 * 60 * 1000
 export function genPairCode() {
   const arr = new Uint8Array(8)
   crypto.getRandomValues(arr)
   return Array.from(arr, b => PAIR_CHARS[b % PAIR_CHARS.length]).join('')
 }
 
-async function pairKey(code) {
+async function pairKey(code, owner) {
   const enc = new TextEncoder()
   const km = await crypto.subtle.importKey('raw', enc.encode(code), 'PBKDF2', false, ['deriveKey'])
-  return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: enc.encode('ag-pair-' + GH.owner), iterations: 100000, hash: 'SHA-256' }, km, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt'])
+  return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: enc.encode('ag-pair-' + owner), iterations: 100000, hash: 'SHA-256' }, km, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt'])
 }
 
-function b64buf(buf) {
-  return btoa(String.fromCharCode(...new Uint8Array(buf)))
-}
+function b64buf(buf) { return btoa(String.fromCharCode(...new Uint8Array(buf))) }
 function bufB64(b64) {
   const bin = atob(b64)
   const arr = new Uint8Array(bin.length)
@@ -97,23 +108,24 @@ function bufB64(b64) {
   return arr
 }
 
-async function pairFileMeta(code) {
-  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(code + ':' + GH.owner))
+async function pairFileMeta(code, owner) {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(code + ':' + owner))
   const hash = Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2, '0')).join('')
   return `handshake/pair-${hash.slice(0, 20)}.json`
 }
 
-// 旧设备：把 token 用配对码加密写入公开中转仓库（密文 + 用后即删 + 5 分钟过期）
+// 旧设备：把 token 用配对码加密写入自己的公开中转仓
 export async function authorizePair(code) {
   const token = getToken()
-  if (!token) throw new Error('本设备未登录')
-  const key = await pairKey(code)
+  const owner = getOwner()
+  if (!token || !owner) throw new Error('本设备未登录')
+  const key = await pairKey(code, owner)
   const iv = crypto.getRandomValues(new Uint8Array(12))
   const enc = new TextEncoder()
   const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(JSON.stringify({ t: token, u: getUsername() })))
-  const path = await pairFileMeta(code)
+  const path = await pairFileMeta(code, owner)
   const body = { c: b64buf(ct), iv: b64buf(iv), at: new Date().toISOString(), from: getUsername() }
-  const url = `${API}/repos/${GH.owner}/${GH.pairRepo}/contents/${path}`
+  const url = `${API}/repos/${owner}/${GH.pairRepo}/contents/${path}`
   const head = await fetch(url, { headers: ghHeaders(token) })
   const payload = { message: 'pair: authorize new device', content: btoa(unescape(encodeURIComponent(JSON.stringify(body)))) }
   if (head.status === 200) payload.sha = (await head.json()).sha
@@ -122,12 +134,11 @@ export async function authorizePair(code) {
   return true
 }
 
-// 新设备（无令牌）：匿名轮询公开中转仓库的配对文件，解密后获得 token 并删除文件
-export async function pollPair(code) {
-  const key = await pairKey(code)
-  const path = await pairFileMeta(code)
-  const url = `${API}/repos/${GH.owner}/${GH.pairRepo}/contents/${path}`
-  // 匿名 GET（新设备尚无令牌，公开仓库可匿名读，限速内完成）
+// 新设备（无令牌）：匿名轮询指定账号下的公开中转仓，解密后获得 token 并删除文件
+export async function pollPair(code, owner) {
+  const key = await pairKey(code, owner)
+  const path = await pairFileMeta(code, owner)
+  const url = `${API}/repos/${owner}/${GH.pairRepo}/contents/${path}`
   const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' } })
   if (res.status === 404) return { status: 'pending' }
   if (res.status === 403) return { status: 'ratelimit' }
@@ -141,7 +152,6 @@ export async function pollPair(code) {
     const dec = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: bufB64(body.iv) }, key, bufB64(body.c))
     pt = JSON.parse(new TextDecoder().decode(dec))
   } catch { return { status: 'pending' } }
-  // 解密成功：用新 token 删除配对文件（用后即删）
   const del = await fetch(url, {
     method: 'DELETE',
     headers: ghHeaders(pt.t, { 'Content-Type': 'application/json' }),
@@ -156,7 +166,8 @@ function b64decode(b64) { return decodeURIComponent(escape(atob(b64.replace(/\n/
 
 export async function pullData() {
   const token = getToken()
-  const url = `${API}/repos/${GH.owner}/${GH.repo}/contents/${GH.dataPath}`
+  const owner = getOwner()
+  const url = `${API}/repos/${owner}/${GH.repo}/contents/${GH.dataPath}`
   const res = await fetch(url, { headers: ghHeaders(token) })
   if (res.status === 404) return { exists: false, data: null }
   if (res.status === 401) { clearSession(); throw new Error('令牌已失效，请重新登录') }
@@ -167,7 +178,8 @@ export async function pullData() {
 
 export async function pushData(dataObj, retry = true) {
   const token = getToken()
-  const url = `${API}/repos/${GH.owner}/${GH.repo}/contents/${GH.dataPath}`
+  const owner = getOwner()
+  const url = `${API}/repos/${owner}/${GH.repo}/contents/${GH.dataPath}`
   const content = b64encode(JSON.stringify(dataObj, null, 2))
   let sha
   const head = await fetch(url, { headers: ghHeaders(token) })
