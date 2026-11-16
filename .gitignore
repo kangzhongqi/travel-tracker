@@ -1,0 +1,8 @@
+# Agent 学习中心（app/）运行时文件
+app/backend/.venv/
+app/backend/data/
+app/frontend/node_modules/
+app/frontend/dist/
+
+# 系统文件
+.DS_Store
