@@ -1,6 +1,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import DeviceAuthPanel from './components/DeviceAuthPanel.vue'
+import PassSetupPanel from './components/PassSetupPanel.vue'
 import { GH, getToken, getUsername, clearSession, fetchUser } from './github.js'
+
+const showAuth = ref(false)
+const showPass = ref(false)
 
 const sections = [
   {
@@ -41,7 +46,7 @@ const sections = [
 const cloud = ref('checking')
 const username = ref('')
 
-onMounted(async () => {
+async function check() {
   username.value = getUsername()
   if (!GH.configured) { cloud.value = 'notconfig'; return }
   if (!getToken()) { cloud.value = 'off'; return }
@@ -53,7 +58,13 @@ onMounted(async () => {
     cloud.value = 'off'
     username.value = ''
   }
-})
+}
+onMounted(check)
+
+function onAuthClose() {
+  showAuth.value = false
+  check()
+}
 
 function logout() {
   clearSession()
@@ -72,16 +83,21 @@ function logout() {
 
     <div v-if="cloud === 'on'" class="cloudbar">
       ✅ 已登录 <b>{{ username }}</b> · 学习数据自动同步中 · <a href="study.html">进入学习中心 →</a>
+      <a class="lgout" style="margin-left:10px" @click="showPass = true">🔒 同步密码</a>
       <span class="lgout" @click="logout">退出</span>
     </div>
     <div v-else-if="cloud === 'off'" class="cloudbar">
-      ☁️ 跨设备云同步已就绪 · <a href="study.html">登录学习中心 →</a>（首次绑定
+      ☁️ 全站统一登录：<a href="javascript:void(0)" @click="showAuth = true" style="font-weight:800">点此登录</a>（接力 / 密码 / 首次绑定三选一，登录一次全站通用）
+      · 首次使用需一次性绑定
       <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">生成令牌→粘贴</a>，约 2 分钟；
-      之后所有新设备接力登录，无需粘贴；不登录可单机使用；任何人也可用自己的 GitHub 账号开启自己的同步）
+      不登录也可单机使用；任何人也可用自己的 GitHub 账号开启自己的同步
     </div>
     <div v-else class="cloudbar">
       ☁️ 正在检查云同步状态…
     </div>
+
+    <DeviceAuthPanel v-if="showAuth" @close="onAuthClose" />
+    <PassSetupPanel v-if="showPass" @close="showPass = false" />
 
     <div v-for="sec in sections" :key="sec.title" class="section">
       <div class="section-title">{{ sec.title }}</div>
