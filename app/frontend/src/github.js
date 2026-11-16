@@ -218,14 +218,14 @@ export async function pollPair(code, owner) {
   return { status: 'ok', token: pt.t, username: pt.u, cleaned: del.ok }
 }
 
-// ===== 私有仓库 JSON 读写（Contents API）=====
+// ===== 私有仓库 JSON 读写（Contents API，支持多文件）=====
 function b64encode(str) { return btoa(unescape(encodeURIComponent(str))) }
 function b64decode(b64) { return decodeURIComponent(escape(atob(b64.replace(/\n/g, '')))) }
 
-export async function pullData() {
+export async function pullData(path = 'data/learning-data.json') {
   const token = getToken()
   const owner = getOwner()
-  const url = `${API}/repos/${owner}/${GH.repo}/contents/${GH.dataPath}`
+  const url = `${API}/repos/${owner}/${GH.repo}/contents/${path}`
   const res = await fetch(url, { headers: ghHeaders(token) })
   if (res.status === 404) return { exists: false, data: null }
   if (res.status === 401) { clearSession(); throw new Error('令牌已失效，请重新登录') }
@@ -234,10 +234,10 @@ export async function pullData() {
   return { exists: true, sha: j.sha, data: JSON.parse(b64decode(j.content)) }
 }
 
-export async function pushData(dataObj, retry = true) {
+export async function pushData(dataObj, retry = true, path = 'data/learning-data.json') {
   const token = getToken()
   const owner = getOwner()
-  const url = `${API}/repos/${owner}/${GH.repo}/contents/${GH.dataPath}`
+  const url = `${API}/repos/${owner}/${GH.repo}/contents/${path}`
   const content = b64encode(JSON.stringify(dataObj, null, 2))
   let sha
   const head = await fetch(url, { headers: ghHeaders(token) })
@@ -253,7 +253,7 @@ export async function pushData(dataObj, retry = true) {
       ...(sha ? { sha } : {})
     })
   })
-  if (res.status === 409 && retry) return pushData(dataObj, false)
+  if (res.status === 409 && retry) return pushData(dataObj, false, path)
   if (res.status === 401) { clearSession(); throw new Error('令牌已失效，请重新登录') }
   if (!res.ok) {
     const body = await res.text().catch(() => '')
@@ -263,3 +263,9 @@ export async function pushData(dataObj, retry = true) {
   }
   return { saved: true }
 }
+
+// ===== 旧模块（地图/地铁/西语练习等）数据同步：独立 misc 文件，与学习数据互不覆盖 =====
+export const MISC_PATH = 'data/misc.json'
+export async function pullMisc() { return pullData(MISC_PATH) }
+export async function pushMisc(dataObj) { return pushData(dataObj, true, MISC_PATH) }
+
