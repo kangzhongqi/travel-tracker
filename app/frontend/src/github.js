@@ -75,14 +75,71 @@ async function ensureOneRepo(token, owner, name, isPrivate) {
   const err = new Error('无法访问仓库'); err.isNetwork = true; throw err
 }
 
-// ===== 首次绑定（粘贴 PAT 一次；之后所有设备走接力）=====
-export async function bindToken(token) {
+// ===== 首次绑定（粘贴 PAT 一次；之后所有设备走接力/密码登录）=====
+export async function bindToken(token, syncPassword) {
   const user = await fetchUser(token)          // 自动识别用户身份，无需输入用户名
   const owner = user.login
   await ensureOneRepo(token, owner, GH.repo, true)       // 私有数据仓
   await ensureOneRepo(token, owner, GH.pairRepo, false)  // 公开接力中转仓
   saveSession(token, user.login)
+  if (syncPassword) await saveCredential(token, owner, syncPassword)
   return user.login
+}
+
+// ===== 密码登录（任意设备直接登录，无需其他设备参与）=====
+// 原理：同步密码作为加密钥匙，解开存在公开中转仓里的令牌密文
+const CRED_PATH = 'auth/credentials.json'
+
+async function passKey(password, saltBuf) {
+  const enc = new TextEncoder()
+  const km = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey'])
+  return crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt: saltBuf, iterations: 310000, hash: 'SHA-256' },
+    km, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']
+  )
+}
+
+// 已登录设备：用同步密码加密令牌，存入公开中转仓（凭密码+用户名即可从任何设备取回）
+export async function saveCredential(token, owner, password) {
+  if (!token || !owner) throw new Error('本设备未登录')
+  if (typeof password !== 'string' || password.length < 6) throw new Error('同步密码至少 6 位（建议 8 位以上并包含字母与数字）')
+  await ensureOneRepo(token, owner, GH.pairRepo, false).catch(() => {})
+  const salt = crypto.getRandomValues(new Uint8Array(16))
+  const key = await passKey(password, salt)
+  const iv = crypto.getRandomValues(new Uint8Array(12))
+  const enc = new TextEncoder()
+  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(JSON.stringify({ t: token, u: owner })))
+  const body = { c: b64buf(ct), iv: b64buf(iv), salt: b64buf(salt), at: new Date().toISOString() }
+  const url = `${API}/repos/${owner}/${GH.pairRepo}/contents/${CRED_PATH}`
+  const head = await fetch(url, { headers: ghHeaders(token) })
+  const payload = { message: 'auth: update credential', content: btoa(unescape(encodeURIComponent(JSON.stringify(body)))) }
+  if (head.status === 200) payload.sha = (await head.json()).sha
+  const res = await fetch(url, { method: 'PUT', headers: ghHeaders(token, { 'Content-Type': 'application/json' }), body: JSON.stringify(payload) })
+  if (!res.ok) throw new Error('保存密码凭据失败（' + res.status + '）')
+  return true
+}
+
+// 任意设备：输用户名+同步密码 → 匿名拉取密文 → 解密得令牌 → 登录
+export async function loginWithPassword(owner, password) {
+  if (!/^[A-Za-z0-9-]{1,39}$/.test(owner || '')) throw new Error('请输入正确的 GitHub 用户名')
+  if (!password) throw new Error('请输入同步密码')
+  const url = `${API}/repos/${owner}/${GH.pairRepo}/contents/${CRED_PATH}`
+  const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' } })
+  if (res.status === 404) throw new Error('该账号尚未设置密码登录（先在任一已登录设备上设置，或改用接力/首次绑定）')
+  if (res.status === 403) throw new Error('GitHub 匿名请求额度已用完，请稍后再试或改用接力登录')
+  if (!res.ok) throw new Error('拉取凭据失败（' + res.status + '）')
+  const j = await res.json()
+  let body
+  try { body = JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g, ''))))) } catch { throw new Error('凭据文件异常') }
+  let pt
+  try {
+    const key = await passKey(password, bufB64(body.salt))
+    const dec = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: bufB64(body.iv) }, key, bufB64(body.c))
+    pt = JSON.parse(new TextDecoder().decode(dec))
+  } catch { throw new Error('同步密码错误') }
+  await fetchUser(pt.t) // 校验令牌仍有效
+  saveSession(pt.t, pt.u)
+  return pt.u
 }
 
 // ===== 设备接力配对（8 位码，跨设备零粘贴）=====

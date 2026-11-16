@@ -2,6 +2,7 @@
 import { ref, onMounted, computed } from 'vue'
 import DeviceAuthPanel from './components/DeviceAuthPanel.vue'
 import PairAuthorizePanel from './components/PairAuthorizePanel.vue'
+import PassSetupPanel from './components/PassSetupPanel.vue'
 import FinanceModule from './components/FinanceModule.vue'
 import SpanishModule from './components/SpanishModule.vue'
 import { store, uploadCloud, pullCloud, setSyncMsg, LS_KEYS, lsGet } from './store.js'
@@ -10,6 +11,7 @@ import { GH, getToken, getUsername, clearSession, fetchUser } from './github.js'
 const tab = ref('finance')
 const showAuth = ref(false)
 const showPair = ref(false)
+const showPass = ref(false)
 const logged = computed(() => store.cloud === 'on' && store.username)
 const configured = computed(() => GH.configured)
 
@@ -64,6 +66,7 @@ function learnStatus() {
           <button class="btn ghost" @click="manualUpload">⬆️ 立即上传</button>
           <button class="btn ghost" @click="manualPull">⬇️ 云端拉取</button>
           <button class="btn ghost" @click="showPair = true">🤝 授权新设备</button>
+          <button class="btn ghost" @click="showPass = true">🔒 密码登录</button>
           <button class="btn ghost" @click="logout">登出</button>
         </template>
         <template v-else-if="configured">
@@ -83,6 +86,7 @@ function learnStatus() {
 
     <DeviceAuthPanel v-if="showAuth" @close="onAuthClose" />
     <PairAuthorizePanel v-if="showPair" @close="showPair = false" />
+    <PassSetupPanel v-if="showPass" @close="showPass = false" />
 
     <div class="tabs">
       <button class="tab" :class="{ on: tab === 'finance' }" @click="tab = 'finance'">💰 金融知识测评</button>
