@@ -66,7 +66,7 @@ function learnStatus() {
           <button class="btn ghost" @click="manualUpload">⬆️ 立即上传</button>
           <button class="btn ghost" @click="manualPull">⬇️ 云端拉取</button>
           <button class="btn ghost" @click="showPair = true">🤝 授权新设备</button>
-          <button class="btn ghost" @click="showPass = true">🔒 密码登录</button>
+          <button class="btn ghost" @click="showPass = true">🔒 同步密码</button>
           <button class="btn ghost" @click="logout">登出</button>
         </template>
         <template v-else-if="configured">
