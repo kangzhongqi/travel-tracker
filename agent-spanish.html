@@ -3,413 +3,407 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>西语 A2 笔记与复习 · Agent 版</title>
+<title>西语 A2 学习中心 · Agent 合体版</title>
 <style>
 :root{--bg:#090d15;--card:#111827;--card2:#1a2235;--text:#e5e7eb;--text2:#9ca3af;--text3:#6b7280;--border:#1f2937;--accent:#10b981;--accent2:#34d399;--danger:#f87171;--warn:#fbbf24;--radius:16px}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(16,185,129,.06),transparent 70%)}
-.container{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:24px 20px 60px}
-.topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
-.back{display:inline-flex;align-items:center;gap:6px;color:var(--text2);text-decoration:none;font-size:13px;padding:6px 12px;border:1px solid var(--border);border-radius:10px;background:var(--card)}
-.back:hover{color:var(--accent2);border-color:var(--accent)}
-h1{font-size:22px;font-weight:800;letter-spacing:-.3px}
+.container{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:24px 20px 60px}
+.topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.back{display:inline-flex;align-items:center;color:var(--text2);text-decoration:none;font-size:13px;padding:6px 12px;border:1px solid var(--border);border-radius:10px;background:var(--card)}
+h1{font-size:21px;font-weight:800}
 h1 .grad{background:linear-gradient(135deg,#e5e7eb 20%,var(--accent2) 80%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,rgba(16,185,129,.18),rgba(52,211,153,.08));color:var(--accent2);border:1px solid rgba(16,185,129,.35)}
+.badge{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,rgba(16,185,129,.18),rgba(52,211,153,.08));color:var(--accent2);border:1px solid rgba(16,185,129,.35)}
 .langbtn{margin-left:auto;padding:6px 14px;border-radius:999px;border:1px solid var(--accent);background:rgba(16,185,129,.1);color:var(--accent2);font-size:12px;font-weight:700;cursor:pointer}
 .sub{color:var(--text2);font-size:12px;margin-top:6px}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
-.tab{padding:8px 16px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
-.tab:hover{border-color:var(--accent)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+.tab{padding:8px 14px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text2);font-size:13px;font-weight:600;cursor:pointer}
 .tab.on{background:rgba(16,185,129,.12);color:var(--accent2);border-color:var(--accent)}
-.panel{display:none;animation:fadeIn .35s ease-out}
+.panel{display:none;animation:fadeIn .3s}
 .panel.on{display:block}
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px}
-.card h3{font-size:15px;margin-bottom:10px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px}
+.card h3{font-size:15px;margin-bottom:8px}
 .hint{font-size:12px;color:var(--text3);line-height:1.7}
-.btn{display:inline-block;padding:9px 18px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--accent),#059669);color:#fff;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
-.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(16,185,129,.25)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.chip{padding:5px 12px;border-radius:999px;border:1px solid var(--border);background:var(--card2);color:var(--text2);font-size:12px;cursor:pointer;user-select:none;white-space:nowrap}
+.chip.on{background:rgba(16,185,129,.15);color:var(--accent2);border-color:var(--accent)}
+.btn{display:inline-block;padding:9px 18px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--accent),#059669);color:#fff;font-size:13px;font-weight:700;cursor:pointer}
 .btn.ghost{background:var(--card2);color:var(--text2);border:1px solid var(--border)}
 .btn.danger{background:var(--card2);color:var(--danger);border:1px solid rgba(248,113,113,.4)}
-.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
-.gcard{border:1px solid var(--border);border-radius:var(--radius);background:var(--card);padding:18px;cursor:pointer}
+.stat{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;font-size:11px}
+.stat span{padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:var(--card2);color:var(--text3)}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.gcard{border:1px solid var(--border);border-radius:var(--radius);background:var(--card);padding:16px;cursor:pointer}
 .gcard:hover{border-color:var(--accent)}
-.gcard .gt{font-size:15px;font-weight:800;color:var(--accent2);margin-bottom:8px}
-.gcard .gp{font-size:12.5px;color:var(--text2);line-height:1.75;display:none}
+.gcard .gt{font-size:14.5px;font-weight:800;color:var(--accent2);margin-bottom:8px}
+.gcard .gs{font-size:11px;color:var(--text3)}
+.gcard .gp{font-size:12.5px;color:var(--text2);line-height:1.8;display:none}
 .gcard.open .gp{display:block}
 .gcard.open .gs{display:none}
-.gcard .gs{font-size:11px;color:var(--text3)}
-.gex{margin-top:10px;padding:10px 12px;border-left:3px solid var(--accent);background:var(--card2);border-radius:8px;font-size:12.5px;line-height:1.8}
-.gex b{color:var(--accent2);font-weight:700}
+.gex{margin-top:10px;padding:9px 12px;border-left:3px solid var(--accent);background:var(--card2);border-radius:8px;font-size:12.5px;line-height:1.9}
+.gex b{color:var(--accent2)}
 .gex i{color:var(--text3);font-style:normal;font-size:11.5px}
-.mark3{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-.mk{flex:1;min-width:80px;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--card2);font-size:13px;font-weight:700;cursor:pointer;color:var(--text2)}
-.mk.ok:hover,.mk.ok.on{border-color:var(--accent);color:var(--accent2);background:rgba(16,185,129,.1)}
-.mk.mid:hover,.mk.mid.on{border-color:var(--warn);color:var(--warn);background:rgba(251,191,36,.08)}
-.mk.no:hover,.mk.no.on{border-color:var(--danger);color:var(--danger);background:rgba(248,113,113,.08)}
-.vbox{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:34px 24px;text-align:center}
-.vbox .ves{font-size:38px;font-weight:900;letter-spacing:-.5px}
+.vbox{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:30px 22px;text-align:center}
+.vbox .ves{font-size:36px;font-weight:900}
 .vbox .vez{font-size:16px;color:var(--accent2);margin-top:8px;font-weight:700}
-.vbox .vex{margin-top:14px;font-size:13px;color:var(--text2);line-height:1.7}
-.vbox .vex i{display:block;color:var(--text3);font-size:11.5px;margin-top:2px}
-.vnav{display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:10px;flex-wrap:wrap}
-.stat{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;font-size:11px}
-.stat span{padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:var(--card2);color:var(--text3)}
-.stat .s1{color:var(--accent2)}
-.stat .s2{color:var(--warn)}
-.stat .s3{color:var(--danger)}
-.empty{text-align:center;color:var(--text3);font-size:13px;padding:30px 0}
-.note{font-size:11px;color:var(--text3);margin-top:14px;text-align:center;line-height:1.8}
+.vbox .vex{margin-top:12px;font-size:12.5px;color:var(--text2);line-height:1.7}
+.vbox .vex i{display:block;color:var(--text3);font-size:11px;margin-top:2px}
+.mark3{display:flex;gap:8px;margin-top:14px}
+.mk{flex:1;min-width:80px;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--card2);font-size:13px;font-weight:700;cursor:pointer;color:var(--text2)}
+.mk.ok:hover{border-color:var(--accent);color:var(--accent2)}
+.mk.mid:hover{border-color:var(--warn);color:var(--warn)}
+.mk.no:hover{border-color:var(--danger);color:var(--danger)}
+.vnav{display:flex;justify-content:space-between;margin-top:18px;gap:10px;flex-wrap:wrap}
 .opt{display:block;padding:10px 14px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;font-size:13px;color:var(--text2);cursor:pointer;line-height:1.5}
 .opt:hover{border-color:var(--accent)}
 .opt.right{border-color:var(--accent);background:rgba(16,185,129,.12);color:var(--accent2)}
 .opt.wrong{border-color:var(--danger);background:rgba(248,113,113,.08);color:var(--danger)}
-.scorebox{text-align:center;padding:26px;border:1px solid var(--accent);border-radius:var(--radius);background:rgba(16,185,129,.06);margin-bottom:16px}
-.scorebox .big{font-size:40px;font-weight:900;color:var(--accent2)}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.exp{margin-top:10px;padding:12px 14px;border-radius:10px;background:var(--card2);border-left:3px solid var(--accent);font-size:12px;color:var(--text2);line-height:1.7}
+.exp b{color:var(--accent2)}
+.empty{text-align:center;color:var(--text3);font-size:13px;padding:26px 0}
+.note{font-size:11px;color:var(--text3);margin-top:14px;text-align:center;line-height:1.8}
+.srsbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th,.tbl td{padding:7px 9px;border-bottom:1px solid var(--border);text-align:left}
+.tbl th{color:var(--text3);font-size:11px}
+.tbl td{color:var(--text2)}
+.tbl td.first{color:var(--accent2);font-weight:700}
+input.q{width:100%;max-width:320px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--card2);color:var(--text);font-size:14px;outline:none}
+input.q:focus{border-color:var(--accent)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
 <div class="container">
   <div class="topbar">
-    <a class="back" href="index.html">← <span data-t="back">首页</span></a>
-    <h1><span class="grad">🇪🇸 <span data-t="title">西语 A2 · 笔记与复习</span></span></h1>
-    <span class="badge">🤖 Agent 版</span>
-    <button class="langbtn" id="langBtn" onclick="toggleLang()">ES</button>
+    <a class="back" href="./">← 首页</a>
+    <h1><span class="grad">🇪🇸 <span id="t-title">西语 A2 学习中心</span></span></h1>
+    <span class="badge" id="t-badge">Agent 合体版</span>
+    <button class="langbtn" id="langBtn">ES</button>
   </div>
-  <p class="sub" data-t="sub">DELE A2 语法笔记 · 高频词汇三档复习 · 错词本 · 综合小测（多邻国 Section 4 对齐）</p>
+  <p class="sub" id="t-sub">合并词库 329 词 · 20 张透彻语法卡 · 114 动词变位速查 · SRS 遗忘曲线复习 · DELE A2 对齐</p>
 
-  <div class="tabs">
-    <button class="tab on" data-p="gram"><span data-t="t1">📖 语法笔记</span></button>
-    <button class="tab" data-p="vocab"><span data-t="t2">🃏 词汇复习</span></button>
-    <button class="tab" data-p="weak"><span data-t="t3">❌ 错词本</span></button>
-    <button class="tab" data-p="quiz"><span data-t="t4">📝 综合小测</span></button>
+  <div class="tabs" id="tabs">
+    <button class="tab on" data-p="gram"><span id="t1">📖 语法精讲</span></button>
+    <button class="tab" data-p="vocab"><span id="t2">🃏 词汇复习</span></button>
+    <button class="tab" data-p="verbs"><span id="t3">🔤 动词变位</span></button>
+    <button class="tab" data-p="srs"><span id="t5">🔁 遗忘曲线</span><span id="srsBadge" style="display:none;margin-left:4px;font-size:11px;color:var(--warn)"></span></button>
+    <button class="tab" data-p="quiz"><span id="t4">📝 综合小测</span></button>
   </div>
 
   <div class="panel on" id="p-gram">
-    <div class="card"><h3 data-t="g0t">A2 核心语法 · 点击展开要点</h3><div class="hint" data-t="g0d">覆盖 DELE A2 与多邻国 Section 4 阶段的高频语法点。</div></div>
+    <div class="card"><h3 id="t-g0">20 张 A2 核心语法卡 · 点击展开透彻讲解</h3><div class="hint" id="t-g0d">每张卡含：核心原理 / 常见错误 / 对比辨析 / 例句。</div>
+    <div class="chips" id="gramChips" style="margin-top:8px"></div></div>
     <div class="ggrid" id="gGrid"></div>
   </div>
 
   <div class="panel" id="p-vocab">
     <div class="stat" id="vStat"></div>
+    <div class="card" style="padding:12px 16px"><div class="chips" id="vocabSrcChips"></div></div>
     <div class="vbox" id="vBox"></div>
     <div class="vnav">
-      <button class="btn ghost" onclick="nextWord(-1)">← <span data-t="skip">跳过</span></button>
-      <button class="btn" onclick="nextWord(1)" data-t="next">下一个 →</button>
+      <button class="btn ghost" id="vSkip">← 跳过</button>
+      <button class="btn" id="vNext">下一个 →</button>
     </div>
-    <div class="card" style="margin-top:14px"><div class="hint" data-t="vnote">标记规则：✅ 认识 / 🟡 模糊 / ❌ 不认识。复习顺序优先推送 🟡 与 ❌ 的词，全部词也会轮询到。进度存在本机浏览器。</div></div>
+    <div class="note" id="t-vnote">✅ 认识 / 🟡 模糊 / ❌ 不认识 —— 弱词优先推送；标记进入遗忘曲线队列，跨设备自动同步</div>
   </div>
 
-  <div class="panel" id="p-weak">
+  <div class="panel" id="p-verbs">
     <div class="card">
-      <h3 data-t="w0t">🟡❌ 需要重点复习的词</h3>
-      <div class="hint" id="wInfo"></div>
-      <div style="margin-top:10px"><button class="btn ghost" onclick="startWeak()" data-t="w0b">开始复习错词</button> <button class="btn danger" onclick="clearWeak()" data-t="w0c">清空错词本</button></div>
+      <h3>🔤 动词变位速查（114 个高频动词）</h3>
+      <div class="hint" style="margin-bottom:10px">搜索动词原形或中文含义；点击动词行展开 6 人称现在时 + 简单过去时关键位。</div>
+      <input class="q" id="verbSearch" placeholder="输入动词，如 hablar / ser / 吃">
     </div>
-    <div class="ggrid" id="wGrid"></div>
+    <div id="verbList"></div>
+  </div>
+
+  <div class="panel" id="p-srs">
+    <div class="card">
+      <div class="srsbar">
+        <h3>🔁 遗忘曲线复习</h3>
+        <span class="hint" id="srsStat"></span>
+        <button class="btn danger" id="srsClear">清空队列</button>
+      </div>
+      <div id="srsBody"></div>
+    </div>
   </div>
 
   <div class="panel" id="p-quiz">
-    <div id="qSetup">
-      <div class="card">
-        <h3 data-t="q0t">📝 A2 综合小测</h3>
-        <div class="hint" style="margin-bottom:12px" data-t="q0d">每次从词汇与语法题库随机抽取 15 题：词汇 10 题 + 语法 5 题，做完即时评分。</div>
-        <button class="btn" onclick="startQuiz()" data-t="q0b">开始小测 →</button>
-      </div>
+    <div id="qSetup" class="card">
+      <h3>📝 A2 综合小测</h3>
+      <div class="hint" style="margin-bottom:12px">每次随机抽 15 题：词汇 10 题 + 语法 5 题，答错自动进入遗忘曲线队列。</div>
+      <button class="btn" id="qStart">开始小测 →</button>
     </div>
     <div id="qBody" style="display:none"></div>
   </div>
 
-  <p class="note" data-t="foot">🤖 本模块由 TeleAgent 智能体按跨设备记忆记录重建部署（Agent 版）· 对齐 Windows 端「西语系统笔记与复习工具」需求：多邻国 Section 4 · DELE A2 · 易遗忘强化复习<br>All data stored locally in your browser · No tracking · No uploads</p>
+  <p class="note">🤖 Agent 合体版：Agent 模块 × A2 手册词汇 × 动词变位库 · 讲解透彻 · 遗忘曲线复习 · 数据自动云同步<br>All data stored locally & in your own private GitHub repo · No tracking</p>
 </div>
-
+<script src="site-auth.js?v=3"></script>
 <script>
-/* ================= i18n ================= */
-var I18N={
- zh:{back:"首页",title:"西语 A2 · 笔记与复习",sub:"DELE A2 语法笔记 · 高频词汇三档复习 · 错词本 · 综合小测（多邻国 Section 4 对齐）",t1:"📖 语法笔记",t2:"🃏 词汇复习",t3:"❌ 错词本",t4:"📝 综合小测",g0t:"A2 核心语法 · 点击展开要点",g0d:"覆盖 DELE A2 与多邻国 Section 4 阶段的高频语法点。",skip:"跳过",next:"下一个 →",vnote:"标记规则：✅ 认识 / 🟡 模糊 / ❌ 不认识。复习顺序优先推送 🟡 与 ❌ 的词，全部词也会轮询到。进度存在本机浏览器。",w0t:"🟡❌ 需要重点复习的词",w0b:"开始复习错词",w0c:"清空错词本",q0t:"📝 A2 综合小测",q0d:"每次从词汇与语法题库随机抽 15 题：词汇 10 题 + 语法 5 题，做完即时评分。",q0b:"开始小测 →",foot:"🤖 本模块由 TeleAgent 智能体按跨设备记忆记录重建部署（Agent 版）· 对齐 Windows 端「西语系统笔记与复习工具」需求：多邻国 Section 4 · DELE A2 · 易遗忘强化复习<br>All data stored locally in your browser · No tracking · No uploads",wEmpty:"暂无需要复习的词 🎉",qNext:"下一题 →",qDone:"交卷评分",ok:"认识",mid:"模糊",no:"不认识",again:"再测一次",clickOpen:"点击展开要点",m:"认识/模糊/不认识标记会同步更新"},
- es:{back:"Inicio",title:"Español A2 · Apuntes y Repaso",sub:"Gramática DELE A2 · Repaso de vocabulario en 3 niveles · Lista de errores · Miniprueba (alineado con Duolingo Sección 4)",t1:"📖 Gramática",t2:"🃏 Vocabulario",t3:"❌ Mis errores",t4:"📝 Miniprueba",g0t:"Gramática esencial A2 · Haz clic para ver",g0d:"Puntos clave de gramática para DELE A2 y Duolingo Sección 4.",skip:"Saltar",next:"Siguiente →",vnote:"Marca: ✅ Lo sé / 🟡 Más o menos / ❌ No lo sé. Se priorizan las palabras 🟡 y ❌. El progreso se guarda en tu navegador.",w0t:"🟡❌ Palabras para repasar",w0b:"Repasar errores",w0c:"Vaciar lista",q0t:"📝 Miniprueba A2",q0d:"15 preguntas aleatorias: 10 de vocabulario y 5 de gramática, con nota inmediata.",q0b:"Empezar →",foot:"🤖 Módulo reconstruido y desplegado por el agente TeleAgent (versión Agent) · Basado en la herramienta de apuntes y repaso del equipo Windows: Duolingo Sección 4 · DELE A2 · repaso reforzado<br>All data stored locally in your browser · No tracking · No uploads",wEmpty:"No hay palabras para repasar 🎉",qNext:"Siguiente →",qDone:"Terminar",ok:"Lo sé",mid:"Más o menos",no:"No lo sé",again:"Otra vez",clickOpen:"Haz clic para ver",m:"Las marcas se actualizan automáticamente"}
+window.ESDATA = window.ESDATA = {"grammar":[{"t":"ser vs estar（本质 vs 状态）","zh":"【核心原理】ser 描写本质、身份、来源、性质（固有属性）；estar 描写状态、位置、心情、结果（可变状态）。【判断口诀】「他是个安静的人」用 es tranquilo（性格本质）；「他今天很安静」用 está tranquilo（当下状态）。【常见错误】① 说位置一律用 estar：Madrid está en España（马德里在西班牙），不能用 es；② estar muerto（死了）虽是永久状态，但西语视作「状态结果」，固定用 estar；③ ser listo（聪明）vs estar listo（准备好了）意思完全不同。【对比表】soy de China 我是中国人（来源）/ estoy en China 我在中国（位置）；la sopa es rica 这汤(本身)好喝 / la sopa está rica 汤现在尝起来很棒。","ex":[["Soy de Beijing.","我来自北京。"],["Hoy estoy cansado.","我今天很累。"],["Mi madre es profesora.","我妈妈是老师。"],["La reunión está en la sala tres.","会议在第三会议室。"]]},{"t":"gustar 及其家族（使役表达）","zh":"【核心原理】gustar 的主语是被喜欢的事物，人称代词只是间接宾语：Me gusta el café＝「咖啡使我愉悦」。单数事物用 gusta、复数用 gustan、动词用 gusta + 原形。【扩展家族】encantar（超爱）、doler（疼，Me duele la cabeza 头疼）、faltar（缺）、parecer（觉得如何）、importar（要紧，No me importa 无所谓）——同一句型。【常见错误】① 把 gustan 用在单数名词后（Me gustan el café ✗）；② 表达「喜欢做某事」用 Me gusta + infinitive，不加做主语的人称（Yo me gusta leer ✗ → Me gusta leer ✓）；③ 否定加 no：No me gusta nada 一点也不喜欢。【速记】永远先想「什么东西」在让人喜欢。","ex":[["Me gustan los gatos.","我喜欢猫。"],["Me encanta viajar.","我超爱旅行。"],["¿Te duele el brazo?","你胳膊疼吗？"],["A ella le fascina la música.","音乐让她着迷。"]]},{"t":"宾格代词 lo/la/los/las","zh":"【核心原理】代替「直接宾语」（动词的直接承受者），必须与名词的性数一致：lo（他/它/您-阳单）、la（她/阴单）、los/las（复数）。【位置规则】变位动词之前（Lo veo 我看见它）；原形动词之后连写（Quiero verlo 我想看它）；肯定命令式之后连写（¡Hazlo! 做吧！）。【常见错误】① 性数不匹配：la mesa（阴性）→ la veo，不能写成 lo veo；② 双代词并用时宾格在与格前：Me lo das（你把它给我），注意 le lo 必须合并为 se lo。【与下章联动】记住三步：找动词 → 确认宾语是什么 → 按性数选代词。","ex":[["¿El libro? Lo tengo.","书？我有。"],["¿Las llaves? No las veo.","钥匙？没看见。"],["¿El café? Quiero tomarlo ahora.","咖啡？我现在就想喝。"]]},{"t":"与格代词 me/te/le/nos/les 与双代词","zh":"【核心原理】与格表示动作「对谁」发生：me（对我）、te（对你）、le（对他/她/您）、nos、les。典型动词：dar（给）、decir（告诉）、enviar（寄）、preguntar（问）、mandar。【双代词规则】与格+宾格同现时，与格在前：Te lo digo（我把这事告诉你）。第三人称 le/les + lo/la/los/las 必须变 se：Le doy el mapa → Se lo doy。【强调用法】与格可重复出现在句尾强化：A mí me gusta el vino（强调「是我」喜欢）。【常见错误】双写：Yo le doy a él ✗ 多余；漏变 se：Le lo digo ✗。","ex":[["Le doy el mapa a mi jefe.","我把地图给老板。"],["¿Me puedes ayudar?","你能帮我吗？"],["Se lo digo mañana.","我明天告诉他这件事。"],["Nos envían la factura.","他们把账单寄给我们。"]]},{"t":"简单过去时 vs 未完成过去时（时空双引擎）","zh":"【核心原理】这是西语过去叙述的骨架：简单过去时（indefinido）拍「快照」——一次性、有明确起止的动作（ayer、el lunes、en 2010）；未完成过去时（imperfecto）放「背景音乐」——持续状态、习惯、场景描述、时间背景。【搭配公式】背景用未完成、事件用简单过去：Llovía cuando salí（我出门时正下着雨——llovía 是幕布，salí 是演员登场）。【仅 imperfecto 可表达「过去常…」：De niño jugaba al fútbol（小时候常踢球）。【常见错误】① 想表达「去过某地一次」用 fui a Madrid；「当时住在」用 vivía；② 表达情绪/年龄/时间等描述状态一律 imperfecto：era、estaba、tenía、eran las diez。","ex":[["Ayer fui al cine.","昨天我去了电影院（一次）。"],["De niño, jugaba al fútbol.","小时候常踢球（习惯）。"],["Llovía cuando salí de casa.","我出门时正下着雨。"],["Eran las diez cuando llegó.","他到的时候十点。"]]},{"t":"现在完成时（pretérito perfecto）","zh":"【核心原理】haber（he/has/ha/hemos/han/habeis）+ 过去分词，连接「过去」与「现在」：经历（He estado en España 我去过西班牙）、刚刚（Ya he comido 我吃过了）、对现在有影响的过去。【与简单过去时的分水岭】完成时配「至今」类时间词（hoy、esta semana、ya、todavía no、nunca），简单过去时配「过去具体时间」（ayer、anoche、en 1998）。【分词规则】-ar → -ado（hablado）、-er/-ir → -ido（comido）；不规则：hecho（做）、visto（看）、dicho（说）、escrito（写）、puesto（放）、vuelto（回）、abierto（开）。【常见错误】① 分词永不变性数（He comidas ✗）；② haber 之后动词绝不能用复数形式。","ex":[["He comido ya.","我已经吃过了。"],["¿Has visto mi maleta?","你看见我行李箱了吗？"],["Nunca hemos estado en Perú.","我们从没去过秘鲁。"],["Hoy he trabajado mucho.","今天我干了很多活。"]]},{"t":"口语将来：ir a + 原形","zh":"【核心原理】表达打算、计划中的未来，日常 90% 的「将来」都用它：voy/vas/va/vamos/vais/van + a + 动词原形。【与将来时态对比】简单将来时（hablaré）更多表达「推测、承诺、遥远将来」，口语中反而是 ir a 更高频。Negación：no voy a venir（我不来了）。【常见错误】① 漏 a：Voy comprar ✗ → Voy a comprar ✓；② 想表达「现在正在」误用 ir a：Estoy comprando（正在买）≠ Voy a comprar（要去买）。【引申】ir a 也常用于「命令式替代」：¡Vas a estudiar!（你得去学习！）。","ex":[["Voy a comprar pan.","我要去买面包。"],["Vamos a viajar a Madrid.","我们要去马德里。"],["No va a venir hoy.","他今天不来了。"],["¿Qué vas a hacer mañana?","你明天干什么？"]]},{"t":"肯定命令式（tú / usted / nosotros）","zh":"【核心原理】tú 肯定命令＝原形去掉词尾换调：-ar 动词加 -a（hablar→habla）、-er/-ir 加 -e（come、escribe）；usted 加 -a/-e 相反（hable、coma）；nosotros 用 -amos/-amos 变体（vamos、comamos）。【8 个不规则 tú 命令】ven( venir)、ten(tener)、sal(salir)、haz(hacer)、ve(ir)、pon(poner)、dime(decir)、sé(ser)。【代词连写】肯定命令后代词连写并加重音符号：siéntate（坐下）、dímelo（把它告诉我）。【常见错误】① tú 命令不能加 -s：hablas ✗；② usted 命令重音：siéntese，不是 sientese。","ex":[["¡Ven aquí!","过来！"],["Siéntese, por favor.","您请坐。"],["Hazlo ahora.","现在就做。"],["Dime la verdad.","跟我说实话。"]]},{"t":"por vs para（万能介词双雄）","zh":"【核心原理】para 朝「目的、收件人、截止、用途」看：Para qué（为了什么）、un regalo para ti（给你的礼物）、hasta para el lunes（赶在周一前）。por 看「原因、交换、路径、时间段、代替代身」：Gracias por todo（因一切而感谢）、dos euros por el pan（花两欧买面包）、por la mañana（在上午）、hablar por teléfono（通过电话）。【高频口诀】感谢+礼物收受+期限 用 para；原因+金钱+时间+方式 用 por。【常见错误】① Gracias por 而非 para；② 「为了健康而运动」= Hago deporte para estar sano（目的）；「因为下雨没去」= No fui por la lluvia（原因）。","ex":[["Gracias por todo.","感谢一切。"],["Esto es para ti.","这是给你的。"],["Salimos por la mañana.","我们上午出门。"],["Estudio para el examen.","我为考试而学习。"]]},{"t":"比较级与最高级","zh":"【核心原理】más/menos + adj. + que（比）；tan + adj. + como（与…一样）；最高级 el/la + más + adj.。四个不规则必须背：bueno→mejor（更好）、malo→peor（更糟）、grande→mayor（更大/年长）、pequeño→menor（更小/年轻）。【数量比较】más de（超过某数字）：más de 50 personas（50 多人）——注意与 más que 的区别。【绝对最高级】-ísimo 加在形容词尾：buenísimo（超好）、rapidísimo（超快）。【常见错误】① mayor/menor 表「年龄大小」只用于人，物体大小仍用 más grande；② 比较中名词前有 el 时注意：Mi hermana es la más alta de la familia（家系里最高——用 de）。","ex":[["Ella es más alta que yo.","她比我高。"],["Este café es tan caro como aquel.","这咖啡和那个一样贵。"],["Mi hermano es mayor que yo.","我哥比我大。"],["Es el mejor restaurante de la ciudad.","这是城里最好的餐厅。"]]},{"t":"自复动词（动词的反身用法）","zh":"【核心原理】动作回施于自身：levantarse（起床）、lavarse（洗自己）、llamarse（叫什么名字）、dormirse（睡着）。变位时自复代词与主语一致：me/te/se/nos/os/se + 动词变位。习惯与身体部位：Se lava las manos（他洗手——用 se 而不用 sus manos）。【常见错误】① 忘记自复代词：Yo llamo Kang ✗ → Me llamo Kang ✓；② 命令式连写：¡Levántate!（起床！）代词贴在命令式后并加重音；③ 有的动词加不加 se 意思不同：dormir（睡）vs dormirse（入睡）、ir（去）vs irse（离开）。","ex":[["Me levanto a las siete.","我七点起床。"],["Se llama María.","她叫玛丽亚。"],["Vamos a acostarnos.","我们去睡觉吧。"],["¡Lávate las manos!","洗手！"]]},{"t":"tener que / hay que（义务表达）","zh":"【核心原理】tener que + 原形＝「某人必须」（人称化）：Tengo que trabajar（我得工作）；hay que + 原形＝「（一般性的）应当」，无人称，相当于「规矩如此」：Hay que estudiar mucho（学习就要下功夫）。【扩展】deber ＋ 原形＝「应该」带建议语气：Debes descansar（你该休息了）；hay que vs debe que 不可混。【常见错误】① tener que 后必须原形：Tengo que trabajo ✗ → trabajar ✓；② 想表达「不得不、被迫」语气最重的是 tener que；委婉建议用 deberías（ deber 的条件式）。","ex":[["Tengo que trabajar hoy.","我今天得工作。"],["Hay que estudiar mucho.","学习必须用功。"],["Debes descansar un poco.","你该歇一会儿。"],["Tenemos que irnos ya.","我们得走了。"]]},{"t":"否定系统（nunca / nadie / nada / tampoco）","zh":"【核心原理】西语「双重否定」是标准语法，不是强调。Nunca como carne（我从不吃肉）＝No como carne nunca，两者都对。【四个否定词】nunca（从不）、nadie（没人）、nada（没什么）、tampoco（也不）。【位置】可放动词前（单独成否定）或动词后（需配 no）：No viene nadie ＝ Nadie viene。【易混点】tampoco 对应否定句中的「也」：Yo tampoco（我也不）；肯定句的「也」用 también。【常见错误】按中文语序直译「我也没有什么东西」→ No tengo nada ✓（不是 No no tengo nada ✗——两个 no 只在一个结构里出现）。","ex":[["No viene nadie.","没有人来。"],["Nunca como carne.","我从不吃肉。"],["Yo tampoco.","我也不。"],["No tengo nada que hacer.","我没事可做。"]]},{"t":"真实条件句 si + 现在时","zh":"【核心原理】表达真实可能发生的条件：si（如果）从句用陈述式现在时，主句用现在时/将来意义/命令式——绝不把将来时态放进 si 从句。【公式】Si + 现在时,（陈述式现在/命令/ir a 将来）。【对比】若用虚拟式（Si tuviera tiempo, iría），表达「不太可能的假设」，属于 B1 内容，A2 阶段先掌握真实条件句。【常见错误】① si 从句用将来时：Si vendrás ✗ → Si vienes ✓；② 主句加将来的正确方式：Si tienes tiempo, vamos a cenar（用 ir a 表达计划）。","ex":[["Si llueve, no vamos.","如果下雨我们就不去。"],["Si tienes tiempo, ven a mi casa.","有空来我家。"],["Si puedo, te llamo.","能的话我打给你。"]]},{"t":"现在时变位总复习（-ar / -er / -ir）","zh":"【核心原理】三大规则动词现在时人称词尾：-ar（hablo, hablas, habla, hablamos, habláis, hablan）、-er（como, comes, come, comemos, coméis, comen）、-ir（vivo, vives, vive, vivimos, vivís, viven）。-er 与 -ir 只有 nosotros/vosotros 不同。【第一人称不规则高发】tengo（tener）、hago（hacer）、pongo（poner）、salgo（salir）、veo（ver）、sé（saber）、doy（dar）、conozco（conocer）。【 stem-changing 括号词】e→ie（querer→quiero）、o→ue（poder→puedo）、e→i（pedir→pido）——「靴子动词」只变 tú/usted/el/nosotros(部分)/ellos，nosotros 常保持原音（pensamos 不是 piensamos）。","ex":[["Hablo español todos los días.","我每天说西语。"],["Comemos a las dos.","我们两点吃饭。"],["Vivo en Beijing.","我住在北京。"],["No puedo ir hoy.","我今天去不了。"]]},{"t":"动词 quizá/tal vez 与可能表达（A2 入门）","zh":"【核心原理】表达「可能/也许」：quizá(s)/tal vez + 动词（陈述式表大概率，虚拟式表小概率——A2 先学陈述式用法）。【更实用的口语句型】a lo mejor（说不定）、puede que + 虚拟式（可能会，A2 掌握固定句型即可）、 igual（没准）。【常见错误】① a lo mejor 不用虚拟式（A lo mejor llueve √）；② quizá 后接原句直用：Quizá venga mañana（他明天没准会来）。【实用提示】西语母语者极少在生活对话中区分 quizá/tal vez 的虚拟式细微差别，日常先用陈述式即可自然交流。","ex":[["Quizá venga mañana.","他明天没准会来。"],["A lo mejor llueve el sábado.","周六说不定下雨。"],["Puede que sea verdad.","可能是真的。"],["Igual nos encontramos allí.","没准我们在那儿碰面。"]]},{"t":"不定冠词与定冠词（el / la 的完整规则）","zh":"【核心原理】定冠词 el/la/los/las 指「特指的、双方知道的」：el libro（那本书）；不定冠词 un/una 指「泛指的、第一次提到」：un libro（某本书）。【性数判断】以 -o 结尾多为阳（el día 例外）、-a 多为阴（la mano 例外）；以 -ción/-sión/-dad/-tad 结尾必为阴性。【el 与 la 的独特用法】① el + 阴性单数以 a/ha 开头时用 el：el agua（水）、el hacha（斧头）但复数恢复 las aguas；② 学科、语言加 el：el español；③ 一周某天加 el 表「每逢」：el lunes（每周一）。【常见错误】a/el 缩合： Voy a el banco ✗ → Voy al banco ✓；de + el = del。","ex":[["El agua está fría.","水是凉的。"],["Voy al banco.","我去银行。"],["Trabajo los lunes.","我每周一上班。"],["Es un buen día.","今天是个好日子。"]]},{"t":"疑问词系统（qué / cuál / cómo / dónde / cuándo / quién / cuánto）","zh":"【核心原理】qué 问「什么」（类别、定义）；cuál 问「哪一个」（选择、具体信息）；cómo 问「方式」；dónde/cuándo 问「地点/时间」；quién 问「谁」；cuánto/a/os/as 问「多少」。【qué vs cuál 分水岭】问号码、姓名、选项时尽管中文是「什么」，西语用 cuál：¿Cuál es tu número?（你号码是多少）、¿Cuál prefieres?（你选哪个）；qué + 名词直接组合：¿Qué libro lees?（你在读什么书）。【礼貌升级】加 por favor 放句尾或用 ¿Puedes decirme…? 包裹。【常见错误】① ¿Qué es tu nombre? ✗ → ¿Cuál es tu nombre? ✓；② 疑问句首尾要打 ¿?，别忘开头的倒问号。","ex":[["¿Cuál es tu número?","你的号码是多少？"],["¿Qué libro lees?","你在读什么书？"],["¿Cómo se va al centro?","去市中心怎么走？"],["¿Cuánto cuesta?","多少钱？"]]},{"t":"频率副词与日常安排表达","zh":"【核心原理】频率阶梯：siempre（总是）> casi siempre（几乎总是）> a menudo（经常）> a veces（有时）> casi nunca（几乎从不）> nunca（从不）。【位置规则】可放句首或动词后；放动词前需要语气缓冲，标准位置是句首或句尾。日常安排句型： todos los días（每天）、dos veces por semana（每周两次）、 de vez en cuando（偶尔）。【常见错误】① 想表达「我有时早上锻炼」→ A veces hago ejercicio por la mañana ✓（不是 Yo a veces hago ✗ 语序拗口）；② 「每 X」的介词用 por/annum 区分：por semana（每周）、al mes（每月）均正确，口语更常用 por。","ex":[["Siempre desayuno café.","我早饭总喝咖啡。"],["A veces salgo los fines de semana.","我周末有时出门。"],["Voy al gimnasio tres veces por semana.","我每周去健身房三次。"],["Nunca llego tarde.","我从不迟到。"]]},{"t":" haber 与「存在表达」（hay / había / 各类地点句）","zh":"【核心原理】haber 的无人称形式表示「存在」：hay（现在有）、había（过去有）、habrá（将有）、ha habido（一直有）。后接名词永远单数形式：Hay muchos libros（书再多 hay 也单数）。【对比 está/son】hay ＝「有个 X」（未知首次提及）；está/está en ＝「X 在哪里」（已知特定物）。【去某处固定句】Voy a la biblioteca（去图书馆）→ 表示「去某类场所」不需具体名词；¿Hay un banco por aquí?（这附近有银行吗）＝问存在。【常见错误】① Hay + 复数动词 ✗（hay 无人称永单数）；② 过去存在不能用 hay：Había una fiesta ayer ✓。","ex":[["Hay un banco por aquí.","这附近有家银行。"],["Había mucha gente en la fiesta.","派对上人很多。"],["¿Hay cafeterías cerca?","附近有咖啡馆吗？"],["No hay problema.","没问题。"]]}],"vocab":[{"es":"el padre","zh":"父亲","ex":"Mi padre trabaja en Beijing.","exz":"我父亲在北京工作。","src":"core"},{"es":"la madre","zh":"母亲","ex":"Mi madre cocina muy bien.","exz":"我妈妈做饭很好吃。","src":"core"},{"es":"el hermano","zh":"兄弟","ex":"Mi hermano es mayor que yo.","exz":"我哥哥比我大。","src":"core"},{"es":"la hermana","zh":"姐妹","ex":"Mi hermana vive en Shanghái.","exz":"我妹妹住在上海。","src":"core"},{"es":"el abuelo","zh":"祖父","ex":"Mi abuelo tiene ochenta años.","exz":"我爷爷八十岁了。","src":"core"},{"es":"la abuela","zh":"祖母","ex":"Mi abuela prepara el desayuno.","exz":"奶奶做早饭。","src":"core"},{"es":"el tío","zh":"叔叔/舅舅","ex":"Mi tío es profesor.","exz":"我叔叔是老师。","src":"core"},{"es":"el primo","zh":"表兄弟","ex":"Mi primo juega al baloncesto.","exz":"我表弟打篮球。","src":"core"},{"es":"el sobrino","zh":"侄子","ex":"Mi sobrino tiene cinco años.","exz":"我侄子五岁。","src":"core"},{"es":"la suegra","zh":"婆婆/岳母","ex":"Mi suegra es muy simpática.","exz":"我婆婆人很好。","src":"core"},{"es":"el día","zh":"天/日","ex":"¿Qué día es hoy?","exz":"今天星期几？","src":"core"},{"es":"la semana","zh":"周","ex":"Esta semana estoy ocupado.","exz":"这周我很忙。","src":"core"},{"es":"el mes","zh":"月","ex":"El mes que viene viajo.","exz":"下个月我去旅行。","src":"core"},{"es":"el año","zh":"年","ex":"Feliz año nuevo!","exz":"新年快乐！","src":"core"},{"es":"la hora","zh":"小时","ex":"Espera una hora, por favor.","exz":"请等一个小时。","src":"core"},{"es":"ayer","zh":"昨天","ex":"Ayer fui al museo.","exz":"昨天我去了博物馆。","src":"core"},{"es":"hoy","zh":"今天","ex":"Hoy hace buen tiempo.","exz":"今天天气好。","src":"core"},{"es":"mañana","zh":"明天/上午","ex":"Mañana tengo un examen.","exz":"明天我有考试。","src":"core"},{"es":"la mañana","zh":"上午","ex":"Voy al gimnasio por la mañana.","exz":"我上午去健身房。","src":"core"},{"es":"el fin de semana","zh":"周末","ex":"El fin de semana descanso.","exz":"周末我休息。","src":"core"},{"es":"feliz","zh":"幸福的","ex":"Estamos muy felices.","exz":"我们很幸福。","src":"core"},{"es":"triste","zh":"悲伤的","ex":"Está triste hoy.","exz":"他今天不开心。","src":"core"},{"es":"enfadado","zh":"生气的","ex":"Mi jefe está enfadado.","exz":"我老板生气了。","src":"core"},{"es":"cansado","zh":"累的","ex":"Estoy cansado del trabajo.","exz":"我工作累了。","src":"core"},{"es":"contento","zh":"高兴的","ex":"Estoy contento de verte.","exz":"见到你我很高兴。","src":"core"},{"es":"nervioso","zh":"紧张的","ex":"Estoy nervioso por el examen.","exz":"考试让我紧张。","src":"core"},{"es":"tranquilo","zh":"安静的/平静的","ex":"El barrio es tranquilo.","exz":"这个街区很安静。","src":"core"},{"es":"simpático","zh":"友好的","ex":"La camarera es simpática.","exz":"服务员很友好。","src":"core"},{"es":"tímido","zh":"害羞的","ex":"Es tímido con la gente nueva.","exz":"他见到生人害羞。","src":"core"},{"es":"divertido","zh":"有趣的","ex":"La película es divertida.","exz":"这电影很有趣。","src":"core"},{"es":"la cabeza","zh":"头","ex":"Me duele la cabeza.","exz":"我头疼。","src":"core"},{"es":"el brazo","zh":"手臂","ex":"Tiene un dolor en el brazo.","exz":"他手臂疼。","src":"core"},{"es":"la mano","zh":"手","ex":"Lávate las manos.","exz":"洗手。","src":"core"},{"es":"el pie","zh":"脚","ex":"Calzo un pie grande.","exz":"我脚大。","src":"core"},{"es":"el ojo","zh":"眼睛","ex":"Tiene los ojos azules.","exz":"她眼睛是蓝色的。","src":"core"},{"es":"la boca","zh":"嘴","ex":"Abre la boca.","exz":"张开嘴。","src":"core"},{"es":"el pelo","zh":"头发","ex":"Tiene el pelo largo.","exz":"她留长发。","src":"core"},{"es":"el estómago","zh":"胃","ex":"Me duele el estómago.","exz":"我胃疼。","src":"core"},{"es":"el corazón","zh":"心/心脏","ex":"Mi corazón late rápido.","exz":"我心跳很快。","src":"core"},{"es":"la espalda","zh":"背","ex":"Ella nada para la espalda.","exz":"她游泳锻炼背部。","src":"core"},{"es":"el desayuno","zh":"早餐","ex":"El desayuno está listo.","exz":"早饭好了。","src":"core"},{"es":"la comida","zh":"午饭","ex":"La comida es a las dos.","exz":"午饭两点吃。","src":"core"},{"es":"la cena","zh":"晚饭","ex":"Hoy ceno poco.","exz":"今晚我吃得少。","src":"core"},{"es":"el arroz","zh":"米饭","ex":"Quiero arroz con pollo.","exz":"我要鸡肉米饭。","src":"core"},{"es":"el pollo","zh":"鸡肉","ex":"El pollo está muy bueno.","exz":"这鸡肉很好吃。","src":"core"},{"es":"el pescado","zh":"鱼","ex":"Comemos pescado fresco.","exz":"我们吃新鲜的鱼。","src":"core"},{"es":"la fruta","zh":"水果","ex":"La fruta de aquí es dulce.","exz":"这里的水果很甜。","src":"core"},{"es":"la verdura","zh":"蔬菜","ex":"Come más verdura.","exz":"多吃蔬菜。","src":"core"},{"es":"el queso","zh":"奶酪","ex":"El queso manchego es famoso.","exz":"曼彻格奶酪很有名。","src":"core"},{"es":"el vino","zh":"葡萄酒","ex":"Un vaso de vino tinto, por favor.","exz":"请来一杯红葡萄酒。","src":"core"},{"es":"el billete","zh":"车票/票","ex":"Compré un billete de tren.","exz":"我买了张火车票。","src":"core"},{"es":"el avión","zh":"飞机","ex":"El avión sale a las nueve.","exz":"飞机九点起飞。","src":"core"},{"es":"el tren","zh":"火车","ex":"El tren llega tarde.","exz":"火车晚点了。","src":"core"},{"es":"el autobús","zh":"公交车","ex":"Tomo el autobús al trabajo.","exz":"我坐公交上班。","src":"core"},{"es":"el aeropuerto","zh":"机场","ex":"El aeropuerto está lejos.","exz":"机场很远。","src":"core"},{"es":"la estación","zh":"车站","ex":"¿Dónde está la estación?","exz":"车站在哪？","src":"core"},{"es":"la maleta","zh":"行李箱","ex":"Mi maleta es pesada.","exz":"我的箱子很重。","src":"core"},{"es":"el hotel","zh":"旅馆","ex":"El hotel tiene piscina.","exz":"这家旅馆有泳池。","src":"core"},{"es":"el mapa","zh":"地图","ex":"Necesitamos un mapa.","exz":"我们需要一张地图。","src":"core"},{"es":"el pasaporte","zh":"护照","ex":"Muestre su pasaporte.","exz":"请出示护照。","src":"core"},{"es":"la casa","zh":"房子","ex":"Mi casa tiene dos habitaciones.","exz":"我家有两个卧室。","src":"core"},{"es":"la puerta","zh":"门","ex":"Cierra la puerta, por favor.","exz":"请关门。","src":"core"},{"es":"la ventana","zh":"窗户","ex":"Abre la ventana.","exz":"把窗户打开。","src":"core"},{"es":"la mesa","zh":"桌子","ex":"El mapa está sobre la mesa.","exz":"地图在桌上。","src":"core"},{"es":"la silla","zh":"椅子","ex":"Toma una silla.","exz":"拿把椅子来。","src":"core"},{"es":"la cama","zh":"床","ex":"La cama es muy cómoda.","exz":"床很舒服。","src":"core"},{"es":"la llave","zh":"钥匙","ex":"¿Dónde están mis llaves?","exz":"我的钥匙在哪？","src":"core"},{"es":"el suelo","zh":"地板","ex":"El suelo está limpio.","exz":"地板干净。","src":"core"},{"es":"la cocina","zh":"厨房","ex":"Ella está en la cocina.","exz":"她在厨房。","src":"core"},{"es":"el baño","zh":"浴室/洗手间","ex":"¿Puedo usar el baño?","exz":"我能用下洗手间吗？","src":"core"},{"es":"el trabajo","zh":"工作","ex":"Voy al trabajo en metro.","exz":"我坐地铁上班。","src":"core"},{"es":"la oficina","zh":"办公室","ex":"La oficina está cerrada.","exz":"办公室关门了。","src":"core"},{"es":"la reunión","zh":"会议","ex":"Hay una reunión a las diez.","exz":"十点有个会。","src":"core"},{"es":"el informe","zh":"报告","ex":"Tengo que escribir un informe.","exz":"我得写个报告。","src":"core"},{"es":"la empresa","zh":"公司","ex":"Trabajo en una empresa grande.","exz":"我在一家大公司工作。","src":"core"},{"es":"el jefe","zh":"老板/上司","ex":"Mi jefe es exigente.","exz":"我上司要求严。","src":"core"},{"es":"el compañero","zh":"同事","ex":"Mi compañero me ayuda mucho.","exz":"我同事很帮我。","src":"core"},{"es":"el profesor","zh":"老师","ex":"El profesor habla despacio.","exz":"老师说话慢。","src":"core"},{"es":"el alumno","zh":"学生","ex":"Los alumnos hacen el examen.","exz":"学生们在考试。","src":"core"},{"es":"el examen","zh":"考试","ex":"El examen es difícil.","exz":"考试很难。","src":"core"},{"es":"ayudar","zh":"帮助","ex":"Siempre ayudo a mi madre.","exz":"我总帮妈妈。","src":"core"},{"es":"esperar","zh":"等待/希望","ex":"Espero tu llamada.","exz":"我等你的电话。","src":"core"},{"es":"comprar","zh":"买","ex":"Voy a comprar fruta.","exz":"我去买水果。","src":"core"},{"es":"pagar","zh":"支付","ex":"¿Quién paga la cena?","exz":"晚饭谁买单？","src":"core"},{"es":"llevar","zh":"携带/穿着","ex":"Llevo una chaqueta azul.","exz":"我穿蓝色夹克。","src":"core"},{"es":"dejar","zh":"留下/让","ex":"Deja las llaves aquí.","exz":"把钥匙放这。","src":"core"},{"es":"pasar","zh":"度过/经过","ex":"Pasamos el día en la playa.","exz":"我们在海滩过了一天。","src":"core"},{"es":"cambiar","zh":"改变","ex":"Quiero cambiar de trabajo.","exz":"我想换工作。","src":"core"},{"es":"recordar","zh":"记得","ex":"Recuerdo tu cara.","exz":"我记得你的脸。","src":"core"},{"es":"olvidar","zh":"忘记","ex":"Olvido las palabras nuevas.","exz":"我老忘生词。","src":"core"},{"es":"difícil","zh":"难的","ex":"La gramática es difícil.","exz":"语法很难。","src":"core"},{"es":"fácil","zh":"容易的","ex":"Este ejercicio es fácil.","exz":"这个练习容易。","src":"core"},{"es":"barato","zh":"便宜的","ex":"Este mercado es barato.","exz":"这个市场东西便宜。","src":"core"},{"es":"caro","zh":"贵的","ex":"El hotel es caro.","exz":"这家旅馆贵。","src":"core"},{"es":"cerca","zh":"近的","ex":"Vivo cerca del trabajo.","exz":"我住得离公司近。","src":"core"},{"es":"lejos","zh":"远的","ex":"La estación está lejos.","exz":"车站很远。","src":"core"},{"es":"rápido","zh":"快","ex":"El tren es muy rápido.","exz":"火车很快。","src":"core"},{"es":"despacio","zh":"慢/慢慢地","ex":"Habla despacio, por favor.","exz":"请说慢点。","src":"core"},{"es":"siempre","zh":"总是","ex":"Siempre desayuno café.","exz":"我早饭总喝咖啡。","src":"core"},{"es":"casi","zh":"几乎","ex":"Casi termino el informe.","exz":"报告我差不多写完了。","src":"core"},{"es":"el pan","zh":"面包","ex":"","exz":"","src":"餐饮"},{"es":"la carne","zh":"肉","ex":"","exz":"","src":"餐饮"},{"es":"el huevo","zh":"鸡蛋","ex":"","exz":"","src":"餐饮"},{"es":"la leche","zh":"牛奶","ex":"","exz":"","src":"餐饮"},{"es":"el aceite","zh":"油","ex":"","exz":"","src":"餐饮"},{"es":"la sal","zh":"盐","ex":"","exz":"","src":"餐饮"},{"es":"el azúcar","zh":"糖","ex":"","exz":"","src":"餐饮"},{"es":"el agua","zh":"水","ex":"","exz":"","src":"餐饮"},{"es":"la cerveza","zh":"啤酒","ex":"","exz":"","src":"餐饮"},{"es":"el café","zh":"咖啡","ex":"","exz":"","src":"餐饮"},{"es":"el té","zh":"茶","ex":"","exz":"","src":"餐饮"},{"es":"la sopa","zh":"汤","ex":"","exz":"","src":"餐饮"},{"es":"la ensalada","zh":"沙拉","ex":"","exz":"","src":"餐饮"},{"es":"la habitación","zh":"房间","ex":"","exz":"","src":"旅行"},{"es":"la reserva","zh":"预订","ex":"","exz":"","src":"旅行"},{"es":"la playa","zh":"海滩","ex":"","exz":"","src":"旅行"},{"es":"el museo","zh":"博物馆","ex":"","exz":"","src":"旅行"},{"es":"la calle","zh":"街道","ex":"","exz":"","src":"旅行"},{"es":"la plaza","zh":"广场","ex":"","exz":"","src":"旅行"},{"es":"el viaje","zh":"旅行","ex":"","exz":"","src":"旅行"},{"es":"la salida","zh":"出口","ex":"","exz":"","src":"旅行"},{"es":"la llegada","zh":"到达","ex":"","exz":"","src":"旅行"},{"es":"el taxi","zh":"出租车","ex":"","exz":"","src":"旅行"},{"es":"el dormitorio","zh":"卧室","ex":"","exz":"","src":"家居"},{"es":"el espejo","zh":"镜子","ex":"","exz":"","src":"家居"},{"es":"la lámpara","zh":"灯","ex":"","exz":"","src":"家居"},{"es":"el sofá","zh":"沙发","ex":"","exz":"","src":"家居"},{"es":"la nevera","zh":"冰箱","ex":"","exz":"","src":"家居"},{"es":"el horno","zh":"烤箱","ex":"","exz":"","src":"家居"},{"es":"la ducha","zh":"淋浴","ex":"","exz":"","src":"家居"},{"es":"la toalla","zh":"毛巾","ex":"","exz":"","src":"家居"},{"es":"la almohada","zh":"枕头","ex":"","exz":"","src":"家居"},{"es":"el armario","zh":"衣柜","ex":"","exz":"","src":"家居"},{"es":"la escalera","zh":"楼梯","ex":"","exz":"","src":"家居"},{"es":"el jardín","zh":"花园","ex":"","exz":"","src":"家居"},{"es":"el correo","zh":"邮件","ex":"","exz":"","src":"工作"},{"es":"el teléfono","zh":"电话","ex":"","exz":"","src":"工作"},{"es":"la computadora","zh":"电脑","ex":"","exz":"","src":"工作"},{"es":"el dinero","zh":"钱","ex":"","exz":"","src":"工作"},{"es":"el banco","zh":"银行","ex":"","exz":"","src":"工作"},{"es":"la tarjeta","zh":"卡","ex":"","exz":"","src":"工作"},{"es":"la cuenta","zh":"账户","ex":"","exz":"","src":"工作"},{"es":"el sueldo","zh":"工资","ex":"","exz":"","src":"工作"},{"es":"la entrevista","zh":"面试","ex":"","exz":"","src":"工作"},{"es":"el negocio","zh":"生意","ex":"","exz":"","src":"工作"},{"es":"el cliente","zh":"客户","ex":"","exz":"","src":"工作"},{"es":"la firma","zh":"签名","ex":"","exz":"","src":"工作"},{"es":"el contrato","zh":"合同","ex":"","exz":"","src":"工作"},{"es":"la factura","zh":"发票","ex":"","exz":"","src":"工作"},{"es":"la nariz","zh":"鼻子","ex":"","exz":"","src":"身体"},{"es":"la oreja","zh":"耳朵","ex":"","exz":"","src":"身体"},{"es":"el dedo","zh":"手指","ex":"","exz":"","src":"身体"},{"es":"la pierna","zh":"腿","ex":"","exz":"","src":"身体"},{"es":"el médico","zh":"医生","ex":"","exz":"","src":"身体"},{"es":"la farmacia","zh":"药房","ex":"","exz":"","src":"身体"},{"es":"la medicina","zh":"药","ex":"","exz":"","src":"身体"},{"es":"el dolor","zh":"疼痛","ex":"","exz":"","src":"身体"},{"es":"la fiebre","zh":"发烧","ex":"","exz":"","src":"身体"},{"es":"la cita","zh":"预约","ex":"","exz":"","src":"身体"},{"es":"la receta","zh":"处方","ex":"","exz":"","src":"身体"},{"es":"el hospital","zh":"医院","ex":"","exz":"","src":"身体"},{"es":"preocupado","zh":"担心的","ex":"","exz":"","src":"情绪"},{"es":"aburrido","zh":"无聊的","ex":"","exz":"","src":"情绪"},{"es":"sorprendido","zh":"惊讶的","ex":"","exz":"","src":"情绪"},{"es":"asustado","zh":"害怕的","ex":"","exz":"","src":"情绪"},{"es":"emocionado","zh":"兴奋的","ex":"","exz":"","src":"情绪"},{"es":"confundido","zh":"困惑的","ex":"","exz":"","src":"情绪"},{"es":"orgulloso","zh":"自豪的","ex":"","exz":"","src":"情绪"},{"es":"avergonzado","zh":"尴尬的","ex":"","exz":"","src":"情绪"},{"es":"el amor","zh":"爱","ex":"","exz":"","src":"情绪"},{"es":"la alegría","zh":"快乐","ex":"","exz":"","src":"情绪"},{"es":"la tristeza","zh":"悲伤","ex":"","exz":"","src":"情绪"},{"es":"el miedo","zh":"恐惧","ex":"","exz":"","src":"情绪"},{"es":"la sorpresa","zh":"惊喜","ex":"","exz":"","src":"情绪"},{"es":"ahora","zh":"现在","ex":"","exz":"","src":"时间"},{"es":"después","zh":"之后","ex":"","exz":"","src":"时间"},{"es":"antes","zh":"之前","ex":"","exz":"","src":"时间"},{"es":"nunca","zh":"从不","ex":"","exz":"","src":"时间"},{"es":"a veces","zh":"有时","ex":"","exz":"","src":"时间"},{"es":"pronto","zh":"很快","ex":"","exz":"","src":"时间"},{"es":"tarde","zh":"晚","ex":"","exz":"","src":"时间"},{"es":"temprano","zh":"早","ex":"","exz":"","src":"时间"},{"es":"el lunes","zh":"周一","ex":"","exz":"","src":"时间"},{"es":"la tarde","zh":"下午","ex":"","exz":"","src":"时间"},{"es":"la noche","zh":"晚上","ex":"","exz":"","src":"时间"},{"es":"uno","zh":"一","ex":"","exz":"","src":"数字"},{"es":"dos","zh":"二","ex":"","exz":"","src":"数字"},{"es":"tres","zh":"三","ex":"","exz":"","src":"数字"},{"es":"cuatro","zh":"四","ex":"","exz":"","src":"数字"},{"es":"cinco","zh":"五","ex":"","exz":"","src":"数字"},{"es":"seis","zh":"六","ex":"","exz":"","src":"数字"},{"es":"siete","zh":"七","ex":"","exz":"","src":"数字"},{"es":"ocho","zh":"八","ex":"","exz":"","src":"数字"},{"es":"nueve","zh":"九","ex":"","exz":"","src":"数字"},{"es":"diez","zh":"十","ex":"","exz":"","src":"数字"},{"es":"once","zh":"十一","ex":"","exz":"","src":"数字"},{"es":"doce","zh":"十二","ex":"","exz":"","src":"数字"},{"es":"trece","zh":"十三","ex":"","exz":"","src":"数字"},{"es":"catorce","zh":"十四","ex":"","exz":"","src":"数字"},{"es":"quince","zh":"十五","ex":"","exz":"","src":"数字"},{"es":"veinte","zh":"二十","ex":"","exz":"","src":"数字"},{"es":"treinta","zh":"三十","ex":"","exz":"","src":"数字"},{"es":"cuarenta","zh":"四十","ex":"","exz":"","src":"数字"},{"es":"cincuenta","zh":"五十","ex":"","exz":"","src":"数字"},{"es":"sesenta","zh":"六十","ex":"","exz":"","src":"数字"},{"es":"setenta","zh":"七十","ex":"","exz":"","src":"数字"},{"es":"ochenta","zh":"八十","ex":"","exz":"","src":"数字"},{"es":"noventa","zh":"九十","ex":"","exz":"","src":"数字"},{"es":"cien","zh":"一百","ex":"","exz":"","src":"数字"},{"es":"mil","zh":"一千","ex":"","exz":"","src":"数字"},{"es":"primero","zh":"第一","ex":"","exz":"","src":"数字"},{"es":"segundo","zh":"第二","ex":"","exz":"","src":"数字"},{"es":"la mitad","zh":"一半","ex":"","exz":"","src":"数字"},{"es":"todo","zh":"全部","ex":"","exz":"","src":"数字"},{"es":"nada","zh":"没有","ex":"","exz":"","src":"数字"},{"es":"hace sol","zh":"晴天","ex":"","exz":"","src":"天气"},{"es":"hace calor","zh":"热","ex":"","exz":"","src":"天气"},{"es":"hace frío","zh":"冷","ex":"","exz":"","src":"天气"},{"es":"hace viento","zh":"刮风","ex":"","exz":"","src":"天气"},{"es":"hace buen tiempo","zh":"好天气","ex":"","exz":"","src":"天气"},{"es":"hace mal tiempo","zh":"坏天气","ex":"","exz":"","src":"天气"},{"es":"llueve","zh":"下雨","ex":"","exz":"","src":"天气"},{"es":"nieva","zh":"下雪","ex":"","exz":"","src":"天气"},{"es":"está nublado","zh":"多云","ex":"","exz":"","src":"天气"},{"es":"la lluvia","zh":"雨","ex":"","exz":"","src":"天气"},{"es":"la nieve","zh":"雪","ex":"","exz":"","src":"天气"},{"es":"el sol","zh":"太阳","ex":"","exz":"","src":"天气"},{"es":"la nube","zh":"云","ex":"","exz":"","src":"天气"},{"es":"la temperatura","zh":"温度","ex":"","exz":"","src":"天气"},{"es":"el grado","zh":"度","ex":"","exz":"","src":"天气"},{"es":"la primavera","zh":"春天","ex":"","exz":"","src":"天气"},{"es":"el verano","zh":"夏天","ex":"","exz":"","src":"天气"},{"es":"el otoño","zh":"秋天","ex":"","exz":"","src":"天气"},{"es":"el invierno","zh":"冬天","ex":"","exz":"","src":"天气"},{"es":"la camisa","zh":"衬衫","ex":"","exz":"","src":"衣物"},{"es":"el pantalón","zh":"裤子","ex":"","exz":"","src":"衣物"},{"es":"el vestido","zh":"连衣裙","ex":"","exz":"","src":"衣物"},{"es":"la chaqueta","zh":"外套","ex":"","exz":"","src":"衣物"},{"es":"los zapatos","zh":"鞋","ex":"","exz":"","src":"衣物"},{"es":"el sombrero","zh":"帽子","ex":"","exz":"","src":"衣物"},{"es":"la falda","zh":"裙子","ex":"","exz":"","src":"衣物"},{"es":"el abrigo","zh":"大衣","ex":"","exz":"","src":"衣物"},{"es":"la bufanda","zh":"围巾","ex":"","exz":"","src":"衣物"},{"es":"los calcetines","zh":"袜子","ex":"","exz":"","src":"衣物"},{"es":"el traje","zh":"西装","ex":"","exz":"","src":"衣物"},{"es":"la camiseta","zh":"T恤","ex":"","exz":"","src":"衣物"},{"es":"el suéter","zh":"毛衣","ex":"","exz":"","src":"衣物"},{"es":"las gafas","zh":"眼镜","ex":"","exz":"","src":"衣物"},{"es":"el reloj","zh":"手表","ex":"","exz":"","src":"衣物"},{"es":"el bolsillo","zh":"口袋","ex":"","exz":"","src":"衣物"},{"es":"el cinturón","zh":"腰带","ex":"","exz":"","src":"衣物"},{"es":"el paraguas","zh":"雨伞","ex":"","exz":"","src":"衣物"},{"es":"el bolso","zh":"包","ex":"","exz":"","src":"衣物"},{"es":"la talla","zh":"尺码","ex":"","exz":"","src":"衣物"},{"es":"a la derecha","zh":"向右","ex":"","exz":"","src":"街道"},{"es":"a la izquierda","zh":"向左","ex":"","exz":"","src":"街道"},{"es":"todo recto","zh":"直走","ex":"","exz":"","src":"街道"},{"es":"al lado de","zh":"在…旁边","ex":"","exz":"","src":"街道"},{"es":"enfrente de","zh":"在…对面","ex":"","exz":"","src":"街道"},{"es":"detrás de","zh":"在…后面","ex":"","exz":"","src":"街道"},{"es":"delante de","zh":"在…前面","ex":"","exz":"","src":"街道"},{"es":"entre","zh":"在…之间","ex":"","exz":"","src":"街道"},{"es":"la esquina","zh":"拐角","ex":"","exz":"","src":"街道"},{"es":"el semáforo","zh":"红绿灯","ex":"","exz":"","src":"街道"},{"es":"cruzar","zh":"穿过","ex":"","exz":"","src":"街道"},{"es":"girar","zh":"转弯","ex":"","exz":"","src":"街道"},{"es":"seguir","zh":"继续","ex":"","exz":"","src":"街道"},{"es":"la dirección","zh":"地址","ex":"","exz":"","src":"街道"},{"es":"la parada","zh":"车站","ex":"","exz":"","src":"街道"},{"es":"perdido","zh":"迷路的","ex":"","exz":"","src":"街道"},{"es":"¿Dónde está...?","zh":"…在哪里？","ex":"","exz":"","src":"街道"},{"es":"¿Cómo llego a...?","zh":"怎么去…？","ex":"","exz":"","src":"街道"}],"verbs":[{"v":"ser","t":"是","type":"irr","yo":"soy","pret":"fui","pres":["soy","eres","es","somos","sois","son"],"pretConj":["fui","fuiste","fue","fuimos","fuisteis","fueron"]},{"v":"estar","t":"在/处于","type":"irr","yo":"estoy","pret":"estuve","pres":["estoy","estás","está","estamos","estáis","están"],"pretConj":["estuve","estuviste","estuvo","estuvimos","estuvisteis","estuvieron"]},{"v":"ir","t":"去","type":"irr","yo":"voy","pret":"fui","pres":["voy","vas","va","vamos","vais","van"],"pretConj":["fui","fuiste","fue","fuimos","fuisteis","fueron"]},{"v":"tener","t":"有","type":"irr","yo":"tengo","pret":"tuve","pres":["tengo","tienes","tiene","tenemos","tenéis","tienen"],"pretConj":["tuve","tuviste","tuvo","tuvimos","tuvisteis","tuvieron"]},{"v":"hacer","t":"做","type":"irr","yo":"hago","pret":"hice","pres":["hago","haces","hace","hacemos","hacéis","hacen"],"pretConj":["hice","hiciste","hizo","hicimos","hicisteis","hicieron"]},{"v":"decir","t":"说","type":"irr","yo":"digo","pret":"dije","pres":["digo","dices","dice","decimos","decís","dicen"],"pretConj":["dije","dijiste","dijo","dijimos","dijisteis","dijeron"]},{"v":"venir","t":"来","type":"irr","yo":"vengo","pret":"vine","pres":["vengo","vienes","viene","venimos","venís","vienen"],"pretConj":["vine","viniste","vino","vinimos","vinisteis","vinieron"]},{"v":"poner","t":"放","type":"irr","yo":"pongo","pret":"puse","pres":["pongo","pones","pone","ponemos","ponéis","ponen"],"pretConj":["puse","pusiste","puso","pusimos","pusisteis","pusieron"]},{"v":"saber","t":"知道","type":"irr","yo":"sé","pret":"supe","pres":["sé","sabes","sabe","sabemos","sabéis","saben"],"pretConj":["supe","supiste","supo","supimos","supisteis","supieron"]},{"v":"salir","t":"出去","type":"irr","yo":"salgo","pret":"salí","pres":["salgo","sales","sale","salimos","salís","salen"],"pretConj":["salí","saliste","salió","salimos","salisteis","salieron"]},{"v":"traer","t":"带来","type":"irr","yo":"traigo","pret":"traje","pres":["traigo","traes","trae","traemos","traéis","traen"],"pretConj":["traje","trajiste","trajo","trajimos","trajisteis","trajeron"]},{"v":"ver","t":"看见","type":"irr","yo":"veo","pret":"vi","pres":["veo","ves","ve","vemos","veis","ven"],"pretConj":["vi","viste","vio","vimos","visteis","vieron"]},{"v":"dar","t":"给","type":"irr","yo":"doy","pret":"di","pres":["doy","das","da","damos","dais","dan"],"pretConj":["di","diste","dio","dimos","disteis","dieron"]},{"v":"conocer","t":"认识","type":"-zco","yo":"conozco","pret":"conocí","pres":["conozco","conoces","conoce","conocemos","conocéis","conocen"],"pretConj":["conocí","conociste","conoció","conocimos","conocisteis","conocieron"]},{"v":"caer","t":"掉落","type":"irr","yo":"caigo","pret":"caí","pres":["caigo","caes","cae","caemos","caéis","caen"],"pretConj":["caí","caíste","cayó","caímos","caísteis","cayeron"]},{"v":"oír","t":"听见","type":"irr","yo":"oigo","pret":"oí","pres":["oigo","oyes","oye","oímos","oís","oyen"],"pretConj":["oí","oíste","oyó","oímos","oísteis","oyeron"]},{"v":"caber","t":"容纳","type":"irr","yo":"quepo","pret":"cupe","pres":["quepo","cabes","cabe","cabemos","cabéis","caben"],"pretConj":["cupe","cupiste","cupo","cupimos","cupisteis","cupieron"]},{"v":"poder","t":"能","type":"o→ue","yo":"puedo","pret":"pude","pres":["puedo","puedes","puede","podemos","podéis","pueden"],"pretConj":["pude","pudiste","pudo","pudimos","pudisteis","pudieron"]},{"v":"querer","t":"想要/爱","type":"e→ie","yo":"quiero","pret":"quise","pres":["quiero","quieres","quiere","queremos","queréis","quieren"],"pretConj":["quise","quisiste","quiso","quisimos","quisisteis","quisieron"]},{"v":"pensar","t":"思考","type":"e→ie","yo":"pienso","pret":"pensé","pres":["pienso","piensas","piensa","pensamos","pensáis","piensan"],"pretConj":["pensé","pensaste","pensó","pensamos","pensasteis","pensaron"]},{"v":"entender","t":"理解","type":"e→ie","yo":"entiendo","pret":"entendí","pres":["entiendo","entiendes","entiende","entendemos","entendéis","entienden"],"pretConj":["entendí","entendiste","entendió","entendimos","entendisteis","entendieron"]},{"v":"empezar","t":"开始","type":"e→ie","yo":"empiezo","pret":"empecé","pres":["empiezo","empiezas","empieza","empezamos","empezáis","empiezan"],"pretConj":["empecé","empezaste","empezó","empezamos","empezasteis","empezaron"]},{"v":"cerrar","t":"关闭","type":"e→ie","yo":"cierro","pret":"cerré","pres":["cierro","cierras","cierra","cerramos","cerráis","cierran"],"pretConj":["cerré","cerraste","cerró","cerramos","cerrasteis","cerraron"]},{"v":"perder","t":"失去","type":"e→ie","yo":"pierdo","pret":"perdí","pres":["pierdo","pierdes","pierde","perdemos","perdéis","pierden"],"pretConj":["perdí","perdiste","perdió","perdimos","perdisteis","perdieron"]},{"v":"sentir","t":"感觉","type":"e→ie","yo":"siento","pret":"sentí","pres":["siento","sientes","siente","sentimos","sentís","sienten"],"pretConj":["sentí","sentiste","sintió","sentimos","sentisteis","sintieron"]},{"v":"preferir","t":"偏爱","type":"e→ie","yo":"prefiero","pret":"preferí","pres":["prefiero","prefieres","prefiere","preferimos","preferís","prefieren"],"pretConj":["preferí","preferiste","prefirió","preferimos","preferisteis","prefirieron"]},{"v":"dormir","t":"睡觉","type":"o→ue","yo":"duermo","pret":"dormí","pres":["duermo","duermes","duerme","dormimos","dormís","duermen"],"pretConj":["dormí","dormiste","durmió","dormimos","dormisteis","durmieron"]},{"v":"volver","t":"返回","type":"o→ue","yo":"vuelvo","pret":"volví","pres":["vuelvo","vuelves","vuelve","volvemos","volvéis","vuelven"],"pretConj":["volví","volviste","volvió","volvimos","volvisteis","volvieron"]},{"v":"encontrar","t":"找到/遇到","type":"o→ue","yo":"encuentro","pret":"encontré","pres":["encuentro","encuentras","encuentra","encontramos","encontráis","encuentran"],"pretConj":["encontré","encontraste","encontró","encontramos","encontrasteis","encontraron"]},{"v":"costar","t":"花费","type":"o→ue","yo":"cuesto","pret":"costó","pres":["cuesto","cuestas","cuesta","costamos","costáis","cuestan"],"pretConj":["costé","costaste","costó","costamos","costasteis","costaron"]},{"v":"morir","t":"死","type":"o→ue","yo":"muero","pret":"morí","pres":["muero","mueres","muere","morimos","morís","mueren"],"pretConj":["morí","moriste","murió","morimos","moristeis","murieron"]},{"v":"recordar","t":"记得","type":"o→ue","yo":"recuerdo","pret":"recordé","pres":["recuerdo","recuerdas","recuerda","recordamos","recordáis","recuerdan"],"pretConj":["recordé","recordaste","recordó","recordamos","recordasteis","recordaron"]},{"v":"soñar","t":"做梦","type":"o→ue","yo":"sueño","pret":"soñé","pres":["sueño","sueñas","sueña","soñamos","soñáis","sueñan"],"pretConj":["soñé","soñaste","soñó","soñamos","soñasteis","soñaron"]},{"v":"mover","t":"移动","type":"o→ue","yo":"muevo","pret":"moví","pres":["muevo","mueves","mueve","movemos","movéis","mueven"],"pretConj":["moví","moviste","movió","movimos","movisteis","movieron"]},{"v":"probar","t":"尝试/品尝","type":"o→ue","yo":"pruebo","pret":"probé","pres":["pruebo","pruebas","prueba","probamos","probáis","prueban"],"pretConj":["probé","probaste","probó","probamos","probasteis","probaron"]},{"v":"pedir","t":"请求/点餐","type":"e→i","yo":"pido","pret":"pedí","pres":["pido","pides","pide","pedimos","pedís","piden"],"pretConj":["pedí","pediste","pidió","pedimos","pedisteis","pidieron"]},{"v":"servir","t":"服务","type":"e→i","yo":"sirvo","pret":"serví","pres":["sirvo","sirves","sirve","servimos","servís","sirven"],"pretConj":["serví","serviste","sirvió","servimos","servisteis","sirvieron"]},{"v":"repetir","t":"重复","type":"e→i","yo":"repito","pret":"repetí","pres":["repito","repites","repite","repetimos","repetís","repiten"],"pretConj":["repetí","repetiste","repitió","repetimos","repetisteis","repitieron"]},{"v":"seguir","t":"跟随/继续","type":"e→i","yo":"sigo","pret":"seguí","pres":["sigo","sigues","sigue","seguimos","seguís","siguen"],"pretConj":["seguí","seguiste","siguió","seguimos","seguisteis","siguieron"]},{"v":"conseguir","t":"获得","type":"e→i","yo":"consigo","pret":"conseguí","pres":["consigo","consigues","consigue","conseguimos","conseguís","consiguen"],"pretConj":["conseguí","conseguiste","consiguió","conseguimos","conseguisteis","consiguieron"]},{"v":"vestir","t":"穿","type":"e→i","yo":"visto","pret":"vestí","pres":["visto","vistes","viste","vestimos","vestís","visten"],"pretConj":["vestí","vestiste","vistió","vestimos","vestisteis","vistieron"]},{"v":"jugar","t":"玩","type":"u→ue","yo":"juego","pret":"jugué","pres":["juego","juegas","juega","jugamos","jugáis","juegan"],"pretConj":["jugué","jugaste","jugó","jugamos","jugasteis","jugaron"]},{"v":"hablar","t":"说话","type":"reg-ar","yo":"hablo","pret":"hablé"},{"v":"comer","t":"吃","type":"reg-er","yo":"como","pret":"comí"},{"v":"vivir","t":"住/生活","type":"reg-ir","yo":"vivo","pret":"viví"},{"v":"trabajar","t":"工作","type":"reg-ar","yo":"trabajo","pret":"trabajé"},{"v":"estudiar","t":"学习","type":"reg-ar","yo":"estudio","pret":"estudié"},{"v":"beber","t":"喝","type":"reg-er","yo":"bebo","pret":"bebí"},{"v":"escribir","t":"写","type":"reg-ir","yo":"escribo","pret":"escribí"},{"v":"leer","t":"读","type":"reg-er","yo":"leo","pret":"leí"},{"v":"abrir","t":"打开","type":"reg-ir","yo":"abro","pret":"abrí"},{"v":"bailar","t":"跳舞","type":"reg-ar"},{"v":"cantar","t":"唱歌","type":"reg-ar"},{"v":"cocinar","t":"烹饪","type":"reg-ar"},{"v":"comprar","t":"购买","type":"reg-ar"},{"v":"caminar","t":"走路","type":"reg-ar"},{"v":"viajar","t":"旅行","type":"reg-ar"},{"v":"llegar","t":"到达","type":"reg-ar","pret":"llegué"},{"v":"llevar","t":"携带/穿着","type":"reg-ar"},{"v":"mirar","t":"看/注视","type":"reg-ar"},{"v":"necesitar","t":"需要","type":"reg-ar"},{"v":"pagar","t":"付款","type":"reg-ar","pret":"pagué"},{"v":"terminar","t":"结束","type":"reg-ar"},{"v":"tomar","t":"拿/喝/乘坐","type":"reg-ar"},{"v":"usar","t":"使用","type":"reg-ar"},{"v":"esperar","t":"等待/希望","type":"reg-ar"},{"v":"llamar","t":"打电话/叫","type":"reg-ar"},{"v":"enviar","t":"发送","type":"reg-ar"},{"v":"dejar","t":"留下/允许","type":"reg-ar"},{"v":"escuchar","t":"听","type":"reg-ar"},{"v":"explicar","t":"解释","type":"reg-ar","pret":"expliqué"},{"v":"gustar","t":"使喜欢","type":"reg-ar"},{"v":"lavar","t":"洗","type":"reg-ar"},{"v":"limpiar","t":"打扫","type":"reg-ar"},{"v":"nadar","t":"游泳","type":"reg-ar"},{"v":"pasar","t":"经过/传递","type":"reg-ar"},{"v":"preguntar","t":"提问","type":"reg-ar"},{"v":"regresar","t":"回来","type":"reg-ar"},{"v":"ayudar","t":"帮助","type":"reg-ar"},{"v":"buscar","t":"寻找","type":"reg-ar","pret":"busqué"},{"v":"cambiar","t":"改变","type":"reg-ar"},{"v":"descansar","t":"休息","type":"reg-ar"},{"v":"entrar","t":"进入","type":"reg-ar"},{"v":"ganar","t":"赢/赚","type":"reg-ar"},{"v":"gastar","t":"花费/浪费","type":"reg-ar"},{"v":"mandar","t":"命令/发送","type":"reg-ar"},{"v":"olvidar","t":"忘记","type":"reg-ar"},{"v":"preparar","t":"准备","type":"reg-ar"},{"v":"aprender","t":"学习/学会","type":"reg-er"},{"v":"correr","t":"跑","type":"reg-er"},{"v":"creer","t":"相信","type":"reg-er","yo":"creo","pret":"creí"},{"v":"deber","t":"应该/欠","type":"reg-er"},{"v":"responder","t":"回答","type":"reg-er"},{"v":"vender","t":"卖","type":"reg-er"},{"v":"romper","t":"打破","type":"reg-er"},{"v":"comprender","t":"理解","type":"reg-er"},{"v":"esconder","t":"藏","type":"reg-er"},{"v":"prometer","t":"承诺","type":"reg-er"},{"v":"recibir","t":"收到","type":"reg-ir"},{"v":"subir","t":"上升/上传","type":"reg-ir"},{"v":"decidir","t":"决定","type":"reg-ir"},{"v":"describir","t":"描述","type":"reg-ir"},{"v":"permitir","t":"允许","type":"reg-ir"},{"v":"sufrir","t":"受苦","type":"reg-ir"},{"v":"unir","t":"连接","type":"reg-ir"},{"v":"existir","t":"存在","type":"reg-ir"},{"v":"ocurrir","t":"发生","type":"reg-ir"},{"v":"acostarse","t":"躺下","type":"o→ue","yo":"me acuesto"},{"v":"despertarse","t":"醒来","type":"e→ie","yo":"me despierto"},{"v":"levantarse","t":"起床","type":"reg-ar","yo":"me levanto"},{"v":"llamarse","t":"名叫","type":"reg-ar","yo":"me llamo"},{"v":"sentirse","t":"感到","type":"e→ie","yo":"me siento"},{"v":"vestirse","t":"穿衣服","type":"e→i","yo":"me visto"},{"v":"divertirse","t":"玩得开心","type":"e→ie","yo":"me divierto"}],"mig":{"0":"el padre","1":"la madre","2":"el hermano","3":"la hermana","4":"el abuelo","5":"la abuela","6":"el tío","7":"el primo","8":"el sobrino","9":"la suegra","10":"el día","11":"la semana","12":"el mes","13":"el año","14":"la hora","15":"ayer","16":"hoy","17":"mañana","18":"la mañana","19":"el fin de semana","20":"feliz","21":"triste","22":"enfadado","23":"cansado","24":"contento","25":"nervioso","26":"tranquilo","27":"simpático","28":"tímido","29":"divertido","30":"la cabeza","31":"el brazo","32":"la mano","33":"el pie","34":"el ojo","35":"la boca","36":"el pelo","37":"el estómago","38":"el corazón","39":"la espalda","40":"el desayuno","41":"la comida","42":"la cena","43":"el arroz","44":"el pollo","45":"el pescado","46":"la fruta","47":"la verdura","48":"el queso","49":"el vino","50":"el billete","51":"el avión","52":"el tren","53":"el autobús","54":"el aeropuerto","55":"la estación","56":"la maleta","57":"el hotel","58":"el mapa","59":"el pasaporte","60":"la casa","61":"la puerta","62":"la ventana","63":"la mesa","64":"la silla","65":"la cama","66":"la llave","67":"el suelo","68":"la cocina","69":"el baño","70":"el trabajo","71":"la oficina","72":"la reunión","73":"el informe","74":"la empresa","75":"el jefe","76":"el compañero","77":"el profesor","78":"el alumno","79":"el examen","80":"ayudar","81":"esperar","82":"comprar","83":"pagar","84":"llevar","85":"dejar","86":"pasar","87":"cambiar","88":"recordar","89":"olvidar","90":"difícil","91":"fácil","92":"barato","93":"caro","94":"cerca","95":"lejos","96":"rápido","97":"despacio","98":"siempre","99":"casi"}};;
+</script>
+<script>
+(function(){
+var D = window.ESDATA;
+var lang = "zh";
+var T = {
+zh:{t1:"📖 语法精讲",t2:"🃏 词汇复习",t3:"🔤 动词变位",t4:"📝 综合小测",t5:"🔁 遗忘曲线",next:"下一个 →",skip:"跳过",ok:"✅ 认识",mid:"🟡 模糊",no:"❌ 不认识",open:"🃏 点击展开透彻讲解"},
+es:{t1:"📖 Gramática",t2:"🃏 Vocabulario",t3:"🔤 Verbos",t4:"📝 Miniprueba",t5:"🔁 Repaso",next:"Siguiente →",skip:"Saltar",ok:"✅ Lo sé",mid:"🟡 Más o menos",no:"❌ No lo sé",open:"🃏 Haz clic para ver"}
 };
-var lang="zh";
+
+/* ===== 存储键（文本键，兼容迁移）===== */
+var K = { mark:"agv_mark_v2", srs:"es_srs_v1", oldMark:"agv_mark" };
+function load(k,d){ try{ var v=JSON.parse(localStorage.getItem(k)); return v==null?d:v }catch(e){ return d } }
+function save(k,v){ localStorage.setItem(k, JSON.stringify(v)); window.__agMiscTouch && window.__agMiscTouch(); }
+var VMARK = load(K.mark, null);
+if(!VMARK){ // 旧索引键迁移到文本键
+  VMARK = {};
+  var old = load(K.oldMark, {});
+  for(var i in old){ var w = D.mig[i]; if(w) VMARK[w] = old[i]; }
+  save(K.mark, VMARK);
+}
+var SRS = load(K.srs, {});
+function mLevel(w){ return VMARK[w]||0 }
+function touch(w, lv){ if(lv===0) delete VMARK[w]; else VMARK[w]=lv; save(K.mark, VMARK);
+  if(lv>=2){ if(!SRS[w]) SRS[w] = {due: Date.now(), streak: 0}; save(K.srs, SRS); }
+  else if(SRS[w] && lv===1){ delete SRS[w]; save(K.srs, SRS); }
+}
+
+/* ===== i18n ===== */
 function applyLang(){
-  document.querySelectorAll("[data-t]").forEach(function(el){var k=el.dataset.t;if(I18N[lang][k]!==undefined)el.innerHTML=I18N[lang][k]});
-  document.getElementById("langBtn").textContent=lang==="zh"?"ES":"中文";
-  renderStat();renderWeak();renderQuiz();if(!quizOn)showWord();
+  ["t1","t2","t3","t4","t5"].forEach(function(id){ var el=document.getElementById(id); if(el) el.textContent=T[lang][id]; });
+  document.getElementById("langBtn").textContent = lang==="zh"?"ES":"中文";
+  renderStat(); renderSrs();
 }
-function toggleLang(){lang=lang==="zh"?"es":"zh";applyLang()}
+document.getElementById("langBtn").onclick=function(){ lang = lang==="zh"?"es":"zh"; applyLang(); };
 
-/* ================= 语法笔记 ================= */
-var GRAM=[
-{t:"ser vs estar",zh:"ser 表本质、身份、来源、属性；estar 表状态、位置、临时感受。",es:"ser: esencia, identidad, origen. estar: estado, posición, sentimiento temporal.",ex:[["Soy de China.","我来自中国。"],["Estoy cansado hoy.","我今天很累。"],["La sopa está fría.","汤是凉的。"]]},
-{t:"gustar 类动词",zh:"“喜欢”主语是物品：Me gusta + 单数名词；Me gustan + 复数名词；喜欢做事用 Me gusta + 动词原形。同类：encantar, doler, parecer。",es:"El objeto es el sujeto: Me gusta + sing. / Me gustan + pl. / Me gusta + infinitivo. Igual: encantar, doler, parecer.",ex:[["Me gusta el café.","我喜欢咖啡。"],["Me gustan los gatos.","我喜欢猫。"],["Me encanta viajar.","我超爱旅行。"]]},
-{t:"宾格代词 lo / la / los / las",zh:"代替“直接宾语”，放在变位动词前，或接在原形/命令式后。",es:"Reemplazan el objeto directo; van antes del verbo conjugado o detrás del infinitivo.",ex:[["¿El libro? Lo tengo.","书？我有。"],["¿Las llaves? No las veo.","钥匙？我没看见。"],["Quiero verlo ahora.","我现在就想看它。"]]},
-{t:"与格代词 me / te / le / nos / les",zh:"表示“对谁”。le 可指他/她/您；与格+宾格同时出现时 le/les 变 se。",es:"Indican «a quién». le = él/ella/usted; le + lo → se lo.",ex:[["Le doy el mapa.","我给他地图。"],["¿Me puedes ayudar?","你能帮我吗？"],["Se lo digo mañana.","我明天告诉他这件事。"]]},
-{t:"简单过去时 vs 未完成过去时",zh:"一次性、已完成的动作用简单过去时（fui, comió）；背景、习惯、描述用未完成过去时（iba, comía）。",es:"Pretérito indefinido: acción única y terminada. Imperfecto: contexto, hábito, descripción.",ex:[["Ayer fui al cine.","昨天我去了电影院。"],["De niño, jugaba al fútbol.","小时候我常踢球。"],["Llovía cuando salí.","我出门时正下着雨。"]]},
-{t:"现在完成时",zh:"haber（he/has/ha…）+ 过去分词，连接过去与现在；常见搭配：ya, todavía no, nunca。",es:"haber + participio; conecta pasado y presente; con ya, todavía no, nunca.",ex:[["He comido ya.","我已经吃过了。"],["¿Has visto mi maleta?","你看见我行李箱了吗？"],["No hemos ido nunca.","我们从来没去过。"]]},
-{t:"口语将来：ir a + 原形",zh:"日常表达将来最常用 ir a + 动词原形，比将来时更口语。",es:"Futuro coloquial: ir a + infinitivo.",ex:[["Voy a comprar pan.","我要去买面包。"],["Vamos a viajar a Madrid.","我们要去马德里旅行。"],["¿Vas a venir?","你会来吗？"]]},
-{t:"命令式（肯定）",zh:"tú 规则动词：原形去 -er/-ir 加 -a / -e（comer→come）； usted：加 -e / -o 带重音；nosotros：vamos。",es:"tú: forma de «vos» simple; usted: terminación con tilde; nosotros: vamos + inf.",ex:[["¡Ven aquí!","过来！"],["Siéntese, por favor.","您请坐。"],["Vamos a comer.","我们去吃饭吧。"]]},
-{t:"por vs para",zh:"por 表原因、交换、经过、期间；para 表目的、对象、截止。",es:"por: causa, intercambio, duración. para: finalidad, destinatario, plazo.",ex:[["Gracias por todo.","感谢一切。"],["Esto es para ti.","这是给你的。"],["Salimos por la mañana.","我们上午出门。"]]},
-{t:"比较级",zh:"más / menos + 形容词 + que；同级 tan…como；不规则：bueno→mejor, malo→peor, grande→mayor(年龄)。",es:"más/menos + adj. + que; tan…como; irregulares: mejor, peor, mayor.",ex:[["Ella es más alta que yo.","她比我高。"],["Este es tan caro como aquel.","这个和那个一样贵。"],["El rojo es mejor.","红色那个更好。"]]},
-{t:"反身动词",zh:"动作作用于自身：lavarse, levantarse, llamarse。变位时反身代词与主语一致，放动词前。",es:"La acción recae en el sujeto: me/te/se… + verbo; con infinitivo va detrás.",ex:[["Me levanto a las siete.","我七点起床。"],["Se lava las manos.","他洗手。"],["¿Cómo te llamas?","你叫什么名字？"]]},
-{t:"tener que / hay que",zh:"tener que + 原形：某人“得做”；hay que + 原形：泛指“必须/应当”。",es:"tener que: obligación personal. hay que: obligación general.",ex:[["Tengo que trabajar.","我得工作。"],["Hay que estudiar mucho.","得用功学习。"],["Tienes que descansar.","你必须休息。"]]},
-{t:"否定词 nunca / nadie / nada / tampoco",zh:"西语“双重否定表否定”。动词带 no 后仍可加 nunca/nadie。tampoco 表示“也不”。",es:"La doble negación es normal y sigue siendo negativa.",ex:[["No viene nadie.","没有人来。"],["Nunca como carne.","我从不吃肉。"],["Yo tampoco.","我也不。"]]},
-{t:"条件句 si + 现在时",zh:"真实条件：si + 陈述式现在时，主句用现在时或将来意义（不用将来时态在 si 从句中）。",es:"Si + presente de indicativo, resultado real; nunca futuro en la cláusula con si.",ex:[["Si llueve, no vamos.","如果下雨我们就不去。"],["Si tienes tiempo, ven a mi casa.","有空来我家。"],["Si puedo, te llamo.","能的话我给你打电话。"]]}
-];
-var gh="";
-GRAM.forEach(function(g,i){
-  gh+='<div class="gcard" onclick="this.classList.toggle(\'open\')"><div class="gt">'+(i+1)+'. '+g.t+'</div><div class="gs">🃏 '+(lang==="zh"?"点击展开要点":"Haz clic para ver")+'</div><div class="gp">'+(lang==="zh"?g.zh:g.es);
-  g.ex.forEach(function(e){gh+='<div class="gex"><b>'+e[0]+'</b><br><i>'+e[1]+'</i></div>'});
-  gh+='</div></div>';
-});
-document.getElementById("gGrid").innerHTML=gh;
-
-/* ================= 词汇 ================= */
-var VOCAB=[
-["el padre","父亲","Mi padre trabaja en Beijing.","我父亲在北京工作。"],
-["la madre","母亲","Mi madre cocina muy bien.","我妈妈做饭很好吃。"],
-["el hermano","兄弟","Mi hermano es mayor que yo.","我哥哥比我大。"],
-["la hermana","姐妹","Mi hermana vive en Shanghái.","我妹妹住在上海。"],
-["el abuelo","祖父","Mi abuelo tiene ochenta años.","我爷爷八十岁了。"],
-["la abuela","祖母","Mi abuela prepara el desayuno.","奶奶做早饭。"],
-["el tío","叔叔/舅舅","Mi tío es profesor.","我叔叔是老师。"],
-["el primo","表兄弟","Mi primo juega al baloncesto.","我表弟打篮球。"],
-["el sobrino","侄子","Mi sobrino tiene cinco años.","我侄子五岁。"],
-["la suegra","婆婆/岳母","Mi suegra es muy simpática.","我婆婆人很好。"],
-["el día","天/日","¿Qué día es hoy?","今天星期几？"],
-["la semana","周","Esta semana estoy ocupado.","这周我很忙。"],
-["el mes","月","El mes que viene viajo.","下个月我去旅行。"],
-["el año","年","Feliz año nuevo!","新年快乐！"],
-["la hora","小时","Espera una hora, por favor.","请等一个小时。"],
-["ayer","昨天","Ayer fui al museo.","昨天我去了博物馆。"],
-["hoy","今天","Hoy hace buen tiempo.","今天天气好。"],
-["mañana","明天/上午","Mañana tengo un examen.","明天我有考试。"],
-["la mañana","上午","Voy al gimnasio por la mañana.","我上午去健身房。"],
-["el fin de semana","周末","El fin de semana descanso.","周末我休息。"],
-["feliz","幸福的","Estamos muy felices.","我们很幸福。"],
-["triste","悲伤的","Está triste hoy.","他今天不开心。"],
-["enfadado","生气的","Mi jefe está enfadado.","我老板生气了。"],
-["cansado","累的","Estoy cansado del trabajo.","我工作累了。"],
-["contento","高兴的","Estoy contento de verte.","见到你我很高兴。"],
-["nervioso","紧张的","Estoy nervioso por el examen.","考试让我紧张。"],
-["tranquilo","安静的/平静的","El barrio es tranquilo.","这个街区很安静。"],
-["simpático","友好的","La camarera es simpática.","服务员很友好。"],
-["tímido","害羞的","Es tímido con la gente nueva.","他见到生人害羞。"],
-["divertido","有趣的","La película es divertida.","这电影很有趣。"],
-["la cabeza","头","Me duele la cabeza.","我头疼。"],
-["el brazo","手臂","Tiene un dolor en el brazo.","他手臂疼。"],
-["la mano","手","Lávate las manos.","洗手。"],
-["el pie","脚","Calzo un pie grande.","我脚大。"],
-["el ojo","眼睛","Tiene los ojos azules.","她眼睛是蓝色的。"],
-["la boca","嘴","Abre la boca.","张开嘴。"],
-["el pelo","头发","Tiene el pelo largo.","她留长发。"],
-["el estómago","胃","Me duele el estómago.","我胃疼。"],
-["el corazón","心/心脏","Mi corazón late rápido.","我心跳很快。"],
-["la espalda","背","Ella nada para la espalda.","她游泳锻炼背部。"],
-["el desayuno","早餐","El desayuno está listo.","早饭好了。"],
-["la comida","午饭","La comida es a las dos.","午饭两点吃。"],
-["la cena","晚饭","Hoy ceno poco.","今晚我吃得少。"],
-["el arroz","米饭","Quiero arroz con pollo.","我要鸡肉米饭。"],
-["el pollo","鸡肉","El pollo está muy bueno.","这鸡肉很好吃。"],
-["el pescado","鱼","Comemos pescado fresco.","我们吃新鲜的鱼。"],
-["la fruta","水果","La fruta de aquí es dulce.","这里的水果很甜。"],
-["la verdura","蔬菜","Come más verdura.","多吃蔬菜。"],
-["el queso","奶酪","El queso manchego es famoso.","曼彻格奶酪很有名。"],
-["el vino","葡萄酒","Un vaso de vino tinto, por favor.","请来一杯红葡萄酒。"],
-["el billete","车票/票","Compré un billete de tren.","我买了张火车票。"],
-["el avión","飞机","El avión sale a las nueve.","飞机九点起飞。"],
-["el tren","火车","El tren llega tarde.","火车晚点了。"],
-["el autobús","公交车","Tomo el autobús al trabajo.","我坐公交上班。"],
-["el aeropuerto","机场","El aeropuerto está lejos.","机场很远。"],
-["la estación","车站","¿Dónde está la estación?","车站在哪？"],
-["la maleta","行李箱","Mi maleta es pesada.","我的箱子很重。"],
-["el hotel","旅馆","El hotel tiene piscina.","这家旅馆有泳池。"],
-["el mapa","地图","Necesitamos un mapa.","我们需要一张地图。"],
-["el pasaporte","护照","Muestre su pasaporte.","请出示护照。"],
-["la casa","房子","Mi casa tiene dos habitaciones.","我家有两个卧室。"],
-["la puerta","门","Cierra la puerta, por favor.","请关门。"],
-["la ventana","窗户","Abre la ventana.","把窗户打开。"],
-["la mesa","桌子","El mapa está sobre la mesa.","地图在桌上。"],
-["la silla","椅子","Toma una silla.","拿把椅子来。"],
-["la cama","床","La cama es muy cómoda.","床很舒服。"],
-["la llave","钥匙","¿Dónde están mis llaves?","我的钥匙在哪？"],
-["el suelo","地板","El suelo está limpio.","地板干净。"],
-["la cocina","厨房","Ella está en la cocina.","她在厨房。"],
-["el baño","浴室/洗手间","¿Puedo usar el baño?","我能用下洗手间吗？"],
-["el trabajo","工作","Voy al trabajo en metro.","我坐地铁上班。"],
-["la oficina","办公室","La oficina está cerrada.","办公室关门了。"],
-["la reunión","会议","Hay una reunión a las diez.","十点有个会。"],
-["el informe","报告","Tengo que escribir un informe.","我得写个报告。"],
-["la empresa","公司","Trabajo en una empresa grande.","我在一家大公司工作。"],
-["el jefe","老板/上司","Mi jefe es exigente.","我上司要求严。"],
-["el compañero","同事","Mi compañero me ayuda mucho.","我同事很帮我。"],
-["el profesor","老师","El profesor habla despacio.","老师说话慢。"],
-["el alumno","学生","Los alumnos hacen el examen.","学生们在考试。"],
-["el examen","考试","El examen es difícil.","考试很难。"],
-["ayudar","帮助","Siempre ayudo a mi madre.","我总帮妈妈。"],
-["esperar","等待/希望","Espero tu llamada.","我等你的电话。"],
-["comprar","买","Voy a comprar fruta.","我去买水果。"],
-["pagar","支付","¿Quién paga la cena?","晚饭谁买单？"],
-["llevar","携带/穿着","Llevo una chaqueta azul.","我穿蓝色夹克。"],
-["dejar","留下/让","Deja las llaves aquí.","把钥匙放这。"],
-["pasar","度过/经过","Pasamos el día en la playa.","我们在海滩过了一天。"],
-["cambiar","改变","Quiero cambiar de trabajo.","我想换工作。"],
-["recordar","记得","Recuerdo tu cara.","我记得你的脸。"],
-["olvidar","忘记","Olvido las palabras nuevas.","我老忘生词。"],
-["difícil","难的","La gramática es difícil.","语法很难。"],
-["fácil","容易的","Este ejercicio es fácil.","这个练习容易。"],
-["barato","便宜的","Este mercado es barato.","这个市场东西便宜。"],
-["caro","贵的","El hotel es caro.","这家旅馆贵。"],
-["cerca","近的","Vivo cerca del trabajo.","我住得离公司近。"],
-["lejos","远的","La estación está lejos.","车站很远。"],
-["rápido","快","El tren es muy rápido.","火车很快。"],
-["despacio","慢/慢慢地","Habla despacio, por favor.","请说慢点。"],
-["siempre","总是","Siempre desayuno café.","我早饭总喝咖啡。"],
-["casi","几乎","Casi termino el informe.","报告我差不多写完了。"]
-];
-var VMARK=load("agv_mark",{}),VIDX=0;
-function load(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}}
-function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
-function mLevel(i){return VMARK[i]||0}/* 0未标 1认识 2模糊 3不认识 */
-function weakList(){var a=[];for(var i=0;i<VOCAB.length;i++){if(mLevel(i)>=2)a.push(i)}return a}
-function showWord(){
-  if(quizOn)return;
-  var cand=[];
-  for(var k=0;k<VOCAB.length;k++){
-    var c=k;
-    if(mLevel(c)>=2)cand.push({i:c,w:mLevel(c)===3?0:1});
-    else cand.push({i:c,w:2});
-  }
-  cand.sort(function(a,b){return a.w-b.w||Math.random()-.5});
-  var idx=VOCAB.length?cand[Math.floor(Math.random()*Math.min(cand.length,8))].i:0;
-  VIDX=idx;
-  var v=VOCAB[idx];
-  var d=document.getElementById("vBox");
-  d.innerHTML='<div class="ves">'+v[0]+'</div><div class="vez">'+v[1]+'</div><div class="vex">💬 '+v[2]+'<i>'+v[3]+'</i></div>'
-   +'<div class="mark3">'
-   +'<button class="mk ok" onclick="mark(1)">'+(lang==="zh"?"✅ 认识":"✅ Lo sé")+'</button>'
-   +'<button class="mk mid" onclick="mark(2)">'+(lang==="zh"?"🟡 模糊":"🟡 Más o menos")+'</button>'
-   +'<button class="mk no" onclick="mark(3)">'+(lang==="zh"?"❌ 不认识":"❌ No lo sé")+'</button>'
-   +'</div>';
-  renderStat();
-}
-function mark(level){VMARK[VIDX]=level;save("agv_mark",VMARK);showWord()}
-function nextWord(dir){if(dir>0)showWord();else{delete VMARK[VIDX];save("agv_mark",VMARK);showWord()}}
-function renderStat(){
-  var ok=0,mid=0,no=0;
-  for(var i=0;i<VOCAB.length;i++){var l=mLevel(i);if(l===1)ok++;else if(l===2)mid++;else if(l===3)no++}
-  document.getElementById("vStat").innerHTML='<span class="s1">✅ '+ok+'</span><span class="s2">🟡 '+mid+'</span><span class="s3">❌ '+no+'</span><span>总计 '+VOCAB.length+' 词</span>';
-}
-
-/* ================= 错词本 ================= */
-function renderWeak(){
-  var wl=weakList();
-  document.getElementById("wInfo").textContent=wl.length?(lang==="zh"?"共 "+wl.length+" 个词标记为模糊/不认识。":"Hay "+wl.length+" palabras marcadas."):(lang==="zh"?"暂无需要复习的词 🎉":"No hay palabras para repasar 🎉");
-  var h="";
-  wl.forEach(function(i){
-    var v=VOCAB[i];
-    h+='<div class="gcard"><div class="gt">'+(mLevel(i)===3?"❌ ":"🟡 ")+v[0]+' <span style="font-size:12px;color:var(--text2)">'+v[1]+'</span></div><div class="gp" style="display:block"><div class="gex"><b>'+v[2]+'</b><br><i>'+v[3]+'</i></div><div class="mark3"><button class="mk ok" style="width:auto" onclick="VMARK['+i+']=1;save(\'agv_mark\',VMARK);renderWeak();showWord()">✅</button></div></div></div>';
-  });
-  document.getElementById("wGrid").innerHTML=h||'<div class="empty">'+(lang==="zh"?"暂无需要复习的词 🎉":"Nada que repasar 🎉")+'</div>';
-}
-function startWeak(){
-  var wl=weakList();
-  if(!wl.length){alert(lang==="zh"?"错词本是空的，先去词汇复习里标记吧！":"La lista está vacía.");return}
-  document.querySelector('.tab[data-p="vocab"]').click();
-  showWord();
-}
-function clearWeak(){
-  if(!confirm(lang==="zh"?"把所有 🟡/❌ 标记清空？":"¿Vaciar todas las marcas 🟡/❌?"))return;
-  for(var i=0;i<VOCAB.length;i++){if(mLevel(i)>=2)delete VMARK[i]}
-  save("agv_mark",VMARK);renderWeak();renderStat();
-}
-
-/* ================= 综合小测 ================= */
-var QB2=[
-{q:"Me ___ el café.",o:["gusta","gustan","gusto","gustas"],a:0,e:"Me gusta + 单数名词。"},
-{q:"¿Las llaves? No ___ veo.",o:["lo","las","la","les"],a:1,e:"las 代替阴性复数直接宾语。"},
-{q:"Ayer ___ al cine.",o:["voy","iba","fui","he ido"],a:2,e:"一次性完结动作用简单过去时 fui。"},
-{q:"De niño, ___ al fútbol.",o:["jugaba","jugué","juego","he jugado"],a:0,e:"过去习惯动作用未完成过去时 jugaba。"},
-{q:"Si ___ tiempo, ven a mi casa.",o:["tienes","tendrás","tengas","vas a tener"],a:0,e:"si 从句用陈述式现在时。"},
-{q:"___ llueve, no vamos.",o:["Si","Cuando","Porque","Que"],a:0,e:"真实条件用 si + 现在时。"},
-{q:"Le ___ el mapa a María.",o:["doy","da","das","damos"],a:0,e:"我给→第一人称单数 doy。"},
-{q:"Se ___ digo mañana.",o:["lo","la","le","los"],a:0,e:"与格 le + 宾格 lo → se lo。"},
-{q:"Gracias ___ todo.",o:["para","por","a","de"],a:1,e:"por 表原因。"},
-{q:"Esto es ___ ti.",o:["por","para","con","en"],a:1,e:"para 表对象。"},
-{q:"Estoy ___ hoy.",o:["cansado","es"],a:0,e:"estar + 状态形容词（本例用阳性形式，主语若为阴性则 cansada）。"},
-{q:"Voy ___ comprar pan.",o:["a","de","en","para"],a:0,e:"ir a + 原形表将来。"},
-{q:"No viene ___.",o:["nada","nadie","nunca","ninguno"],a:1,e:"nobody=nadie。"},
-{q:"Tengo ___ trabajar.",o:["que","de","a","por"],a:0,e:"tener que + 原形表义务。"},
-{q:"Me ___ a las siete.",o:["levanto","levantar","levantas","levanta"],a:0,e:"反转动词第一人称 me levanto。"}
-];
-var quizOn=false,qIdx=0,qRight=0,qPicks=[];
-function buildQuizItems(){
-  var vs=[];
-  var pool=VOCAB.map(function(v,i){return i});
-  shuffle(pool).slice(0,10).forEach(function(i){
-    var v=VOCAB[i];
-    var distr=shuffle(VOCAB.filter(function(x,j){return j!==i}).map(function(x){return x[1]})).slice(0,3);
-    var opts=shuffle(distr.concat([v[1]]));
-    vs.push({q:"“"+v[0]+"” 的意思是？",o:opts,a:opts.indexOf(v[1]),e:"“"+v[0]+"” = "+v[1]+"。例句："+v[2]+"（"+v[3]+"）",vi:i});
-  });
-  var gs=shuffle(QB2).slice(0,5);
-  return vs.concat(gs);
-}
-function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
-var quizItems=[];
-function startQuiz(){
-  quizItems=buildQuizItems();qIdx=0;qRight=0;quizOn=true;
-  document.getElementById("qSetup").style.display="none";
-  document.getElementById("qBody").style.display="";
-  renderQ();
-}
-function renderQ(){
-  var it=quizItems[qIdx];
-  var h='<div class="card"><div class="hint" style="margin-bottom:12px">'+(lang==="zh"?"第 ":"Pregunta ")+(qIdx+1)+" / "+quizItems.length+(lang==="zh"?" 题":"")+' · '+(lang==="zh"?"已答对 ":"Aciertos: ")+qRight+'</div>'
-   +'<div class="stem" style="font-size:15px;font-weight:700;margin-bottom:14px">'+it.q+'</div>';
-  it.o.forEach(function(o,j){h+='<div class="opt" data-j="'+j+'">'+o+'</div>'});
-  h+='<div class="exp" id="qExp" style="display:none;margin-top:10px;padding:12px 14px;border-radius:10px;background:var(--card2);border-left:3px solid var(--accent);font-size:12px;color:var(--text2);line-height:1.7"></div>'
-   +'<div class="vnav" style="margin-top:16px"><span></span><button class="btn" id="qNext" style="display:none"></button></div></div>';
-  document.getElementById("qBody").innerHTML=h;
-  document.getElementById("qNext").textContent=qIdx===quizItems.length-1?(lang==="zh"?"交卷评分":"Terminar"):(lang==="zh"?"下一题 →":"Siguiente →");
-  var answered=false;
-  document.querySelectorAll("#qBody .opt").forEach(function(op){
-    op.onclick=function(){
-      if(answered)return;answered=true;
-      var j=+op.dataset.j;var ok=j===it.a;
-      if(ok){qRight++;op.classList.add("right")}
-      else{op.classList.add("wrong");document.querySelector('#qBody .opt[data-j="'+it.a+'"]').classList.add("right");
-        if(it.vi!==undefined){if(!VMARK[it.vi]||VMARK[it.vi]<3){VMARK[it.vi]=VMARK[it.vi]===2?3:2;save("agv_mark",VMARK);renderStat()}}
-      }
-      var ex=document.getElementById("qExp");ex.innerHTML=(ok?"✅ ":"❌ ")+it.e;ex.style.display="block";
-      document.getElementById("qNext").style.display="";
-      document.getElementById("qNext").onclick=function(){
-        qIdx++;
-        if(qIdx<quizItems.length)renderQ();
-        else{
-          quizOn=false;
-          var h2='<div class="scorebox"><div class="big">'+qRight+' / '+quizItems.length+'</div><div class="hint">'+(lang==="zh"?"得分率 ":"Aciertos: ")+Math.round(qRight/quizItems.length*100)+'%</div></div>'
-           +'<button class="btn" onclick="document.getElementById(\'qSetup\').style.display=\'\';document.getElementById(\'qBody\').style.display=\'none\'">'+(lang==="zh"?"再测一次":"Otra vez")+'</button>';
-          document.getElementById("qBody").innerHTML=h2;
-        }
-      };
-    };
-  });
-}
-function renderQuiz(){}
-
-/* ================= Tab 切换 ================= */
+/* ===== Tabs ===== */
 document.querySelectorAll(".tab").forEach(function(t){
   t.onclick=function(){
     document.querySelectorAll(".tab").forEach(function(x){x.classList.remove("on")});
     t.classList.add("on");
     document.querySelectorAll(".panel").forEach(function(p){p.classList.remove("on")});
     document.getElementById("p-"+t.dataset.p).classList.add("on");
-    if(t.dataset.p==="vocab")showWord();
-    if(t.dataset.p==="weak")renderWeak();
+    if(t.dataset.p==="vocab") showWord();
+    if(t.dataset.p==="verbs") renderVerbs(document.getElementById("verbSearch").value);
+    if(t.dataset.p==="srs") renderSrs();
   };
 });
-showWord();renderStat();
+
+/* ===== 语法精讲 ===== */
+var gCh = "all";
+function renderGramChips(){
+  var chips = '<span class="chip'+(gCh==="all"?" on":"")+'" data-v="all">全部</span>';
+  chips += '<span class="chip'+(gCh==="core"?" on":"")+'" data-v="core">高频核心</span>';
+  var h="";
+  for(var i=0;i<D.grammar.length;i++){ h+='<span class="chip'+(gCh===(i+1)?" on":"")+'" data-v="'+(i+1)+'">'+(i+1)+'</span>'; }
+  document.getElementById("gramChips").innerHTML = chips + '<span style="flex:1"></span>' + h;
+  document.querySelectorAll("#gramChips .chip").forEach(function(c){
+    c.onclick=function(){ gCh = c.dataset.v==="core"?"core":(c.dataset.v==="all"?"all":+c.dataset.v); renderGram(); };
+  });
+}
+function renderGram(){
+  var list = D.grammar.filter(function(g,i){ return gCh==="all"||gCh==="core"&&i<14||gCh===i+1; });
+  document.getElementById("gGrid").innerHTML = list.map(function(g,i){
+    var h='<div class="gcard"><div class="gt">'+g.t+'</div><div class="gs">'+T[lang].open+'</div><div class="gp">'+g.zh;
+    g.ex.forEach(function(e){ h+='<div class="gex"><b>'+e[0]+'</b><br><i>'+e[1]+'</i></div>'; });
+    return h+'</div></div>';
+  }).join("");
+  document.querySelectorAll("#gGrid .gcard").forEach(function(c){ c.onclick=function(){ c.classList.toggle("open"); }; });
+}
+renderGramChips(); renderGram();
+
+/* ===== 词汇复习（弱词优先）===== */
+var vIdx = null;
+function stat(){
+  var ok=0, mid=0, no=0;
+  D.vocab.forEach(function(w){ var l=mLevel(w.es); if(l===1)ok++; else if(l===2)mid++; else if(l===3)no++; });
+  return {ok:ok,mid:mid,no:no,total:D.vocab.length};
+}
+function renderStat(){
+  var s = stat();
+  document.getElementById("vStat").innerHTML =
+    '<span style="color:var(--accent2)">✅ '+s.ok+'</span><span style="color:var(--warn)">🟡 '+s.mid+'</span><span style="color:var(--danger)">❌ '+s.no+'</span><span>总词库 '+s.total+'</span>';
+}
+function srcChips(){
+  var srcs = {};
+  D.vocab.forEach(function(w){ srcs[w.src] = (srcs[w.src]||0)+1; });
+  var chips = '<span class="chip on" data-v="all">全部</span>';
+  for(var s in srcs){ if(s!=="core") chips += '<span class="chip" data-v="'+s+'">'+s+'（'+srcs[s]+'）</span>'; }
+  document.getElementById("vocabSrcChips").innerHTML = chips;
+  document.querySelectorAll("#vocabSrcChips .chip").forEach(function(c){
+    c.onclick=function(){ document.querySelectorAll("#vocabSrcChips .chip").forEach(function(x){x.classList.remove("on")}); c.classList.add("on"); showWord(c.dataset.v); };
+  });
+}
+srcChips();
+function showWord(srcFilter){
+  var pool = D.vocab.map(function(w,i){ return {w:w, i:i}; }).filter(function(x){ return !srcFilter||srcFilter==="all"||x.w.src===srcFilter; });
+  var cand = [];
+  pool.forEach(function(x){
+    var l = mLevel(x.w.es);
+    cand.push({w:x.w, wt: l===3?0 : l===2?1 : 2});
+  });
+  cand.sort(function(a,b){ return a.wt-b.wt || Math.random()-.5; });
+  var pick = cand[Math.floor(Math.random()*Math.min(cand.length, 10))].w;
+  vIdx = pick.es;
+  document.getElementById("vBox").innerHTML =
+    '<div class="ves">'+pick.es+'</div><div class="vez">'+pick.zh+'</div>'
+    + (pick.ex ? '<div class="vex">💬 '+pick.ex+'<i>'+pick.exz+'</i></div>' : '<div class="vex" style="color:var(--text3)">（本词暂无例句）</div>')
+    + '<div class="mark3"><button class="mk ok" id="mk-ok">'+T[lang].ok+'</button><button class="mk mid" id="mk-mid">'+T[lang].mid+'</button><button class="mk no" id="mk-no">'+T[lang].no+'</button></div>';
+  document.getElementById("mk-ok").onclick = function(){ touch(pick.es,1); showWord(srcFilter); };
+  document.getElementById("mk-mid").onclick = function(){ touch(pick.es,2); showWord(srcFilter); };
+  document.getElementById("mk-no").onclick = function(){ touch(pick.es,3); showWord(srcFilter); };
+  renderStat();
+}
+document.getElementById("vNext").onclick = function(){ showWord(); };
+document.getElementById("vSkip").onclick = function(){ if(vIdx){ touch(vIdx,0); } showWord(); };
+renderStat(); showWord();
+
+/* ===== 动词变位速查 ===== */
+var PERS = ["yo","tú","él/ella","nosotros","vosotros","ellos"];
+document.getElementById("verbSearch").addEventListener("input", function(){ renderVerbs(this.value); });
+function renderVerbs(q){
+  q = (q||"").trim().toLowerCase();
+  var list = D.verbs.filter(function(v){ return !q || v.v.indexOf(q)>=0 || (v.t||"").indexOf(q)>=0; }).slice(0, 30);
+  document.getElementById("verbList").innerHTML = list.map(function(v){
+    var pres = v.pres ? v.pres : null;
+    var h = '<div class="card" style="padding:14px 18px"><div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><b style="font-size:16px;color:var(--accent2)">'+v.v+'</b><span style="color:var(--text2);font-size:13px">'+(v.t||"")+'</span><span class="hint">'+(v.type==="irr"?"不规则":"规则")+'</span></div>';
+    if(pres){
+      h += '<div style="margin-top:8px"><div class="hint" style="margin-bottom:4px">现在时</div><table class="tbl">';
+      PERS.forEach(function(p,i){ h += '<tr><th style="width:90px">'+p+'</th><td'+(i===0?' class="first"':'')+'>'+(pres[i]||"—")+'</td></tr>'; });
+      h += '</table>';
+      if(v.pretConj){ h += '<div class="hint" style="margin:8px 0 4px">简单过去时</div><table class="tbl">';
+        var pc = v.pretConj;
+        PERS.forEach(function(p,i){ h += '<tr><th style="width:90px">'+p+'</th><td>'+(Array.isArray(pc)?(pc[i]||"—"):(pc[p]||"—"))+'</td></tr>'; });
+        h += '</table>'; }
+      else if(v.pret){ h += '<div class="hint" style="margin-top:6px">简单过去时 yo：'+v.pret+'</div>'; }
+    } else { h += '<div class="hint" style="margin-top:6px">（无完整变位数据）</div>'; }
+    return h+'</div>';
+  }).join("") || '<div class="empty">未找到匹配动词</div>';
+}
+renderVerbs("");
+
+/* ===== SRS 遗忘曲线 ===== */
+function srsDue(){
+  var due = [];
+  for(var w in SRS){ if(SRS[w] && SRS[w].due<=Date.now()){ var vw = D.vocab.filter(function(x){return x.es===w;})[0]; if(vw) due.push(vw); } }
+  return due;
+}
+function updSrsBadge(){
+  var n = srsDue().length;
+  var el = document.getElementById("srsBadge");
+  if(n>0){ el.style.display=""; el.textContent="（今日 "+n+"）"; } else el.style.display="none";
+}
+setInterval(updSrsBadge, 2000);
+function renderSrs(){
+  var due = srsDue();
+  var total = Object.keys(SRS).length;
+  var future = total - due.length;
+  document.getElementById("srsStat").innerHTML = '今日到期 <b style="color:'+(due.length?"var(--warn)":"var(--ok)")+'">'+due.length+'</b> · 排期中 '+future+' · 原则：看词回忆 → 翻面自评 → 答对拉长间隔、答错明天再见';
+  var body = document.getElementById("srsBody");
+  document.getElementById("srsClear").onclick = function(){
+    if(!confirm("清空整个复习队列？")) return;
+    SRS = {}; save(K.srs, SRS); renderSrs();
+  };
+  if(!due.length){ body.innerHTML = '<div class="empty">今日没有到期的复习词 🎉</div>'; return; }
+  var w = due[0];
+  body.innerHTML =
+    '<div class="vbox" style="cursor:pointer" id="srsFlip"><div class="ves">'+w.es+'</div>'
+    + '<div class="vez" id="srsBack" style="display:none">'+w.zh+'</div>'
+    + '<div class="vex" id="srsEx" style="display:none">'+(w.ex?'💬 '+w.ex+'<i>'+w.exz+'</i>':'')+'<i>还剩 '+due.length+' 词到期</i></div></div>'
+    + '<div class="mark3"><button class="mk ok" id="srs-ok">✅ 记住了</button><button class="mk no" id="srs-no">❌ 没记住</button></div>';
+  document.getElementById("srsFlip").onclick = function(){
+    document.getElementById("srsBack").style.display="";
+    document.getElementById("srsEx").style.display="";
+  };
+  document.getElementById("srs-ok").onclick = function(){
+    var s = SRS[w.es]; s.streak = (s.streak||0)+1;
+    s.due = Date.now() + [1,2,4,7,15,30][Math.min(s.streak-1,5)]*86400000;
+    if(s.streak>=3){ delete SRS[w.es]; delete VMARK[w.es]; save(K.mark, VMARK); }
+    save(K.srs, SRS); renderSrs(); renderStat();
+  };
+  document.getElementById("srs-no").onclick = function(){
+    SRS[w.es] = {due: Date.now()+86400000, streak: 0};
+    VMARK[w.es] = 3; save(K.mark, VMARK);
+    save(K.srs, SRS); renderSrs(); renderStat();
+  };
+}
+
+/* ===== 综合小测 ===== */
+var QBS = [
+["Me ___ el café.","gusta|gustan|gusto|gustas",0,"Me gusta + 单数名词。"],
+["¿Las llaves? No ___ veo.","lo|las|la|les",1,"las 代替阴性复数直接宾语。"],
+["Ayer ___ al cine.","voy|iba|fui|he ido",2,"一次性完结动作用简单过去时 fui。"],
+["De niño, ___ al fútbol.","jugaba|jugué|juego|he jugado",0,"过去习惯动作用未完成过去时 jugaba。"],
+["Si ___ tiempo, ven a mi casa.","tienes|tendrás|tengas|vas a tener",0,"si 从句用陈述式现在时。"],
+["Le ___ el mapa a María.","doy|da|das|damos",0,"「我给」→ 第一人称单数 doy。"],
+["Se ___ digo mañana.","lo|la|le|los",0,"与格 le + 宾格 lo → se lo。"],
+["Gracias ___ todo.","para|por|a|de",1,"por 表原因。"],
+["Esto es ___ ti.","por|para|con|en",1,"para 表对象。"],
+["No viene ___.","nada|nadie|nunca|ninguno",1,"「没有人」= nadie。"],
+["Tengo ___ trabajar.","que|de|a|por",0,"tener que + 原形表义务。"],
+["Me ___ a las siete.","levanto|levantar|levantas|levanta",0,"自复动词第一人称 me levanto。"],
+["¿___ es tu número?","Qué|Cuál|Cómo|Cuánto",1,"问号码/姓名用 cuál。"],
+["El agua ___ fría.","es|está|son|están",1,"状态用 estar：está fría。"],
+["Había mucha gente ___ la fiesta.","en|a|por|para",0,"「在派对上」en la fiesta。"]
+];
+document.getElementById("qStart").onclick = function(){
+  var vs = [];
+  var idxs = D.vocab.map(function(w,i){return i;});
+  for(var i=idxs.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=idxs[i]; idxs[i]=idxs[j]; idxs[j]=t; }
+  idxs.slice(0,10).forEach(function(i){
+    var w = D.vocab[i];
+    var wrong = D.vocab.filter(function(x){ return x.zh!==w.zh; });
+    var opts = [w.zh];
+    for(var k=0;k<3;k++){ opts.push(wrong[Math.floor(Math.random()*wrong.length)].zh); }
+    opts.sort(function(){ return Math.random()-.5; });
+    vs.push({ q:'“'+w.es+'” 的意思是？', o:opts, a:opts.indexOf(w.zh), e:w.es+' = '+w.zh+(w.ex?'。例句：'+w.ex:''), word:w });
+  });
+  QBS.forEach(function(r){ r.opts = r[1].split("|"); });
+  var gs = QBS.slice().sort(function(){ return Math.random()-.5; }).slice(0,5);
+  var items = vs.concat(gs.map(function(r){ return { q:r[0], o:r.opts, a:r[2], e:r[3], isG:true }; }));
+  var qi = 0, right = 0, answered = false;
+  document.getElementById("qSetup").style.display = "none";
+  var qb = document.getElementById("qBody"); qb.style.display = "";
+  function draw(){
+    var it = items[qi];
+    var h = '<div class="card"><div class="hint" style="margin-bottom:10px">第 '+(qi+1)+' / '+items.length+' 题 · 已答对 '+right+'</div>'
+      + '<div style="font-size:14.5px;font-weight:700;margin-bottom:12px;line-height:1.6">'+it.q+'</div>';
+    it.o.forEach(function(o,j){ h += '<div class="opt" data-j="'+j+'">'+o+'</div>'; });
+    h += '<div id="qExp" style="display:none"></div></div>';
+    qb.innerHTML = h;
+    answered = false;
+    qb.querySelectorAll(".opt").forEach(function(op){
+      op.onclick = function(){
+        if(answered) return; answered = true;
+        var j = +op.dataset.j;
+        var ok = j===it.a;
+        if(ok) right++;
+        else if(!it.isG && it.word){ touch(it.word.es, 3); }
+        op.classList.add(ok?"right":"wrong");
+        qb.querySelector('.opt[data-j="'+it.a+'"]').classList.add("right");
+        var ex = document.getElementById("qExp");
+        ex.style.display = "block";
+        ex.innerHTML = '<b>'+(ok?"✅":"❌")+'</b> '+it.e+(ok?"":(it.word?" · 已加入遗忘曲线队列":""));
+        updSrsBadge();
+        setTimeout(function(){
+          qi++;
+          if(qi<items.length) draw();
+          else {
+            qb.innerHTML = '<div class="card" style="text-align:center;padding:28px"><div style="font-size:38px;font-weight:900;color:var(--accent2)">'+right+' / '+items.length+'</div><div class="hint" style="margin-top:6px">得分率 '+Math.round(right/items.length*100)+'% · 错词已进入遗忘曲线复习</div><button class="btn" style="margin-top:14px" onclick="document.getElementById(\'qSetup\').style.display=\'\';document.getElementById(\'qBody\').style.display=\'none\'">再来一轮</button></div>';
+          }
+        }, 1100);
+      };
+    });
+  }
+  draw();
+};
+
+updSrsBadge();
+applyLang();
+})();
 </script>
-<script src="site-auth.js?v=2"></script>
 </body>
 </html>

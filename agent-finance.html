@@ -2,383 +2,960 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>金融知识测评 · Agent 版</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>金融知识水平测评卷 · 在线答题</title>
 <style>
-:root{--bg:#090d15;--card:#111827;--card2:#1a2235;--text:#e5e7eb;--text2:#9ca3af;--text3:#6b7280;--border:#1f2937;--accent:#10b981;--accent2:#34d399;--danger:#f87171;--warn:#fbbf24;--radius:16px}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(16,185,129,.06),transparent 70%)}
-.container{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:24px 20px 60px}
-.topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
-.back{display:inline-flex;align-items:center;gap:6px;color:var(--text2);text-decoration:none;font-size:13px;padding:6px 12px;border:1px solid var(--border);border-radius:10px;background:var(--card)}
-.back:hover{color:var(--accent2);border-color:var(--accent)}
-h1{font-size:22px;font-weight:800;letter-spacing:-.3px}
-h1 .grad{background:linear-gradient(135deg,#e5e7eb 20%,var(--accent2) 80%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,rgba(16,185,129,.18),rgba(52,211,153,.08));color:var(--accent2);border:1px solid rgba(16,185,129,.35)}
-.sub{color:var(--text2);font-size:12px;margin-top:6px}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
-.tab{padding:8px 16px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
-.tab:hover{border-color:var(--accent)}
-.tab.on{background:rgba(16,185,129,.12);color:var(--accent2);border-color:var(--accent)}
-.panel{display:none;animation:fadeIn .35s ease-out}
-.panel.on{display:block}
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px}
-.card h3{font-size:15px;margin-bottom:10px}
-.hint{font-size:12px;color:var(--text3);line-height:1.7}
-.chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
-.chip{padding:5px 12px;border-radius:999px;border:1px solid var(--border);background:var(--card2);color:var(--text2);font-size:12px;cursor:pointer}
-.chip.on{background:rgba(16,185,129,.15);color:var(--accent2);border-color:var(--accent)}
-.btn{display:inline-block;padding:9px 18px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--accent),#059669);color:#fff;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
-.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(16,185,129,.25)}
-.btn.ghost{background:var(--card2);color:var(--text2);border:1px solid var(--border)}
-.btn.danger{background:var(--card2);color:var(--danger);border:1px solid rgba(248,113,113,.4)}
-.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
-.q{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:12px}
-.q .meta{font-size:11px;color:var(--text3);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-.q .meta .cat{color:var(--accent2)}
-.q .stem{font-size:14px;font-weight:600;line-height:1.6;margin-bottom:12px}
-.opt{display:block;padding:10px 14px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;font-size:13px;color:var(--text2);cursor:pointer;transition:all .15s;line-height:1.5}
-.opt:hover{border-color:var(--accent)}
-.opt.sel{border-color:var(--accent);background:rgba(16,185,129,.1);color:var(--text)}
-.opt.right{border-color:var(--accent);background:rgba(16,185,129,.12);color:var(--accent2)}
-.opt.wrong{border-color:var(--danger);background:rgba(248,113,113,.08);color:var(--danger)}
-.exp{display:none;margin-top:10px;padding:12px 14px;border-radius:10px;background:var(--card2);border-left:3px solid var(--accent);font-size:12px;color:var(--text2);line-height:1.7}
-.exp b{color:var(--accent2)}
-.exp.show{display:block}
-.tag2{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;background:rgba(16,185,129,.1);color:var(--accent2)}
-.kgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
-.kcard{perspective:1000px;cursor:pointer;height:180px}
-.kin{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .5s}
-.kcard.flip .kin{transform:rotateY(180deg)}
-.kface{position:absolute;inset:0;backface-visibility:hidden;border:1px solid var(--border);border-radius:var(--radius);padding:18px;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.kface .kt{font-size:16px;font-weight:800;margin-bottom:8px}
-.kface .ks{font-size:11px;color:var(--text3)}
-.kback{transform:rotateY(180deg);background:var(--card2);border-color:var(--accent);align-items:stretch;justify-content:flex-start;text-align:left;overflow:auto}
-.kback .kt{font-size:14px;color:var(--accent2)}
-.kback .kd{font-size:12px;color:var(--text2);line-height:1.7;font-weight:400}
-.scorebox{text-align:center;padding:28px;border:1px solid var(--accent);border-radius:var(--radius);background:rgba(16,185,129,.06);margin-bottom:18px}
-.scorebox .big{font-size:42px;font-weight:900;color:var(--accent2)}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--border)}
-th{color:var(--text3);font-size:11px}
-td{color:var(--text2)}
-.flexbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.empty{text-align:center;color:var(--text3);font-size:13px;padding:30px 0}
-.note{font-size:11px;color:var(--text3);margin-top:14px;text-align:center;line-height:1.8}
-@media print{body{background:#fff;color:#111}.container{max-width:none}.tabs,.topbar,.noprint,.note{display:none!important}.q{border:1px solid #ccc;background:#fff;color:#111;page-break-inside:avoid}.q .stem{color:#111}.opt{color:#333;border-color:#ccc}.opt.right{border-color:#059669;color:#047857;background:#ecfdf5}.exp{display:block!important;background:#f9fafb;border-left-color:#059669;color:#333}.panel{display:block!important}.tag2{background:#ecfdf5;color:#047857}}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+:root{
+  --navy:#1a3c6e; --navy2:#254b83; --gold:#c9a24b; --bg:#f2f5fa; --card:#fff;
+  --ink:#1c2430; --sub:#5b6572; --line:#e3e8f0;
+  --ok:#16a34a; --okbg:#eaf7ef; --no:#dc2626; --nobg:#fdeeee; --warn:#d97706;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+button{font-family:inherit;cursor:pointer;border:none;background:none;font-size:inherit}
+.hide{display:none!important}
+
+/* ===== 封面 ===== */
+.intro{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.intro-card{background:var(--card);border-radius:18px;box-shadow:0 12px 40px rgba(26,60,110,.14);max-width:640px;width:100%;padding:44px 46px;border-top:6px solid var(--navy)}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.brand .seal{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700}
+.intro h1{font-size:26px;letter-spacing:.5px}
+.intro .sub{color:var(--sub);margin:4px 0 22px;font-size:14px}
+.rules{background:#f6f8fc;border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:22px}
+.rules h3{font-size:14px;color:var(--navy);margin-bottom:10px}
+.rules li{list-style:none;font-size:14px;color:var(--ink);padding:3px 0;display:flex;gap:8px}
+.rules li b{color:var(--navy);font-weight:600;white-space:nowrap}
+.name-row{display:flex;gap:10px;align-items:center;margin-bottom:20px}
+.name-row input{flex:1;border:1.5px solid var(--line);border-radius:10px;padding:10px 14px;font-size:15px;outline:none}
+.name-row input:focus{border-color:var(--navy)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;font-weight:600;transition:.15s;padding:12px 26px;font-size:16px}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:hover{background:var(--navy2)}
+.btn-ghost{border:1.5px solid var(--line);color:var(--ink);background:#fff}
+.btn-ghost:hover{border-color:var(--navy);color:var(--navy)}
+.btn-gold{background:var(--gold);color:#fff}
+.btn-gold:hover{filter:brightness(1.06)}
+.btn-danger{background:var(--no);color:#fff}
+.intro-actions{display:flex;gap:12px;flex-wrap:wrap}
+
+/* ===== 答题顶栏 ===== */
+.topbar{position:sticky;top:0;z-index:50;background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;box-shadow:0 2px 14px rgba(26,60,110,.25)}
+.topbar .in{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar .t{font-size:17px;font-weight:700;letter-spacing:.5px}
+.topbar .meta{font-size:12.5px;opacity:.85}
+.topbar .spacer{flex:1}
+.timer{font-variant-numeric:tabular-nums;background:rgba(255,255,255,.14);border-radius:10px;padding:6px 14px;font-size:17px;font-weight:700;letter-spacing:1px}
+.timer.warn{background:#b91c1c;animation:pulse 1s infinite}
+.timer.free{background:rgba(255,255,255,.14)}
+@keyframes pulse{50%{opacity:.55}}
+.navtoggle{display:none;border:1px solid rgba(255,255,255,.4);border-radius:8px;padding:6px 12px;color:#fff;font-size:13px}
+
+/* ===== 主体布局 ===== */
+.layout{max-width:1180px;margin:0 auto;padding:22px 20px 90px;display:grid;grid-template-columns:264px 1fr;gap:22px;align-items:start}
+.navcol{position:sticky;top:64px}
+.navcard{background:var(--card);border-radius:14px;box-shadow:0 3px 14px rgba(26,60,110,.08);padding:16px}
+.navcard h4{font-size:13px;color:var(--sub);font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.navsec{margin-bottom:14px}
+.navgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.nv{height:34px;border-radius:8px;border:1.5px solid var(--line);background:#fff;font-size:13px;font-weight:600;color:var(--sub);display:flex;align-items:center;justify-content:center;position:relative}
+.nv.done{background:var(--navy);border-color:var(--navy);color:#fff}
+.nv.mark::after{content:"";position:absolute;top:2px;right:2px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.nv.mark.done::after{background:#ffe9b8}
+.legend{display:flex;gap:12px;font-size:11.5px;color:var(--sub);padding-top:4px;border-top:1px dashed var(--line);margin-top:2px;flex-wrap:wrap}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.legend .l1{background:var(--navy)}
+.legend .l2{background:#fff;border:1.5px solid var(--line)}
+.legend .l3{background:var(--gold)}
+
+/* ===== 题目 ===== */
+.qsec{margin-bottom:10px}
+.sec-head{background:var(--navy);color:#fff;border-radius:12px 12px 0 0;padding:11px 18px;font-size:15px;font-weight:600;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.sec-head .sc{font-size:12.5px;opacity:.85;font-weight:400}
+.qitem{background:var(--card);border:1px solid var(--line);border-top:none;padding:20px 22px 18px}
+.qitem:last-child{border-radius:0 0 12px 12px;border-bottom:1px solid var(--line)}
+.q-head{display:flex;gap:12px;margin-bottom:12px}
+.q-no{flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:#eef2f9;color:var(--navy);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
+.q-stem{font-size:15.5px;font-weight:600}
+.q-tools{display:flex;gap:8px;margin-left:auto;align-items:flex-start}
+.markbtn{border:1.5px solid var(--line);border-radius:8px;padding:3px 10px;font-size:12px;color:var(--sub)}
+.markbtn.on{background:var(--gold);border-color:var(--gold);color:#fff}
+.opts{display:grid;gap:9px;padding-left:42px}
+.opt{display:flex;gap:11px;align-items:flex-start;border:1.5px solid var(--line);border-radius:11px;padding:11px 14px;cursor:pointer;transition:.13s;background:#fff;font-size:14.5px}
+.opt:hover{border-color:#aebdd6;background:#fafcff}
+.opt .dot{flex:0 0 auto;width:20px;height:20px;border-radius:50%;border:2px solid #b9c4d4;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:transparent;margin-top:2px}
+.opt.m .dot{border-radius:5px}
+.opt.sel{border-color:var(--navy);background:#f3f7ff}
+.opt.sel .dot{background:var(--navy);border-color:var(--navy);color:#fff}
+.judge-row{display:flex;gap:12px;padding-left:42px}
+.jbtn{flex:1;max-width:200px;border:2px solid var(--line);border-radius:12px;padding:12px;font-size:15px;font-weight:600;color:var(--sub);background:#fff;transition:.13s}
+.jbtn:hover{border-color:#aebdd6}
+.jbtn.sel{border-color:var(--navy);background:var(--navy);color:#fff}
+.qtag{display:inline-block;font-size:11px;color:var(--sub);background:#f1f4f9;border-radius:6px;padding:2px 8px;margin:10px 0 0 42px}
+
+/* ===== 底部条 ===== */
+.bottombar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:#fff;border-top:1px solid var(--line);box-shadow:0 -4px 18px rgba(26,60,110,.08)}
+.bottombar .in{max-width:1180px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:14px}
+.prog{font-size:14px;color:var(--sub)}
+.prog b{color:var(--navy);font-size:16px}
+.bottombar .spacer{flex:1}
+
+/* ===== 成绩页 ===== */
+.result-wrap{max-width:980px;margin:0 auto;padding:26px 20px 60px}
+.scorecard{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:18px;padding:34px 38px;box-shadow:0 12px 34px rgba(26,60,110,.28)}
+.score-top{display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+.score-num{font-size:52px;font-weight:800;line-height:1}
+.score-num small{font-size:18px;font-weight:400;opacity:.8}
+.grade{background:rgba(255,255,255,.16);border-radius:12px;padding:10px 18px;font-size:15px;font-weight:600}
+.score-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:24px}
+.sc-item{background:rgba(255,255,255,.12);border-radius:12px;padding:12px 16px}
+.sc-item .k{font-size:12px;opacity:.85}
+.sc-item .v{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}
+.res-actions{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:20px;padding:7px 18px;font-size:13.5px;color:var(--sub)}
+.chip.on{border-color:var(--navy);background:var(--navy);color:#fff;font-weight:600}
+/* 结果题目卡 */
+.rq{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+.rq.ok{border-left:5px solid var(--ok)}
+.rq.no{border-left:5px solid var(--no)}
+.rq-head{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.badge{flex:0 0 auto;font-size:12px;font-weight:700;border-radius:7px;padding:2px 10px;margin-top:3px}
+.badge.ok{background:var(--okbg);color:var(--ok)}
+.badge.no{background:var(--nobg);color:var(--no)}
+.rq .stem{font-size:15px;font-weight:600;flex:1;min-width:220px}
+.rq .scoreline{font-size:12.5px;color:var(--sub);margin:10px 0 4px 42px}
+.rq .scoreline b{color:var(--navy)}
+.ropts{display:grid;gap:8px;padding-left:42px;margin-top:6px}
+.ropt{display:flex;gap:10px;border-radius:10px;border:1.5px solid var(--line);padding:9px 13px;font-size:14px;background:#fff}
+.ropt .r{flex:0 0 auto;width:20px;height:20px;border-radius:50%;border:2px solid #c3ccd9;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:transparent;margin-top:2px}
+.ropt.m .r{border-radius:5px}
+.ropt.hit{background:var(--okbg);border-color:var(--ok)} .ropt.hit .r{background:var(--ok);border-color:var(--ok);color:#fff}
+.ropt.miss{background:#fdf6e3;border-color:var(--warn);border-style:dashed} .ropt.miss .r{border-color:var(--warn);color:var(--warn)}
+.ropt.extra{background:var(--nobg);border-color:var(--no)} .ropt.extra .r{background:var(--no);border-color:var(--no);color:#fff}
+.ansline{font-size:13.5px;margin:12px 0 0 42px;color:var(--sub)}
+.ansline b{color:var(--navy)}
+.rjudge{display:flex;gap:10px;margin:8px 0 0 42px}
+.rjudge span{border-radius:9px;padding:5px 16px;font-size:14px;font-weight:600;border:1.5px solid var(--line)}
+.rjudge .ok{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.rjudge .no{background:var(--nobg);border-color:var(--no);color:var(--no)}
+.analysis{margin:12px 0 0 42px;background:#f6f8fc;border-radius:12px;padding:14px 16px;font-size:14px;color:var(--ink)}
+.analysis .lab{color:var(--navy);font-weight:700;margin-right:6px}
+.kpbox{margin:10px 0 0 42px;border:1px dashed #c8d4e8;border-radius:12px;padding:0;overflow:hidden}
+.kp-head{width:100%;display:flex;align-items:center;gap:8px;padding:11px 15px;font-size:13.5px;color:var(--navy);font-weight:600;background:#f6f8fc}
+.kp-head .arr{margin-left:auto;transition:.2s}
+.kp-head.on .arr{transform:rotate(90deg)}
+.kp-body{padding:4px 16px 14px;font-size:13.5px;color:var(--sub);display:none}
+.kp-head.on + .kp-body{display:block}
+
+/* 弹窗 */
+.modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:#fff;border-radius:16px;max-width:420px;width:100%;padding:26px 28px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.modal h3{font-size:17px;margin-bottom:8px}
+.modal p{font-size:14px;color:var(--sub);margin-bottom:20px}
+.modal .row{display:flex;gap:10px;justify-content:flex-end}
+.toast{position:fixed;left:50%;top:76px;transform:translateX(-50%);background:rgba(28,36,48,.92);color:#fff;border-radius:10px;padding:9px 20px;font-size:14px;z-index:120;opacity:0;pointer-events:none;transition:.25s}
+.toast.show{opacity:1;top:86px}
+
+/* ===== 响应式 ===== */
+@media (max-width:920px){
+  .layout{grid-template-columns:1fr;padding:14px 12px 90px}
+  .navcol{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,.35);z-index:90;display:none;padding:0}
+  .navcol.open{display:block}
+  .navcard{position:sticky;top:60px;margin:60px 12px 0;max-height:calc(100vh - 90px);overflow:auto}
+  .navtoggle{display:inline-block}
+  .opts,.ropts{padding-left:0}
+  .qtag,.analysis,.ansline,.rjudge,.scoreline{margin-left:0}
+  .rjudge{margin-left:0}
+  .kpbox{margin-left:0}
+  .intro-card{padding:30px 24px}
+}
+@media print{
+  .topbar,.bottombar,.res-actions,.navcol,.q-tools,.toast,.modal-mask{display:none!important}
+  body{background:#fff}
+  .rq{break-inside:avoid;box-shadow:none}
+  .scorecard{background:#fff;color:#000;border:2px solid #000;box-shadow:none}
+  .sc-item{background:#f2f2f2;color:#000}
+  .kp-body{display:block!important}
+}
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="topbar">
-    <a class="back" href="index.html">← 首页</a>
-    <h1><span class="grad">💰 金融知识测评</span></h1>
-    <span class="badge">🤖 Agent 版</span>
-  </div>
-  <p class="sub">题库中心 · 在线测评 · 学生卷 / 教师卷 · 知识点卡片 · 错题本 —— 数据均存本地浏览器，不上传</p>
 
-  <div class="tabs">
-    <button class="tab on" data-p="bank">📚 题库中心</button>
-    <button class="tab" data-p="test">✍️ 在线测评</button>
-    <button class="tab" data-p="cards">🃏 知识点卡片</button>
-    <button class="tab" data-p="wrong">❌ 错题本</button>
-    <button class="tab" data-p="hist">📊 测评历史</button>
-  </div>
-
-  <!-- 题库中心 -->
-  <div class="panel on" id="p-bank">
-    <div class="card">
-      <h3>分类筛选</h3>
-      <div class="chips" id="bankChips"></div>
-      <div class="hint">点击题目可展开答案与解析。题库共 <b id="bankTotal">0</b> 题。</div>
+<!-- 封面 -->
+<div class="intro" id="intro">
+  <div class="intro-card">
+    <div class="brand"><div class="seal">测</div>
+      <div><h1 id="introTitle">金融知识水平测评卷</h1><div class="sub">在线答题 · 交卷自动判分 · 逐题解析</div></div>
     </div>
-    <div id="bankList"></div>
-  </div>
-
-  <!-- 在线测评 -->
-  <div class="panel" id="p-test">
-    <div id="setup">
-      <div class="card">
-        <h3>📋 组卷设置</h3>
-        <div class="hint" style="margin-bottom:10px">卷型：学生卷需逐题作答后统一评分；教师卷直接展示全部答案与解析，适合打印。</div>
-        <div class="chips" id="modeChips">
-          <span class="chip on" data-v="student">🎓 学生卷</span>
-          <span class="chip" data-v="teacher">🧑‍🏫 教师卷</span>
-        </div>
-        <div class="hint" style="margin:6px 0 4px">抽题数量</div>
-        <div class="chips" id="numChips">
-          <span class="chip on" data-v="10">10 题</span>
-          <span class="chip" data-v="20">20 题</span>
-          <span class="chip" data-v="42">全部</span>
-        </div>
-        <div class="hint" style="margin:6px 0 4px">分类范围（不选=全部）</div>
-        <div class="chips" id="catChips"></div>
-        <div style="margin-top:14px"><button class="btn" onclick="startTest()">开始测评 →</button></div>
-      </div>
+    <div class="rules">
+      <h3>考试须知</h3>
+      <ul id="ruleList">
+        <li><b>题量题型：</b>共 45 题 —— 单选 25 题（每题 2 分）、多选 10 题（每题 3 分）、判断 10 题（每题 2 分）</li>
+        <li><b>卷面满分：</b>100 分，限时 60 分钟，倒计时结束自动交卷</li>
+        <li><b>评分规则：</b>多选题全部选对得分，多选、漏选、错选均不得分</li>
+        <li><b>作答保存：</b>作答进度自动保存在本机浏览器，关闭页面后可继续；交卷后可查看成绩与逐题解析，并支持错题重练</li>
+      </ul>
     </div>
-    <div id="paper" style="display:none">
-      <div class="card flexbar noprint">
-        <span id="paperInfo" class="hint"></span>
-        <span id="paperActions"></span>
-      </div>
-      <div id="qList"></div>
+    <div class="name-row"><span style="font-size:14px;color:var(--sub);white-space:nowrap">姓名（选填）</span><input id="nameInput" maxlength="20" placeholder="用于打印成绩单署名，可留空"></div>
+    <div class="intro-actions" id="introActions">
+      <button class="btn btn-primary" id="btnStart">开始测评</button>
     </div>
   </div>
-
-  <!-- 知识点卡片 -->
-  <div class="panel" id="p-cards">
-    <div class="card"><h3>🃏 核心概念 · 点击卡片翻面</h3><div class="hint">点击卡片查看解释，再点翻回。</div></div>
-    <div class="kgrid" id="kGrid"></div>
-  </div>
-
-  <!-- 错题本 -->
-  <div class="panel" id="p-wrong">
-    <div class="card flexbar">
-      <div><h3>❌ 我的错题</h3><div class="hint" id="wrongInfo">学生卷答错的题会自动收进来。</div></div>
-      <span id="wrongActions"></span>
-    </div>
-    <div id="wrongList"></div>
-  </div>
-
-  <!-- 测评历史 -->
-  <div class="panel" id="p-hist">
-    <div class="card flexbar">
-      <div><h3>📊 测评记录</h3><div class="hint">本机保存最近 20 次成绩。</div></div>
-      <span id="histActions"></span>
-    </div>
-    <div class="card"><table id="histTable"></table></div>
-  </div>
-
-  <p class="note">🤖 本模块由 TeleAgent 智能体按跨设备记忆记录重建部署（Agent 版）· 依据 Windows 端已交付的金融知识测评包功能范围：题库中心 / 在线测评 / 学生卷·教师卷<br>All data stored locally in your browser · No tracking · No uploads</p>
 </div>
 
+<!-- 答题 -->
+<div id="exam" class="hide">
+  <div class="topbar">
+    <div class="in">
+      <div>
+        <div class="t" id="examTitle">金融知识水平测评卷</div>
+        <div class="meta" id="examMeta">满分 100 分 · 45 题 · 限时 60 分钟</div>
+      </div>
+      <div class="spacer"></div>
+      <button class="navtoggle" id="navToggle">答题卡</button>
+      <div class="timer" id="timer">--:--</div>
+    </div>
+  </div>
+  <div class="layout">
+    <div class="navcol" id="navcol">
+      <div class="navcard" id="navcard"></div>
+    </div>
+    <div class="main" id="qwrap"></div>
+  </div>
+  <div class="bottombar">
+    <div class="in">
+      <div class="prog">已答 <b id="progN">0</b> / <span id="progT">45</span> 题</div>
+      <div class="spacer"></div>
+      <button class="btn btn-ghost" id="btnGiveup">放弃本次作答</button>
+      <button class="btn btn-primary" id="btnSubmit">交 卷</button>
+    </div>
+  </div>
+</div>
+
+<!-- 成绩 -->
+<div id="result" class="result-wrap hide"></div>
+
+<div class="modal-mask hide" id="modalMask">
+  <div class="modal">
+    <h3 id="modalTitle">确认交卷？</h3>
+    <p id="modalText"></p>
+    <div class="row">
+      <button class="btn btn-ghost" id="modalNo">继续作答</button>
+      <button class="btn btn-primary" id="modalYes">确认交卷</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
 <script>
-/* ========== 题库 ========== */
-var CATS=["银行与货币","证券与基金","保险","宏观经济","个人理财","风险与合规"];
-var QB=[
-{c:0,q:"我国的中央银行是哪家机构？",o:["中国银行","中国人民银行","中国建设银行","财政部"],a:1,e:"中国人民银行是国务院组成部门，负责制定和执行货币政策、维护金融稳定；中国银行等是商业银行。"},
-{c:0,q:"根据我国《存款保险条例》，同一存款人在同一家银行的本息偿付上限为：",o:["10 万元","25 万元","50 万元","100 万元"],a:2,e:"存款保险实行限额偿付，最高偿付限额为 50 万元人民币，覆盖绝大多数存款人的全部存款。"},
-{c:0,q:"LPR 的中文全称是：",o:["贷款市场报价利率","长期基准利率","流动性调节比例","最低准备金率"],a:0,e:"LPR（Loan Prime Rate）即贷款市场报价利率，由各报价行在政策利率基础上加点形成，是贷款定价的参考基准。"},
-{c:0,q:"央行下调政策利率（俗称“降息”）通常的直接效果是：",o:["提高企业贷款成本","降低社会融资成本、刺激投资与消费","提高居民存款收益","减少货币供给"],a:1,e:"降息使银行资金成本下降，带动贷款利率下行，从而鼓励投资和消费。"},
-{c:0,q:"M0、M1、M2 中流动性最强的是：",o:["M2","M1","M0","三者相同"],a:2,e:"M0 是流通中的现金，流动性最强；M1=M0+单位活期存款；M2 再加上定期存款等，流动性依次减弱。"},
-{c:0,q:"商业银行最主要的负债业务是：",o:["吸收存款","发放贷款","代理销售基金","票据贴现"],a:0,e:"银行主要靠吸收存款（负债）获得资金，再通过放贷（资产）获取利差收入。"},
-{c:0,q:"“洗钱”行为的本质是：",o:["把旧钞换成新钞","将非法所得伪装成合法收入","银行间资金清算","外汇兑换业务"],a:1,e:"洗钱指通过金融交易掩盖犯罪所得的来源和性质，使其“合法化”，是严重刑事犯罪。"},
-{c:1,q:"我国 A 股股票交易实行的交收制度是：",o:["T+0","T+1","T+2","T+3"],a:1,e:"A 股目前实行 T+1：当天买入的股票次一交易日才能卖出，资金交收也为 T+1。"},
-{c:1,q:"市盈率（PE）的计算公式是：",o:["股价 ÷ 每股收益","股价 ÷ 每股净资产","股价 × 总股本","净利润 ÷ 营业收入"],a:0,e:"PE=股价÷每股收益（EPS），可粗略理解为按当前盈利水平“多少年回本”。"},
-{c:1,q:"沪深 300 指数反映的是：",o:["创业板股票整体表现","沪深两市规模最大的 300 只股票整体表现","全部 A 股平均股价","债券市场收益水平"],a:1,e:"沪深 300 由沪深两市中规模大、流动性好的 300 只股票构成，是衡量大盘走势的核心宽基指数。"},
-{c:1,q:"ETF 基金的主要特点不包括：",o:["通常跟踪某一指数","可在场内像股票一样交易","费率一般较低","基金经理主动重仓个股博取超额收益"],a:3,e:"ETF 属于被动指数产品，目标是紧跟指数；主动选股博超额收益的是主动型基金。"},
-{c:1,q:"“打新股”指的是：",o:["申购首次公开发行的新股票","买入当天上市的旧股票","申购新发行的国债","买入新股开板后的涨停板"],a:0,e:"打新即参与 IPO 申购；A 股历史上新股上市初期涨幅较好，但注册制后破发风险同样存在。"},
-{c:1,q:"市场利率上升时，存量固定利率债券的价格通常：",o:["上涨","下跌","不变","随机波动"],a:1,e:"债券价格与市场利率大体呈反向关系：新债利率更高，旧的低息债券吸引力下降、价格下跌。"},
-{c:1,q:"基金定投的核心优势是：",o:["保证只赚不赔","平摊买入成本、弱化择时","收益一定高于一次性买入","免收任何手续费"],a:1,e:"定期定额买入可在高位少买、低位多买，摊薄成本，降低一次性买在高点的风险；但不保证盈利。"},
-{c:2,q:"保险合同中“投保人”是指：",o:["与保险人订立合同并缴纳保费的人","领取保险金的人","保险公司本身","被保险人的继承人"],a:0,e:"投保人负责订立合同和缴费；被保险人是受保障的人；受益人是领取保险金的人，三者可以不同。"},
-{c:2,q:"商业费用型医疗险的赔付一般遵循：",o:["按保额一次性给付","实报实销、不超过实际花费","不设免赔额","凭诊断书即赔"],a:1,e:"费用报销型医疗险适用损失补偿原则，赔付以实际合理费用为限；重疾险才是确诊给付型。"},
-{c:2,q:"定期寿险与终身寿险的最主要区别是：",o:["缴费方式不同","保障期限不同","保险标的不同","投保年龄不同"],a:1,e:"定期寿险只保障约定年限（如至 60 岁），杠杆高、保费低；终身寿险保障至身故，兼具储蓄功能、保费更高。"},
-{c:2,q:"保险条款中的“免赔额”是指：",o:["保险公司赔付的下限","开始赔付前需自行承担的部分","保险费之外的附加费","必须购买的基础保额"],a:1,e:"免赔额以内的损失由被保险人自担，超出部分才按比例赔付，可降低小额理赔成本、压低保费。"},
-{c:2,q:"重疾险的典型给付方式是：",o:["实报实销","确诊符合约定疾病即按保额一次性给付","按月发放养老金","身故后才能领取"],a:1,e:"重疾险是给付型：达到合同约定的疾病定义即一次性赔付保额，资金用途不限。"},
-{c:2,q:"保险“犹豫期”内退保，投保人一般：",o:["损失全部保费","仅承担极小成本（如工本费）","被列入黑名单","需赔付违约金"],a:1,e:"长期险一般有 10—15 天犹豫期，期内退保基本无损失；犹豫期后退保只能拿回现金价值，损失较大。"},
-{c:2,q:"保险“杠杆”通俗指：",o:["保费撬动保额的倍数","保险公司的股价","保单贷款利率","分红收益率"],a:0,e:"如几百元保费换来百万元保障，就是保险杠杆的价值，即以小成本转移大风险。"},
-{c:3,q:"CPI 指数主要反映：",o:["居民消费价格的变动水平","房价走势","股市整体估值","出口景气度"],a:0,e:"CPI（居民消费价格指数）衡量一篮子消费品与服务的价格变化，是观察通货膨胀最常用的指标。"},
-{c:3,q:"通胀率明显上升时，持有固定利率债券的实际收益会：",o:["提高","被侵蚀下降","不受影响","翻倍"],a:1,e:"实际收益≈名义利率−通胀率；通胀走高时固定的票面利息购买力缩水，实际收益下降。"},
-{c:3,q:"GDP 的含义是：",o:["一国一定时期内生产的全部最终产品和服务的市场价值总和","政府财政收入总量","全部交易额之和","居民存款总额"],a:0,e:"GDP 只统计最终产品（避免中间品重复计算），是衡量经济总量最核心的指标。"},
-{c:3,q:"以下哪一项不属于货币政策工具？",o:["存款准备金率","公开市场操作","再贴现率","调整税率"],a:3,e:"税率属于财政政策（政府收支）；前三个是央行货币政策三大传统工具。"},
-{c:3,q:"“人民币破 7”通常指：",o:["美元兑人民币汇率升破 7，人民币对美元贬值","人民币升值超过 7%","7 天期逆回购重启","房价跌破 7 折"],a:0,e:"指 1 美元兑换人民币超过 7 元，即人民币对美元贬值；反之“升破/回落”表述为升值。"},
-{c:3,q:"“降准”的意思是：",o:["降低存款准备金率","降低贷款利率","降低存款利率上限","降低外汇准备金"],a:0,e:"降准即下调金融机构存款准备金率，银行可贷资金增加，属于释放流动性的宽松操作。"},
-{c:3,q:"“滞胀”是指：",o:["经济增长停滞与通货膨胀并存","经济高速增长","物价持续下跌","贸易顺差扩大"],a:0,e:"滞胀=停（增长停滞、失业上升）+胀（物价上涨），政策上顾此失彼、最难治理。"},
-{c:4,q:"“复利”是指：",o:["利息再计入本金继续生息","单利的别称","只对本金计息","银行同业拆借利率"],a:0,e:"复利即“利滚利”，长期收益远超单利，爱因斯坦称其为“世界第八大奇迹”。"},
-{c:4,q:"按“72 法则”，年化收益 6% 时本金翻倍约需：",o:["6 年","12 年","18 年","24 年"],a:1,e:"72÷6=12 年。该法则可快速估算：翻倍年数≈72÷年化收益率（%）。"},
-{c:4,q:"一般建议应急备用金预留：",o:["1 个月生活费","3—6 个月生活费","1—2 年生活费","无需预留"],a:1,e:"3—6 个月开支可覆盖失业、疾病等突发状况，应放在随取随用的活期或货币基金中。"},
-{c:4,q:"“资产配置”的核心思想是：",o:["全部资金买入最热门资产","在相关性较低的多类资产间分散配置","只持有现金","满仓单一股票"],a:1,e:"研究表明大类资产间的配置比例是长期收益与风险的主要来源，分散可平滑波动。"},
-{c:4,q:"信用卡只按“最低还款额”还款的后果是：",o:["剩余部分免息","剩余部分按日计收循环利息","自动分期","信用分提高"],a:1,e:"最低还款可避免逾期记录，但未还部分自记账日起按约万分之五/日计息，成本很高。"},
-{c:4,q:"等额本息与等额本金房贷的区别是：",o:["前者每月还款额固定，后者逐月递减","前者利率更低","后者总利息更高","没有区别"],a:0,e:"等额本息月供恒定、前期利息占比高；等额本金月供逐月递减、总利息较少但前期压力大。"},
-{c:4,q:"“收益与风险相匹配”原则意味着：",o:["存在低风险高收益的常规渠道","高收益必然伴随高风险","风险可完全消除","收益与风险无关"],a:1,e:"宣称“稳赚不赔还高收益”的基本可判定为骗局；正常市场中高收益需要承担高风险作对价。"},
-{c:5,q:"非法集资最典型的特征是：",o:["持牌经营","承诺高额回报、向社会公众吸收资金","资金托管于银行","信息披露充分"],a:1,e:"“高息诱惑+公开宣传+不特定公众+无牌经营”是非法集资画像；参与损失自行承担。"},
-{c:5,q:"P2P 网贷平台大面积暴雷的核心教训是：",o:["网贷技术不成熟","无牌照高息集资不受法律保护","投资者太少","利率太低"],a:1,e:"P2P 缺乏资本约束与托管机制，形成资金池和庞氏链条；2020 年底 P2P 机构已全部清零。"},
-{c:5,q:"投资者风险承受能力评估（KYC/适当性管理）的目的是：",o:["把合适的产品卖给合适的投资者","增加销售环节","限制低收入人群投资","为监管罚款提供依据"],a:0,e:"适当性管理要求机构了解客户（风险承受力）与产品（风险等级），实现匹配销售。"},
-{c:5,q:"看到“保本保收益”的理财产品宣传，正确判断是：",o:["果断全仓买入","资管新规下正规产品不得承诺保本保收益，多为违规或诈骗","收益适中即可信","银行大厅发的都可信"],a:1,e:"资管新规打破刚性兑付，任何“保本保收益”的非存款类宣传都涉嫌违规甚至诈骗。"},
-{c:5,q:"电话/群聊“荐股带单、收费分成”常见性质是：",o:["合法投资咨询","非法证券投资咨询/诈骗","券商官方服务","基金销售渠道"],a:1,e:"无资质荐股收费属非法证券活动；先给“涨停票”骗信任，再诱导加大投入甚至入金对赌盘。"},
-{c:5,q:"个人征信不良记录的最主要影响是：",o:["无法乘坐高铁","影响贷款、信用卡审批及利率","限制旅游出行","电话被停机"],a:1,e:"征信不良直接抬高融资成本甚至导致拒贷；普通逾期不涉及出行限制（失信被执行人另当别论）。"},
-{c:5,q:"“不要把鸡蛋放在同一个篮子里”体现的投资原则是：",o:["集中投资","分散投资","追涨杀跌","杠杆投资"],a:1,e:"分散投资通过持有相关性较低的多种资产，降低单一资产暴雷对总财富的冲击。"}
-];
+var EXAM = {"title": "金融知识水平测评卷", "duration": 60, "totalScore": "100", "sections": [{"cn": "一", "title": "单项选择题", "each": "2", "subtotal": "50", "count": 25, "questions": [{"num": 1, "id": "q003", "type": "single", "stem": "我国货币供应量口径中，狭义货币 M1 是指", "options": ["流通中的现金", "M0 加上单位活期存款", "M0 加上单位定期存款和居民储蓄存款", "单位定期存款"], "answer": "B", "analysis": "我国货币供应量分层：M0 为流通中的现金；M1=M0+单位活期存款，即狭义货币；M2=M1+单位定期存款+居民储蓄存款+其他存款，即广义货币。选项A仅是 M0 本身；选项C 是 M2 的口径；选项D只是 M2 的组成部分之一。因此正确答案为B。", "score": 2.0, "chapter": "货币银行与中央银行", "kp": "货币供应量层次 M0/M1/M2", "kpc": "M0=流通中的现金；M1（狭义货币）=M0+单位活期存款，流动性强，反映经济现实购买力；M2（广义货币）=M1+单位定期存款+居民储蓄存款+其他存款，同时反映现实与潜在购买力。M1 增速高于 M2 常被视为资金活化、企业经营活跃的信号；M2 增速常被用来观察流动性松紧和未来通胀压力。"}, {"num": 2, "id": "q006", "type": "single", "stem": "中央银行下调法定存款准备金率后，最直接的影响是", "options": ["商业银行可贷资金增加，市场流动性趋于宽松", "市场流动性收紧", "商业银行必须压缩信贷投放", "居民存款利率必然大幅提高"], "answer": "A", "analysis": "存款准备金率下调后，商业银行缴存央行的法定准备金减少，可贷资金相应增加，货币乘数放大，市场流动性趋于宽松。选项B、C方向相反；降准并不直接调整居民存款挂牌利率，选项D“必然大幅提高”错误。因此正确答案为A。", "score": 2.0, "chapter": "货币银行与中央银行", "kp": "一般性货币政策三大工具", "kpc": "法定存款准备金率、再贴现、公开市场操作，是对货币供应总量进行整体调节的三大一般性工具。存款准备金率是商业银行缴存央行的资金比例，上调收缩信贷、下调释放流动性；再贴现是商业银行将未到期票据向央行贴现融资时适用的利率与额度政策；公开市场操作是央行在市场买卖国债、央票等证券以调节基础货币。此外央行还运用结构性货币政策工具和窗口指导等方式。"}, {"num": 3, "id": "q002", "type": "single", "stem": "下列各项中，不属于中央银行职能的是", "options": ["垄断货币发行，管理人民币流通", "集中保管存款准备金，充当最后贷款人", "经理国库，管理国家外汇储备", "以营利为目的，面向企业和个人经营普通存贷款业务"], "answer": "D", "analysis": "中央银行三大传统职能为“发行的银行”（垄断货币发行）、“银行的银行”（集中保管存款准备金、充当最后贷款人、组织清算）与“政府的银行”（经理国库、管理外汇储备）。中央银行不以营利为目的，不办理企业和个人的普通存贷款业务，这类业务由商业银行经营。选项A、B、C均属央行职能。因此正确答案为D。", "score": 2.0, "chapter": "货币银行与中央银行", "kp": "中央银行的性质与职能", "kpc": "我国的中央银行是中国人民银行，是国务院组成部门，代表国家制定和执行货币政策，不以营利为目的。央行三大传统职能：一是“发行的银行”，垄断人民币发行与流通管理；二是“银行的银行”，集中保管商业银行存款准备金、充当最后贷款人、组织银行间清算；三是“政府的银行”，经理国库、持有和经营国家外汇储备、代表政府参与国际金融活动。央行不办理企业和居民个人的普通存贷款业务。"}, {"num": 4, "id": "q015", "type": "single", "stem": "下列关于财政政策与货币政策的表述，正确的是", "options": ["两者均由中央银行制定并实施", "财政政策由政府通过税收和公共支出实施，货币政策由中央银行通过利率、存款准备金率等工具实施", "财政政策由中央银行通过公开市场操作实施，货币政策由政府通过税收实施", "两者均由财政部门制定并实施"], "answer": "B", "analysis": "财政政策的实施主体是政府（财政部门），工具为税收、公共支出、国债与补贴；货币政策的实施主体是中央银行，工具为利率、存款准备金率、公开市场操作等。选项A、D把两类政策的主体错误归并；选项C将两者主体完全错配。因此正确答案为B。", "score": 2.0, "chapter": "宏观经济指标", "kp": "财政政策与货币政策的区分", "kpc": "财政政策由政府（财政部门）实施，工具包括税收、政府支出、国债与补贴；扩张性财政政策如减税、增加公共投资，可刺激总需求。货币政策由中央银行实施，通过利率、存款准备金率、公开市场操作等调节货币供应量与融资成本。两者常配合使用：“双松”组合刺激经济，“双紧”组合抑制过热。区分关键在于实施主体与工具属性。"}, {"num": 5, "id": "q018", "type": "single", "stem": "某经济体出现物价普遍持续下跌、货币购买力上升的现象，这属于", "options": ["温和通货膨胀", "恶性通货膨胀", "通货紧缩", "经济过热"], "answer": "C", "analysis": "物价总水平持续下跌、货币购买力上升是通货紧缩的典型特征，与通货膨胀正好相反。选项A、B均为物价上涨情形；选项D经济过热通常伴随物价上涨而非下跌。因此正确答案为C。", "score": 2.0, "chapter": "宏观经济指标", "kp": "CPI 与通货膨胀", "kpc": "居民消费价格指数（CPI）衡量居民家庭消费的商品和服务价格水平变化，是观察通货膨胀最常用的指标。通货膨胀指一般物价水平持续、普遍上涨，伴随货币购买力下降、货币对内贬值；其对立面是通货紧缩（物价持续下跌、购买力上升）。温和通胀（通常约2%上下）被视为经济健康运行的表现，恶性通胀则会严重扰乱经济秩序。"}, {"num": 6, "id": "q010", "type": "single", "stem": "PMI 指数高于以下哪个数值时，通常表明制造业经济总体处于扩张区间", "options": ["30", "50", "60", "100"], "answer": "B", "analysis": "PMI 以50%为荣枯分界线：高于50表明制造业总体扩张，低于50表明收缩。选项A、C、D均不是荣枯线标准，60、100只是更高的读数而非分界点。因此正确答案为B。", "score": 2.0, "chapter": "宏观经济指标", "kp": "PMI 与荣枯线", "kpc": "采购经理指数（PMI）通过对企业采购经理的调查编制，是观察制造业/服务业景气度的先行指标。以50%为荣枯分界线：PMI高于50表明行业总体扩张，低于50表明收缩，数值与50的距离代表扩张或收缩力度。PMI按月发布，属于高频指标，常先于GDP反映经济拐点，是判断短期经济走势的重要参考。"}, {"num": 7, "id": "q022", "type": "single", "stem": "市净率（PB）的计算公式是", "options": ["股价÷每股收益", "净利润÷营业收入", "股价÷每股净资产", "总资产÷总负债"], "answer": "C", "analysis": "市净率=股价÷每股净资产，衡量股价相对净资产的倍数，适用于银行、地产等重资产行业。选项A是市盈率公式；选项B是销售利润率相关口径；选项D是资产负债率的倒数形式。因此正确答案为C。", "score": 2.0, "chapter": "股票市场", "kp": "市盈率与市净率", "kpc": "市盈率（PE）=股价÷每股收益，表示按当前盈利水平约多少年收回投资，是最常用的估值指标；市净率（PB）=股价÷每股净资产，适用于银行、地产等重资产行业。PE低通常代表估值相对便宜，但需结合成长性判断；公司亏损时每股收益为负，PE 失去参考意义。股息率=每股分红÷股价，衡量分红回报水平。"}, {"num": 8, "id": "q062", "type": "single", "stem": "某股票股价为10元，每年每股现金分红0.5元，则其股息率为", "options": ["5%", "0.5%", "50%", "2%"], "answer": "A", "analysis": "股息率=每股现金分红÷股价=0.5÷10=5%，衡量按现价买入靠分红获得的年化回报，是高股息策略的核心指标。选项B误将数值直接当作比率；选项C将除法方向倒置；选项D为误算。因此正确答案为A。", "score": 2.0, "chapter": "股票市场", "kp": "分红、股息率与除权除息", "kpc": "上市公司以现金分红或送转股本回报股东。股息率=每股现金分红÷股价，衡量按现价买入每年靠分红获得的回报，是高股息策略的核心指标。分红或送股后，交易所会在除权除息日对股价相应下调（现金分红为除息、送转股为除权），以保证总市值连续——股价下调不等于下跌，投资者总资产不变。"}, {"num": 9, "id": "q029", "type": "single", "stem": "沪深300指数的成分股特点是", "options": ["仅在上海证券交易所上市的300只股票", "全部为小市值股票", "沪深两市中规模大、流动性好的最具代表性的300只股票", "仅为科技类行业股票"], "answer": "C", "analysis": "沪深300指数由沪深两市中规模大、流动性好的最具代表性的300只股票构成，是A股蓝筹核心基准。选项A忽略了深市样本；选项B与成分股特征相反，中小盘对应中证500；选项D成分股覆盖多个行业。因此正确答案为C。", "score": 2.0, "chapter": "股票市场", "kp": "主要股票指数", "kpc": "上证综合指数反映上交所全部股票的整体表现；沪深300指数由沪深两市规模大、流动性好的最具代表性的300只股票构成，是观察A股蓝筹整体走势的核心基准；中证500指数代表中小盘股票；创业板指数反映创业板市场表现。指数是市场整体表现的“晴雨表”，宽基指数基金多以这些指数为跟踪标的。"}, {"num": 10, "id": "q026", "type": "single", "stem": "系统性风险是指", "options": ["仅影响单一行业的经营风险", "可以通过分散投资完全消除的个别公司风险", "仅影响个别公司的财务风险", "由宏观因素引起、影响整个市场、无法通过分散投资消除的风险"], "answer": "D", "analysis": "系统性风险由宏观经济、利率、政策等全局性因素引起，影响整个市场，无法通过分散投资消除。选项A、B、C描述的是非系统性风险，它恰恰可以通过分散投资予以降低。因此正确答案为D。", "score": 2.0, "chapter": "股票市场", "kp": "系统性风险与非系统性风险", "kpc": "系统性风险（市场风险）由宏观经济、利率、汇率、政策等全局性因素引起，影响几乎所有资产，无法通过分散投资消除，典型如市场整体下跌。非系统性风险（特有风险）是单个公司或行业的经营、财务等风险，可通过持有足够数量、相关性较低的资产予以分散降低。即使是充分分散的股票基金、指数基金，仍要承受系统性风险。"}, {"num": 11, "id": "q059", "type": "single", "stem": "投资者向证券公司借入资金买入证券、到期偿还本息的交易行为称为", "options": ["融券交易", "股票质押", "国债回购", "融资交易"], "answer": "D", "analysis": "融资交易指投资者向证券公司借入资金买入证券；融券则是向证券公司借入证券卖出，两者合称融资融券。两融属于杠杆交易，需缴纳保证金并支付利息，收益与亏损都会被放大，触及平仓线还可能被强制平仓。选项A方向相反；选项B是质押借款但非交易所融资交易；选项D国债回购是资金拆借工具。因此正确答案为D。", "score": 2.0, "chapter": "股票市场", "kp": "融资融券与杠杆交易", "kpc": "融资指投资者向证券公司借入资金买入证券，融券指借入证券卖出，合称两融。两融属于杠杆交易：需缴纳保证金、支付利息，收益与亏损同步放大，触及平仓线会被强制平仓。开通有资产与经验门槛，不适合新手重仓参与。"}, {"num": 12, "id": "q027", "type": "single", "stem": "某投资者持有10只不同行业的股票，因市场出现整体性下跌导致全部亏损，该亏损主要属于", "options": ["非系统性风险", "系统性风险", "个股经营风险", "债券信用风险"], "answer": "B", "analysis": "市场整体性下跌使不同行业的股票普遍受损，属于系统性风险，分散持股无法规避；该投资者的非系统性风险已通过持有不同行业股票予以分散。选项A、C若成立，应表现为个别股票下跌而非全市场下跌；选项D信用风险主要指债券违约，与股票市场整体下跌无关。因此正确答案为B。", "score": 2.0, "chapter": "股票市场", "kp": "系统性风险与非系统性风险", "kpc": "系统性风险（市场风险）由宏观经济、利率、汇率、政策等全局性因素引起，影响几乎所有资产，无法通过分散投资消除，典型如市场整体下跌。非系统性风险（特有风险）是单个公司或行业的经营、财务等风险，可通过持有足够数量、相关性较低的资产予以分散降低。即使是充分分散的股票基金、指数基金，仍要承受系统性风险。"}, {"num": 13, "id": "q032", "type": "single", "stem": "债券信用评级中，通常代表偿债能力最强、违约风险最低的级别是", "options": ["CC", "BBB", "AA", "AAA"], "answer": "D", "analysis": "国内信用评级由高到低大致为 AAA、AA、A、BBB、BB、B、CCC、CC、C，AAA 为最高等级，违约风险最低。选项A、B、C的等级均低于 AAA。因此正确答案为D。", "score": 2.0, "chapter": "债券与固定收益", "kp": "信用评级体系", "kpc": "信用评级评估债券发行人按期还本付息的能力与意愿。国内评级由高到低大致为 AAA、AA、A、BBB、BB、B、CCC、CC、C：AAA 为最高等级、违约风险最低；BBB 级及以上通常视为投资级，以下为投机级（高风险）。评级越高，发行人所需支付的利率越低。评级是参考工具而非保证，仍需关注评级调整风险。"}, {"num": 14, "id": "q030", "type": "single", "stem": "国债的发行主体是", "options": ["中央政府", "地方政府", "商业银行", "大型中央企业"], "answer": "A", "analysis": "国债由中央政府（代表国家）发行，以国家信用为基础，违约风险极低。选项B发行的是地方政府债券；选项C、D发行的是金融债、企业债，主体不符。因此正确答案为A。", "score": 2.0, "chapter": "债券与固定收益", "kp": "债券的分类与基本要素", "kpc": "债券是发行人依法定程序发行、约定在一定期限内还本付息的债权凭证，基本要素包括面值、票面利率、期限与发行主体。按发行主体分为国债（中央政府）、地方政府债、金融债（银行等金融机构）、企业债/公司债等。国债以国家信用为基础、违约风险极低，被称为“金边债券”；金融债与企业债合称信用债，需评估发行人违约风险。可转换债券兼具债性与股性，可按约定条件转换为发行公司股票。"}, {"num": 15, "id": "q038", "type": "single", "stem": "某3年期债券面值100元、票面利率3%，若市场利率升至4%并保持不变，投资者按当前市场价格买入并持有到期，其到期收益率与票面利率的关系是", "options": ["高于票面利率", "低于票面利率", "恰好等于票面利率", "可能高于也可能低于票面利率"], "answer": "A", "analysis": "市场利率（4%）高于票面利率（3%）时，该债券只能以低于面值的价格折价成交。投资者折价买入并持有到期，除获得票息外还获得到期按面值兑付的价差补偿，到期收益率因此高于票面利率。选项B对应溢价买入的情形；选项C对应平价买入的情形；选项D忽视了价格与收益率之间的确定关系。因此正确答案为A。", "score": 2.0, "chapter": "债券与固定收益", "kp": "债券价格与市场利率的反向关系", "kpc": "债券价格与市场利率呈反向变动：市场利率上升，存量固定票息债券的相对吸引力下降，价格下跌；市场利率下降，价格上涨。若买入价格低于面值并持有到期，投资者除票息外还获得兑付面值的价差补偿，到期收益率高于票面利率；反之溢价买入则低于票面利率。已持有债券的投资者在加息周期面临资本损失，这就是利率风险。"}, {"num": 16, "id": "q045", "type": "single", "stem": "关于投资中风险与收益的关系，下列说法正确的是", "options": ["预期收益越高，通常伴随的风险越大", "收益高低与风险大小无关", "承担高风险必然获得高收益", "低风险产品一定能带来高收益"], "answer": "A", "analysis": "风险与收益相匹配是投资的基本规律：预期收益越高，通常伴随的风险越大。选项B否定了二者的关联；选项C错误，高风险可能带来高收益也可能亏损，“必然”属于绝对化表述；选项D违背基本规律，“低风险高收益”多为骗局话术。因此正确答案为A。", "score": 2.0, "chapter": "基金与资产配置", "kp": "风险收益匹配原则", "kpc": "风险与收益相匹配是投资的基本规律：预期收益越高，通常伴随的风险越大；声称“低风险高收益”的产品往往暗藏陷阱。风险是亏损的可能性而非确定的损失，高风险也不必然带来高收益。投资者应先评估自身风险承受能力（年龄、收入稳定性、资金期限、心理承受力），再选择风险等级与之匹配的产品。"}, {"num": 17, "id": "q043", "type": "single", "stem": "ETF（交易型开放式指数基金）的主要特点是", "options": ["在交易所挂牌上市，可像股票一样在盘中买卖，并跟踪特定指数", "只能在银行柜台办理申购赎回的非上市基金", "由基金经理主动选股以战胜市场", "承诺保本的结构性存款产品"], "answer": "A", "analysis": "ETF 在交易所挂牌上市，投资者可在交易时段内像买卖股票一样在二级市场交易 ETF 份额，同时其组合跟踪特定指数、被动管理。选项B混淆了 ETF 与场外基金的申赎方式；选项C是主动型基金的做法；选项D与 ETF 的属性不符。因此正确答案为A。", "score": 2.0, "chapter": "基金与资产配置", "kp": "基金的分类与特点", "kpc": "证券投资基金按投资对象分为：货币市场基金（投资短期货币工具，低风险高流动性）、债券基金（主要投资债券，中低风险）、股票基金（主要投资股票，较高风险）、混合基金（股债兼备）；按管理方式分为主动型与被动型（指数基金）。ETF（交易型开放式指数基金）在交易所挂牌，可像股票一样盘中买卖并跟踪特定指数。指数基金采用被动跟踪策略，管理费率通常低于主动管理型基金。"}, {"num": 18, "id": "q042", "type": "single", "stem": "按72法则估算，若年化收益率为6%，资金翻倍大约需要", "options": ["6年", "18年", "24年", "12年"], "answer": "D", "analysis": "72法则：资金翻倍所需年数≈72÷年化收益率=72÷6=12年。选项A、B、C均为对法则的误算或记错。因此正确答案为D。", "score": 2.0, "chapter": "基金与资产配置", "kp": "复利与72法则", "kpc": "复利指每期收益并入本金继续增值，即“利滚利”，收益增长呈加速趋势，时间越长效应越显著。72法则是快速估算工具：用72除以年化收益率，即为资金翻倍所需年数；反之用72除以目标年数即所需收益率。例如年化6%，约12年资金翻倍。复利同样作用于负收益，亏损也会按复利侵蚀本金。"}, {"num": 19, "id": "q052", "type": "single", "stem": "银行理财产品按风险由低到高分为 R1—R5 五级，其中风险最低的等级是", "options": ["R3（中风险）", "R5（高风险）", "R1（低风险）", "R4（中高风险）"], "answer": "C", "analysis": "理财产品风险等级由低到高为 R1（低风险）、R2（中低风险）、R3（中风险）、R4（中高风险）、R5（高风险），R1 风险最低。选项A、B、D的等级均高于R1。因此正确答案为C。", "score": 2.0, "chapter": "金融风险与监管", "kp": "理财产品风险等级", "kpc": "银行与理财公司销售的理财产品通常按风险由低到高分为 R1（低风险）、R2（中低风险）、R3（中风险）、R4（中高风险）、R5（高风险）五级，并对应投资者风险测评等级（C1—C5）。风险等级越高，本金亏损的可能性越大。适当性管理要求投资者购买不高于自身风险承受能力等级的产品，金融机构须充分揭示风险。"}, {"num": 20, "id": "q050", "type": "single", "stem": "2023年机构改革后，我国金融监管格局通常概括为“一行一局一会”，具体是指", "options": ["中国人民银行、银保监会、保监会", "财政部、国家发展改革委、商务部", "工商银行、农业银行、中国银行、建设银行", "中国人民银行、国家金融监督管理总局、中国证监会"], "answer": "D", "analysis": "2023年机构改革后形成“一行一局一会”格局：中国人民银行负责宏观审慎管理与金融稳定，国家金融监督管理总局统一监管银行、保险等机构（除证券业外），中国证监会监管证券期货市场。选项A为改革前的旧格局；选项B为宏观调控与产业管理部门；选项C为国有大型商业银行。因此正确答案为D。", "score": 2.0, "chapter": "金融风险与监管", "kp": "中国金融监管体系", "kpc": "2023年机构改革后，我国形成“一行一局一会”监管格局：中国人民银行负责宏观审慎管理与金融稳定，并监管支付机构等；国家金融监督管理总局统一负责除证券业之外的金融业监管（银行、保险、信托等机构与行为）；中国证监会统一负责证券期货市场监管。财政部负责财会制度与政府债务管理。"}, {"num": 21, "id": "q051", "type": "single", "stem": "根据《存款保险条例》，我国存款保险的偿付安排是", "options": ["同一存款人在同一投保机构的存款本息合计50万元以内全额偿付", "同一存款人在同一投保机构的存款本息合计10万元以内全额偿付", "同一存款人在同一投保机构的存款本息合计100万元以内全额偿付", "无论金额大小均无限额全额兑付"], "answer": "A", "analysis": "根据2015年施行的《存款保险条例》，同一存款人在同一投保机构的存款本息合计在50万元以内实行全额偿付，超出部分依法从投保机构清算财产中受偿。选项B、C金额错误；选项D与存款保险设有偿付上限的规定不符。因此正确答案为A。", "score": 2.0, "chapter": "金融风险与监管", "kp": "存款保险制度", "kpc": "根据2015年施行的《存款保险条例》，我国建立存款保险制度：境内吸收存款的银行业金融机构须投保，同一存款人在同一投保机构的存款本息合计在50万元以内实行全额偿付，超出部分依法从投保机构清算财产中受偿。存款保险有统一的绿色标识，有助于识别正规银行机构，保障范围仅限存款，理财、基金等产品不在保障之列。"}, {"num": 22, "id": "q068", "type": "single", "stem": "若自托管比特币钱包的私钥彻底丢失，结果是", "options": ["联系平台客服即可找回", "报警后由警方重新生成私钥", "由钱包软件公司补发资产", "资产被永久锁死，基本无法找回"], "answer": "D", "analysis": "加密资产以私钥证明所有权，私钥丢失意味着资产在链上永久锁定，没有任何中心化机构可以补发或重置私钥——这正是去中心化系统的特性。选项A、B、C都预设存在可干预的中心机构，与去中心化机制相悖。因此正确答案为D。", "score": 2.0, "chapter": "加密货币与数字资产", "kp": "私钥、钱包与托管风险", "kpc": "加密资产以私钥证明所有权，“私钥在手才是你的币”。自托管分为冷钱包（离线保存，安全性高但操作门槛高）与热钱包（联网，方便但风险更高）。把资产放在交易所属于平台托管：私钥控制在平台手中，投资者只持有对平台的债权，一旦平台挪用、破产或跑路，资产可能血本无归，历史上多次发生大型交易所事件。"}, {"num": 23, "id": "q067", "type": "single", "stem": "根据2021年人民银行等十部门《关于进一步防范和处置虚拟货币交易炒作风险的通知》，虚拟货币相关业务活动在我国属于", "options": ["非法金融活动", "合法投资品种", "受监管的灰色地带", "仅禁止机构参与、个人可自由买卖"], "answer": "A", "analysis": "《通知》明确：虚拟货币相关业务活动属于非法金融活动；境外虚拟货币交易所通过互联网向境内居民提供服务同样属于非法金融活动；参与虚拟货币投资交易的民事法律行为无效，损失由参与者自行承担。因此正确答案为A。", "score": 2.0, "chapter": "加密货币与数字资产", "kp": "中国对虚拟货币的监管定性", "kpc": "根据2021年人民银行等十部门《关于进一步防范和处置虚拟货币交易炒作风险的通知》：虚拟货币相关业务活动属于非法金融活动；境外虚拟货币交易所通过互联网向境内居民提供服务同样属于非法金融活动；参与虚拟货币投资交易活动的民事法律行为无效，损失自行承担。同时，虚拟货币“挖矿”活动已被列为淘汰类产业全面清退。"}, {"num": 24, "id": "q070", "type": "single", "stem": "“稳定币”的主要特征是", "options": ["价值锚定某种法定货币", "与美元汇率完全脱钩", "价格波动比比特币更大", "由各国央行联合发行"], "answer": "A", "analysis": "稳定币通过储备资产或算法机制锚定法定货币价值（如1枚约等于1美元），常用于交易计价与跨境转账；其价值依赖发行方储备充足与赎回机制，历史上仍出现过脱锚事件。选项B与稳定币定义相反；选项C与其低波动设计相悖；选项D描述的是央行数字货币概念，稳定币由私人机构发行。因此正确答案为A。", "score": 2.0, "chapter": "加密货币与数字资产", "kp": "稳定币", "kpc": "稳定币通过储备资产或算法机制锚定法定货币价值（如1枚约锚定1美元），常用于交易计价与跨境转账。其价值依赖发行方储备充足与赎回机制，历史上仍发生过脱锚事件，并非绝对安全；锚定机制与储备透明度是判断稳定币风险的关键。"}, {"num": 25, "id": "q069", "type": "single", "stem": "关于数字人民币与比特币的区别，下列说法正确的是", "options": ["比特币由中国人民银行发行", "数字人民币是去中心化的虚拟商品", "数字人民币是中国人民银行发行的法定货币的数字形式，与去中心化的比特币有本质区别", "两者性质完全相同"], "answer": "C", "analysis": "数字人民币（e-CNY）是央行发行的法定货币的数字形式，与实物人民币1:1、具有法偿性、由央行中心化管理；比特币是去中心化的虚拟商品，不由任何央行发行、无法偿性，其相关交易炒作在我国属于非法金融活动。选项A发行主体错误；选项B把法定货币的属性说反；选项D忽视了法偿货币与虚拟商品的本质差异。因此正确答案为C。", "score": 2.0, "chapter": "加密货币与数字资产", "kp": "数字人民币与加密货币的区别", "kpc": "数字人民币（e-CNY）是中国人民银行发行的法定货币的数字形式：与实物人民币1:1、具有法偿性、由央行中心化管理，拒收数字人民币兑付即违法。比特币等加密货币则是去中心化的虚拟商品：不由任何央行发行、无法偿性，其相关交易炒作活动在我国属于非法金融活动。二者名称相近但性质完全不同。"}]}, {"cn": "二", "title": "多项选择题", "each": "3", "subtotal": "30", "count": 10, "questions": [{"num": 26, "id": "q005", "type": "multiple", "stem": "下列属于一般性货币政策工具的有", "options": ["法定存款准备金率", "再贴现", "公开市场操作", "调整个人所得税税率"], "answer": ["A", "B", "C"], "analysis": "法定存款准备金率、再贴现和公开市场操作是对货币供应总量进行整体调节的三大一般性货币政策工具。选项D调整个人所得税税率属于财政政策工具，由政府财政部门主导，不属于货币政策工具。因此正确答案为ABC。", "score": 3.0, "chapter": "货币银行与中央银行", "kp": "一般性货币政策三大工具", "kpc": "法定存款准备金率、再贴现、公开市场操作，是对货币供应总量进行整体调节的三大一般性工具。存款准备金率是商业银行缴存央行的资金比例，上调收缩信贷、下调释放流动性；再贴现是商业银行将未到期票据向央行贴现融资时适用的利率与额度政策；公开市场操作是央行在市场买卖国债、央票等证券以调节基础货币。此外央行还运用结构性货币政策工具和窗口指导等方式。"}, {"num": 27, "id": "q019", "type": "multiple", "stem": "下列属于扩张性财政政策措施的有", "options": ["降低个人所得税税率", "增加政府基础设施建设投资", "中央银行下调存款准备金率", "向居民发放消费补贴"], "answer": ["A", "B", "D"], "analysis": "降低个税、增加政府投资、发放消费补贴均通过政府收入与支出渠道刺激总需求，属于扩张性财政政策。选项C下调存款准备金率由中央银行实施，属于扩张性货币政策而非财政政策。因此正确答案为ABD。", "score": 3.0, "chapter": "宏观经济指标", "kp": "财政政策与货币政策的区分", "kpc": "财政政策由政府（财政部门）实施，工具包括税收、政府支出、国债与补贴；扩张性财政政策如减税、增加公共投资，可刺激总需求。货币政策由中央银行实施，通过利率、存款准备金率、公开市场操作等调节货币供应量与融资成本。两者常配合使用：“双松”组合刺激经济，“双紧”组合抑制过热。区分关键在于实施主体与工具属性。"}, {"num": 28, "id": "q014", "type": "multiple", "stem": "通货膨胀发生时，通常伴随的现象有", "options": ["物价总水平上涨", "单位货币购买力下降", "单位货币购买力上升", "货币对内贬值"], "answer": ["A", "B", "D"], "analysis": "通胀发生时，物价总水平上涨，单位货币购买力下降，货币对内贬值，三者是同一过程的不同表现。选项C与通胀方向相反，购买力上升对应的是通货紧缩情形。因此正确答案为ABD。", "score": 3.0, "chapter": "宏观经济指标", "kp": "CPI 与通货膨胀", "kpc": "居民消费价格指数（CPI）衡量居民家庭消费的商品和服务价格水平变化，是观察通货膨胀最常用的指标。通货膨胀指一般物价水平持续、普遍上涨，伴随货币购买力下降、货币对内贬值；其对立面是通货紧缩（物价持续下跌、购买力上升）。温和通胀（通常约2%上下）被视为经济健康运行的表现，恶性通胀则会严重扰乱经济秩序。"}, {"num": 29, "id": "q023", "type": "multiple", "stem": "下列属于我国 A 股市场股票指数的有", "options": ["上证综合指数", "沪深300指数", "中证500指数", "道琼斯工业平均指数"], "answer": ["A", "B", "C"], "analysis": "上证综合指数、沪深300指数、中证500指数均为我国A股市场的主要指数，分别反映上交所整体、沪深蓝筹、中小盘股票表现。选项D道琼斯工业平均指数是美国市场的股票指数。因此正确答案为ABC。", "score": 3.0, "chapter": "股票市场", "kp": "主要股票指数", "kpc": "上证综合指数反映上交所全部股票的整体表现；沪深300指数由沪深两市规模大、流动性好的最具代表性的300只股票构成，是观察A股蓝筹整体走势的核心基准；中证500指数代表中小盘股票；创业板指数反映创业板市场表现。指数是市场整体表现的“晴雨表”，宽基指数基金多以这些指数为跟踪标的。"}, {"num": 30, "id": "q024", "type": "multiple", "stem": "常用的股票估值与回报指标包括", "options": ["市盈率", "市净率", "股息率", "法定存款准备金率"], "answer": ["A", "B", "C"], "analysis": "市盈率、市净率是估值指标，股息率衡量分红回报水平，三者都是股票投资最常用的分析指标。选项D法定存款准备金率是货币政策工具，与个股估值无关。因此正确答案为ABC。", "score": 3.0, "chapter": "股票市场", "kp": "市盈率与市净率", "kpc": "市盈率（PE）=股价÷每股收益，表示按当前盈利水平约多少年收回投资，是最常用的估值指标；市净率（PB）=股价÷每股净资产，适用于银行、地产等重资产行业。PE低通常代表估值相对便宜，但需结合成长性判断；公司亏损时每股收益为负，PE 失去参考意义。股息率=每股分红÷股价，衡量分红回报水平。"}, {"num": 31, "id": "q033", "type": "multiple", "stem": "下列关于国债的说法，正确的有", "options": ["以国家信用为基础发行", "常被称为“金边债券”", "投资国债不承担任何风险", "是中央银行公开市场操作的重要工具"], "answer": ["A", "B", "D"], "analysis": "国债以国家信用为基础、违约风险极低，被称为“金边债券”，也是央行公开市场操作的重要工具。选项C错误：国债虽几乎无信用风险，但仍有利率风险，其价格会随市场利率波动，中长期国债尤为明显。因此正确答案为ABD。", "score": 3.0, "chapter": "债券与固定收益", "kp": "债券的分类与基本要素", "kpc": "债券是发行人依法定程序发行、约定在一定期限内还本付息的债权凭证，基本要素包括面值、票面利率、期限与发行主体。按发行主体分为国债（中央政府）、地方政府债、金融债（银行等金融机构）、企业债/公司债等。国债以国家信用为基础、违约风险极低，被称为“金边债券”；金融债与企业债合称信用债，需评估发行人违约风险。可转换债券兼具债性与股性，可按约定条件转换为发行公司股票。"}, {"num": 32, "id": "q046", "type": "multiple", "stem": "关于复利，下列说法正确的有", "options": ["每期收益计入本金继续参与增值", "时间越长，复利效应越显著", "复利投资不承担任何风险", "可用“72法则”估算资金翻倍所需的年数"], "answer": ["A", "B", "D"], "analysis": "复利指每期收益并入本金继续增值（“利滚利”），时间越长效应越显著；72法则（72÷年化收益率≈翻倍年数）是估算复利效应的常用工具。选项C错误：复利只是一种计息方式，与是否承担风险无关，投资本金的亏损同样会按复利侵蚀。因此正确答案为ABD。", "score": 3.0, "chapter": "基金与资产配置", "kp": "复利与72法则", "kpc": "复利指每期收益并入本金继续增值，即“利滚利”，收益增长呈加速趋势，时间越长效应越显著。72法则是快速估算工具：用72除以年化收益率，即为资金翻倍所需年数；反之用72除以目标年数即所需收益率。例如年化6%，约12年资金翻倍。复利同样作用于负收益，亏损也会按复利侵蚀本金。"}, {"num": 33, "id": "q047", "type": "multiple", "stem": "基金定期定额投资（定投）的优点包括", "options": ["分批买入，摊薄持仓成本", "降低一次性买在高点的择时风险", "形成强制储蓄的投资纪律", "保证投资只赚不亏"], "answer": ["A", "B", "C"], "analysis": "定投通过定期定额分批买入，摊薄成本、平滑波动，避免一次性买在高点，并形成强制储蓄的纪律。选项D错误：定投不改变投资品种自身的风险，市场持续下行时同样可能亏损，无法保证只赚不亏。因此正确答案为ABC。", "score": 3.0, "chapter": "基金与资产配置", "kp": "基金净值与定投", "kpc": "基金份额净值=基金资产净值÷份额总数，是每份基金的价值。净值高低反映历史累计表现与份额结构，不代表基金未来收益能力，也不是“贵”或“便宜”的标志。定投（定期定额投资）指固定时间、固定金额买入基金，分批入场可摊薄成本、平滑波动、降低一次性买在高点的择时风险，并形成强制储蓄纪律，但不能保证不亏损。"}, {"num": 34, "id": "q055", "type": "multiple", "stem": "下列理财宣传中，应当高度警惕的有", "options": ["“保本保息、年化收益率15%”", "“内部渠道消息、稳赚不赔”", "“今天投入、明天翻倍”", "“理财非存款、产品有风险、投资须谨慎”"], "answer": ["A", "B", "C"], "analysis": "“保本保息15%”“内部消息稳赚不赔”“明天翻倍”这类宣传违背风险收益匹配的基本规律，且资管产品承诺保本保收益本身即违规，应高度警惕。选项D是合规的风险提示话术，属于正常的销售披露。因此正确答案为ABC。", "score": 3.0, "chapter": "金融风险与监管", "kp": "非法集资与庞氏骗局", "kpc": "非法集资的核心特征：未经金融管理部门依法批准、以高额回报为诱饵、向不特定社会公众吸收资金。庞氏骗局是典型形态：用后来投资者的本金支付先前投资者的“利息”，制造赚钱假象，资金本身没有真实盈利来源，资金链一断即崩盘。识别要点：核实机构牌照、警惕显著高于市场水平的收益承诺、拒绝“保本高收益”话术、不盲从亲友跟投。"}, {"num": 35, "id": "q073", "type": "multiple", "stem": "下列属于加密货币市场典型风险的有", "options": ["价格极端波动，可单日大幅涨跌", "高杠杆合约交易极易爆仓归零", "“带单老师”诱导重仓跟单", "有涨跌停板和熔断机制保护"], "answer": ["A", "B", "C"], "analysis": "加密市场为7×24小时交易，无涨跌幅限制与熔断保护，价格可单日大幅波动；高杠杆合约在剧烈波动下极易爆仓归零；“带单老师”诱导重仓跟单是典型骗局手法。选项D与事实相反——加密市场恰恰没有涨跌停与熔断机制，这是其风险远高于受监管证券市场的重要原因。因此正确答案为ABC。", "score": 3.0, "chapter": "加密货币与数字资产", "kp": "加密货币市场风险与典型骗局", "kpc": "加密市场为7×24小时交易，无涨跌幅限制与熔断保护，价格可单日大幅波动；高杠杆合约极易爆仓归零。典型骗局包括：只进不出的“貔貅盘”假交易平台、拉高出货、传销币、“带单老师”诱导重仓入金等。识别原则与非法集资一致：不轻信高收益承诺、不碰无法出金的平台、不上高杠杆。"}]}, {"cn": "三", "title": "判断题", "each": "2", "subtotal": "20", "count": 10, "questions": [{"num": 36, "id": "q009", "type": "judge", "stem": "根据《中国人民银行法》，我国货币政策的目标是保持货币币值的稳定，并以此促进经济增长。", "options": [], "answer": "正确", "analysis": "《中国人民银行法》明确规定，货币政策目标是保持货币币值的稳定，并以此促进经济增长。币值稳定（对内物价稳定）是促进经济长期增长的前提。因此本题表述正确。", "score": 2.0, "chapter": "货币银行与中央银行", "kp": "一般性货币政策三大工具", "kpc": "法定存款准备金率、再贴现、公开市场操作，是对货币供应总量进行整体调节的三大一般性工具。存款准备金率是商业银行缴存央行的资金比例，上调收缩信贷、下调释放流动性；再贴现是商业银行将未到期票据向央行贴现融资时适用的利率与额度政策；公开市场操作是央行在市场买卖国债、央票等证券以调节基础货币。此外央行还运用结构性货币政策工具和窗口指导等方式。"}, {"num": 37, "id": "q017", "type": "judge", "stem": "PMI 指数低于50%，表明制造业经济总体处于收缩区间。", "options": [], "answer": "正确", "analysis": "PMI 以50%为荣枯线：高于50表明制造业总体扩张，低于50表明总体收缩，与50的距离反映扩张或收缩的力度。因此本题表述正确。", "score": 2.0, "chapter": "宏观经济指标", "kp": "PMI 与荣枯线", "kpc": "采购经理指数（PMI）通过对企业采购经理的调查编制，是观察制造业/服务业景气度的先行指标。以50%为荣枯分界线：PMI高于50表明行业总体扩张，低于50表明收缩，数值与50的距离代表扩张或收缩力度。PMI按月发布，属于高频指标，常先于GDP反映经济拐点，是判断短期经济走势的重要参考。"}, {"num": 38, "id": "q016", "type": "judge", "stem": "社会融资规模反映实体经济从金融体系获得的资金总额，是观察金融对实体经济支持力度的重要指标。", "options": [], "answer": "正确", "analysis": "社会融资规模统计一定时期内实体经济（企业和个人）从金融体系获得的资金总额，涵盖人民币贷款、债券、股票融资等多种渠道，比单看信贷更全面，是观察金融支持实体经济力度的重要指标。因此本题表述正确。", "score": 2.0, "chapter": "宏观经济指标", "kp": "社会融资规模", "kpc": "社会融资规模指一定时期内实体经济（企业和个人）从金融体系获得的资金总额，包括人民币贷款、外币贷款、委托贷款、信托贷款、未贴现银行承兑汇票、企业债券、非金融企业境内股票融资等。它比单看信贷更全面地反映金融对实体经济的资金支持力度，是我国重要的宏观监测指标之一。"}, {"num": 39, "id": "q025", "type": "judge", "stem": "我国主板市场股票的每日涨跌幅限制一般为20%。", "options": [], "answer": "错误", "analysis": "我国主板股票的每日涨跌幅限制一般为前收盘价的±10%；±20%是创业板、科创板股票的限制，ST股票主板为±5%。本题把主板与创业板、科创板的规则混淆了。因此本题表述错误。", "score": 2.0, "chapter": "股票市场", "kp": "A股交易基本规则", "kpc": "我国A股实行 T+1 交易制度：当日买入的股票，次一交易日才能卖出，资金同样 T+1 交收。涨跌幅限制：主板股票一般为前收盘价的±10%，被实施风险警示的 ST 股票为±5%，创业板与科创板股票为±20%。股票交易一般以100股（一手）为整数倍申报。交易时间为每个交易日 9:30—11:30、13:00—15:00。"}, {"num": 40, "id": "q063", "type": "judge", "stem": "我国 A 股证券交易印花税目前仅在卖出环节单向征收。", "options": [], "answer": "正确", "analysis": "自2008年9月起，A股证券交易印花税调整为仅向卖出方单边征收，买入环节不再征收。印花税与佣金、过户费共同构成交易成本，频繁交易的成本累积会显著侵蚀收益。因此本题表述正确。", "score": 2.0, "chapter": "股票市场", "kp": "股票交易费用", "kpc": "A股交易成本主要包括佣金（双向收取、各券商费率有差异）、印花税（2008年9月起仅在卖出环节单向征收）、过户费等。交易成本按次累积，频繁短线交易的摩擦成本会显著侵蚀长期收益，这也是指数基金等低换手策略长期占优的原因之一。"}, {"num": 41, "id": "q035", "type": "judge", "stem": "同期限的国债收益率一般高于信用债，因为国债承担的信用风险更高。", "options": [], "answer": "错误", "analysis": "国债以国家信用为基础，违约风险最低，同期限下收益率一般低于信用债；信用债因承担发行人违约的信用风险，需要以更高的收益率作为风险补偿。本题把两者的风险与收益关系说反了。因此本题表述错误。", "score": 2.0, "chapter": "债券与固定收益", "kp": "债券的分类与基本要素", "kpc": "债券是发行人依法定程序发行、约定在一定期限内还本付息的债权凭证，基本要素包括面值、票面利率、期限与发行主体。按发行主体分为国债（中央政府）、地方政府债、金融债（银行等金融机构）、企业债/公司债等。国债以国家信用为基础、违约风险极低，被称为“金边债券”；金融债与企业债合称信用债，需评估发行人违约风险。可转换债券兼具债性与股性，可按约定条件转换为发行公司股票。"}, {"num": 42, "id": "q040", "type": "judge", "stem": "基金单位净值越高，说明该基金未来的收益能力越强。", "options": [], "answer": "错误", "analysis": "基金净值高低反映的是基金历史累计表现与份额结构（成立时间长短、分红与拆分都会影响净值绝对数），与未来收益能力之间没有必然联系，也不能用净值高低判断基金“贵”或“便宜”。因此本题表述错误。", "score": 2.0, "chapter": "基金与资产配置", "kp": "基金净值与定投", "kpc": "基金份额净值=基金资产净值÷份额总数，是每份基金的价值。净值高低反映历史累计表现与份额结构，不代表基金未来收益能力，也不是“贵”或“便宜”的标志。定投（定期定额投资）指固定时间、固定金额买入基金，分批入场可摊薄成本、平滑波动、降低一次性买在高点的择时风险，并形成强制储蓄纪律，但不能保证不亏损。"}, {"num": 43, "id": "q057", "type": "judge", "stem": "资管新规实施后，金融机构不得对资产管理产品承诺保本保收益，投资者需在“卖者尽责”的前提下自担投资风险。", "options": [], "answer": "正确", "analysis": "资管新规实施后，金融机构开展资产管理业务不得承诺保本保收益，打破刚性兑付、实行净值化管理；基本原则是“卖者尽责、买者自负”：机构须充分揭示风险、履行适当性管理义务，投资者在此基础上自担投资风险。因此本题表述正确。", "score": 2.0, "chapter": "金融风险与监管", "kp": "打破刚性兑付", "kpc": "资管新规实施后，金融机构开展资产管理业务不得承诺保本保收益，理财产品打破刚性兑付（“破刚兑”），实行净值化管理。基本原则是“卖者尽责、买者自负”：金融机构须充分揭示风险、做好适当性管理，投资者在此基础上自担投资风险。任何“保本高收益”承诺本身即违规信号。银行存款受存款保险保障，而理财、基金、信托产品不属于存款、不承诺保本。"}, {"num": 44, "id": "q072", "type": "judge", "stem": "把加密资产存放在交易平台，等于自己掌握了资产的私钥。", "options": [], "answer": "错误", "analysis": "存放在交易所的加密资产由平台托管，私钥控制在平台手中，投资者持有的只是对平台的账户债权；一旦平台挪用、破产或跑路，资产可能无法追回，历史上多次发生大型交易所暴雷事件。只有自托管钱包（自己保管私钥）才是真正掌握资产。因此本题表述错误。", "score": 2.0, "chapter": "加密货币与数字资产", "kp": "私钥、钱包与托管风险", "kpc": "加密资产以私钥证明所有权，“私钥在手才是你的币”。自托管分为冷钱包（离线保存，安全性高但操作门槛高）与热钱包（联网，方便但风险更高）。把资产放在交易所属于平台托管：私钥控制在平台手中，投资者只持有对平台的债权，一旦平台挪用、破产或跑路，资产可能血本无归，历史上多次发生大型交易所事件。"}, {"num": 45, "id": "q074", "type": "judge", "stem": "中国已全面清退虚拟货币“挖矿”项目。", "options": [], "answer": "正确", "analysis": "2021年国家发展改革委等部门将虚拟货币“挖矿”活动列为淘汰类产业并全面清退：挖矿能耗高、经济贡献低，且与虚拟货币炒作风险直接相关。因此本题表述正确。", "score": 2.0, "chapter": "加密货币与数字资产", "kp": "中国对虚拟货币的监管定性", "kpc": "根据2021年人民银行等十部门《关于进一步防范和处置虚拟货币交易炒作风险的通知》：虚拟货币相关业务活动属于非法金融活动；境外虚拟货币交易所通过互联网向境内居民提供服务同样属于非法金融活动；参与虚拟货币投资交易活动的民事法律行为无效，损失自行承担。同时，虚拟货币“挖矿”活动已被列为淘汰类产业全面清退。"}]}]};
+var QS = [];
+EXAM.sections.forEach(function(s){ s.questions.forEach(function(q){ QS.push(q); }); });
+var TOTAL = QS.length;
+var LIMIT = EXAM.duration * 60;
+var STORE = "fin_exam_state_v1";
 
-/* ========== 知识点卡片 ========== */
-var CARDS=[
-["复利","利息再计入本金继续生息，“利滚利”。公式：FV=PV×(1+r)ⁿ。时间是复利最大的朋友——10 万本金年化 8%，30 年约变 100 万。"],
-["72 法则","快速估算翻倍年数：72 ÷ 年化收益率(%)。如年化 6%，约 12 年翻一倍。"],
-["CPI 与通货膨胀","CPI 衡量一篮子消费价格变动。通胀 3% 意味着购买力每年约缩水 3%——现金也有“隐性成本”。"],
-["市盈率 PE","股价 ÷ 每股收益，相当于按当前盈利“多少年回本”。PE 低未必便宜（可能盈利将下滑），需结合成长性判断。"],
-["LPR","贷款市场报价利率，我国贷款定价的基准。每月 20 日公布；房贷利率=LPR −/+ 加点。"],
-["存款保险 50 万","同一银行本息 50 万元以内受存款保险基金全额保障；超出部分参与破产清算受偿。分散存款可提高保障覆盖。"],
-["资产配置","在不同大类资产（股、债、现金、黄金等）间分配比例。研究显示配置比例决定长期收益波动的绝大部分，比选股择时更重要。"],
-["应急备用金","3—6 个月生活费，存于活期/货币基金。它是“不下牌桌”的安全垫，避免被迫在低点卖出资产。"],
-["杠杆","借钱放大收益与亏损。保证金交易中 5 倍杠杆遇到 20% 逆向波动即爆仓。杠杆不会让差策略变好，只会加快出局。"],
-["期限错配","短钱长投（如用一年期借款投五年项目），利率或流动性一变就面临续借风险，是金融风险的经典来源。"],
-["风险收益匹配","高收益必然伴随高风险。凡宣称“保本高收益”者，要么违规，要么是庞氏骗局——没有第三种可能。"],
-["KYC 与适当性","了解你的客户：机构须评估你的风险承受力，把风险等级匹配的产品卖给你。测评不是走形式，是风险的第一道防线。"]
-];
+var S = { phase:"intro", answers:{}, marked:{}, startTs:0, remain:LIMIT, results:null, mode:"full", retryIds:null, name:"" };
 
-/* ========== 状态 ========== */
-var LS={wrong:"agfin_wrong",hist:"agfin_hist"};
-function load(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}}
-function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
-var wrongSet=load(LS.wrong,[]),histArr=load(LS.hist,[]);
+function loadState(){ try{ var r = localStorage.getItem(STORE); if(r) return JSON.parse(r); }catch(e){} return null; }
+function saveState(){ try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){} }
 
-/* ========== Tab 切换 ========== */
-document.querySelectorAll(".tab").forEach(function(t){
-  t.onclick=function(){
-    document.querySelectorAll(".tab").forEach(function(x){x.classList.remove("on")});
-    t.classList.add("on");
-    document.querySelectorAll(".panel").forEach(function(p){p.classList.remove("on")});
-    document.getElementById("p-"+t.dataset.p).classList.add("on");
-    if(t.dataset.p==="wrong")renderWrong();
-    if(t.dataset.p==="hist")renderHist();
-  };
-});
+function $(id){ return document.getElementById(id); }
+function el(tag, cls, text){ var e = document.createElement(tag); if(cls) e.className = cls; if(text !== undefined) e.textContent = text; return e; }
+function correctOf(q){ return Array.isArray(q.answer) ? q.answer.slice() : [q.answer]; }
+function normSet(arr){ return arr.slice().sort().join("|"); }
+function isCorrect(q, ua){ if(!ua || !ua.length) return false; return normSet(ua) === normSet(correctOf(q)); }
+function fmtTime(sec){ sec = Math.max(0, Math.floor(sec)); var m = Math.floor(sec/60), s = sec%60; return (m<10?"0":"")+m+":"+(s<10?"0":"")+s; }
+var LET = ["A","B","C","D","E","F"];
 
-/* ========== 通用渲染题目 ========== */
-function qHTML(item,i,opts){
-  opts=opts||{};
-  var cat=CATS[item.c];
-  var h='<div class="q" id="'+(opts.prefix||"q")+i+'">'
-   +'<div class="meta"><span class="cat">'+cat+'</span><span>第 '+(i+1)+' 题</span>'+(opts.showAns?'<span class="tag2">✓ 答案：'+String.fromCharCode(65+item.a)+'</span>':'')+'</div>'
-   +'<div class="stem">'+item.q+'</div>';
-  item.o.forEach(function(o,j){
-    var cls="opt";
-    if(opts.showAns){if(j===item.a)cls+=" right";else if(opts.wrongPick!==undefined&&j===opts.wrongPick)cls+=" wrong";}
-    else if(opts.pick!==undefined&&j===opts.pick)cls+=" sel";
-    h+='<div class="'+cls+'" data-j="'+j+'">'+String.fromCharCode(65+j)+'. '+o+'</div>';
-  });
-  h+='<div class="exp'+(opts.showAns?" show":"")+'"><b>解析：</b>'+item.e+'</b></div></div>';
-  return h;
-}
-
-/* ========== 题库中心 ========== */
-var bankCat=-1;
-function renderBankChips(){
-  var h='<span class="chip'+(bankCat===-1?" on":"")+'" data-c="-1">全部</span>';
-  CATS.forEach(function(c,i){h+='<span class="chip'+(bankCat===i?" on":"")+'" data-c="'+i+'">'+c+'</span>'});
-  var el=document.getElementById("bankChips");el.innerHTML=h;
-  el.querySelectorAll(".chip").forEach(function(ch){ch.onclick=function(){bankCat=+ch.dataset.c;renderBank()}});
-}
-function renderBank(){
-  var list=QB.map(function(q,i){return{q:q,i:i}}).filter(function(x){return bankCat===-1||x.q.c===bankCat});
-  document.getElementById("bankTotal").textContent=QB.length;
-  var h="";
-  list.forEach(function(x,n){
-    h+=qHTML(x.q,n,{});
-  });
-  document.getElementById("bankList").innerHTML=h;
-  document.getElementById("bankList").querySelectorAll(".q").forEach(function(qEl,n){
-    qEl.querySelector(".stem").style.cursor="pointer";
-    var exp=qEl.querySelector(".exp");
-    qEl.querySelector(".stem").onclick=function(){exp.classList.toggle("show");
-      var t=qEl.querySelector(".tag2");if(t)t.style.display=exp.classList.contains("show")?"":"none";};
-    var meta=qEl.querySelector(".meta");
-    if(!meta.querySelector(".tag2")){var sp=document.createElement("span");sp.className="tag2";sp.style.display="none";sp.textContent="✓ 答案："+String.fromCharCode(65+list[n].q.a);meta.appendChild(sp);}
-    else meta.querySelector(".tag2").style.display="none";
-  });
-}
-renderBankChips();renderBank();
-
-/* ========== 在线测评 ========== */
-var mode="student",pickN=10,pickCats=[],paper=[],picks=[];
-function renderSetupChips(){
-  var mc=document.getElementById("modeChips");
-  mc.querySelectorAll(".chip").forEach(function(ch){ch.onclick=function(){mode=ch.dataset.v;mc.querySelectorAll(".chip").forEach(function(x){x.classList.remove("on")});ch.classList.add("on")}});
-  var nc=document.getElementById("numChips");
-  nc.querySelectorAll(".chip").forEach(function(ch){ch.onclick=function(){pickN=+ch.dataset.v;nc.querySelectorAll(".chip").forEach(function(x){x.classList.remove("on")});ch.classList.add("on")}});
-  var cc=document.getElementById("catChips");var h="";
-  CATS.forEach(function(c,i){h+='<span class="chip" data-c="'+i+'">'+c+'</span>'});
-  cc.innerHTML=h;
-  cc.querySelectorAll(".chip").forEach(function(ch){ch.onclick=function(){
-    var v=+ch.dataset.c;
-    if(pickCats.indexOf(v)>=0){pickCats=pickCats.filter(function(x){return x!==v});ch.classList.remove("on")}
-    else{pickCats.push(v);ch.classList.add("on")}
-  }});
-}
-renderSetupChips();
-function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
-function startTest(){
-  var pool=QB.map(function(q,i){return i}).filter(function(i){return pickCats.length===0||pickCats.indexOf(QB[i].c)>=0});
-  paper=shuffle(pool).slice(0,pickN);
-  picks=paper.map(function(){return -1});
-  document.getElementById("setup").style.display="none";
-  document.getElementById("paper").style.display="";
-  document.getElementById("paperInfo").textContent=(mode==="student"?"🎓 学生卷":"🧑‍🏫 教师卷")+" · 共 "+paper.length+" 题";
-  var h="";
-  paper.forEach(function(qi,n){
-    h+=qHTML(QB[qi],n,mode==="teacher"?{showAns:true,prefix:"tq"}:{prefix:"sq"});
-  });
-  document.getElementById("qList").innerHTML=h;
-  if(mode==="teacher"){
-    document.getElementById("paperActions").innerHTML='<button class="btn ghost" onclick="window.print()">🖨 打印 / 导出 PDF</button> <button class="btn ghost" onclick="backSetup()">返回</button>';
-  }else{
-    document.getElementById("paperActions").innerHTML='<button class="btn" onclick="submitTest()">交卷评分</button> <button class="btn ghost" onclick="backSetup()">返回</button>';
-    document.getElementById("qList").querySelectorAll(".q").forEach(function(qEl,n){
-      qEl.querySelectorAll(".opt").forEach(function(op){
-        op.onclick=function(){picks[n]=+op.dataset.j;op.parentNode.querySelectorAll(".opt").forEach(function(x){x.classList.remove("sel")});op.classList.add("sel")};
-      });
-    });
+/* ---------- 启动 ---------- */
+(function init(){
+  var saved = loadState();
+  if(saved && saved.phase === "answering"){
+    var b = el("button","btn btn-gold","继续上次作答");
+    b.onclick = function(){ S = saved; enterExam(true); };
+    $("introActions").appendChild(b);
+  } else if(saved && saved.phase === "result"){
+    S = saved; renderResult(); return;
   }
+  $("btnStart").onclick = startExam;
+  $("btnSubmit").onclick = askSubmit;
+  $("btnGiveup").onclick = askGiveup;
+  $("modalNo").onclick = closeModal;
+  $("modalYes").onclick = doSubmit;
+  $("navToggle").onclick = function(){ $("navcol").classList.toggle("open"); };
+})();
+
+function startExam(){
+  S.phase = "answering"; S.answers = {}; S.marked = {};
+  S.startTs = Date.now(); S.results = null; S.mode = "full"; S.retryIds = null;
+  S.name = $("nameInput").value.trim();
+  saveState(); enterExam(false);
 }
-function backSetup(){document.getElementById("setup").style.display="";document.getElementById("paper").style.display="none"}
-function submitTest(){
-  var un=picks.filter(function(p){return p<0}).length;
-  if(un>0&&!confirm("还有 "+un+" 题未作答，确定交卷？"))return;
-  var right=0;
-  paper.forEach(function(qi,n){
-    var item=QB[qi];var ok=picks[n]===item.a;
-    if(ok)right++;
-    else if(wrongSet.indexOf(qi)<0){wrongSet.push(qi)}
-    var qEl=document.getElementById("sq"+n);
-    qEl.querySelectorAll(".opt").forEach(function(op){
-      var j=+op.dataset.j;op.classList.remove("sel");
-      if(j===item.a)op.classList.add("right");
-      else if(j===picks[n])op.classList.add("wrong");
-    });
-    qEl.querySelector(".exp").classList.add("show");
-  });
-  save(LS.wrong,wrongSet);
-  histArr.unshift({d:new Date().toLocaleString("zh-CN"),s:right,t:paper.length,m:"学生卷"});
-  histArr=histArr.slice(0,20);save(LS.hist,histArr);
-  document.getElementById("qList").insertAdjacentHTML("afterbegin",
-    '<div class="scorebox"><div class="big">'+right+' / '+paper.length+'</div><div class="hint">得分率 '+Math.round(right/paper.length*100)+'% · 答错的题已自动加入错题本</div></div>');
-  document.getElementById("paperActions").innerHTML='<button class="btn ghost" onclick="backSetup()">再测一次</button>';
+
+function enterExam(resume){
+  $("intro").classList.add("hide");
+  $("result").classList.add("hide");
+  $("exam").classList.remove("hide");
+  if(S.mode === "retry") $("examTitle").textContent = EXAM.title + "（错题重练）";
+  else $("examTitle").textContent = EXAM.title;
+  buildQuestions(); buildNav(); updateProgress(); startTimer();
+  if(resume) toast("已恢复上次作答进度");
   window.scrollTo(0,0);
 }
 
-/* ========== 知识点卡片 ========== */
-var kh="";
-CARDS.forEach(function(c,i){
-  kh+='<div class="kcard" onclick="this.classList.toggle(\'flip\')"><div class="kin">'
-   +'<div class="kface"><div class="kt">'+c[0]+'</div><div class="ks">🃏 点击查看解释</div></div>'
-   +'<div class="kface kback"><div class="kt">'+c[0]+'</div><div class="kd">'+c[1]+'</div></div>'
-   +'</div></div>';
-});
-document.getElementById("kGrid").innerHTML=kh;
+function activeQuestions(){ return S.mode === "retry" ? QS.filter(function(q){ return S.retryIds.indexOf(q.id) >= 0; }) : QS; }
 
-/* ========== 错题本 ========== */
-function renderWrong(){
-  var el=document.getElementById("wrongList");
-  document.getElementById("wrongActions").innerHTML=wrongSet.length?'<button class="btn danger" onclick="if(confirm(\'清空全部错题？\')){wrongSet=[];save(LS.wrong,wrongSet);renderWrong()}">清空错题</button>':"";
-  document.getElementById("wrongInfo").textContent=wrongSet.length?("共 "+wrongSet.length+" 道错题，点击题干展开解析。"):"学生卷答错的题会自动收进来。";
-  if(!wrongSet.length){el.innerHTML='<div class="empty">暂无错题 🎉</div>';return}
-  var h="";wrongSet.forEach(function(qi,n){h+=qHTML(QB[qi],n,{showAns:true,prefix:"wq"})});
-  el.innerHTML=h;
-  el.querySelectorAll(".q").forEach(function(qEl){var exp=qEl.querySelector(".exp");exp.classList.remove("show");qEl.querySelector(".stem").style.cursor="pointer";qEl.querySelector(".stem").onclick=function(){exp.classList.toggle("show")}});
+/* ---------- 题目渲染 ---------- */
+function buildQuestions(){
+  var wrap = $("qwrap"); wrap.textContent = "";
+  var qs = activeQuestions();
+  EXAM.sections.forEach(function(sec){
+    var list = sec.questions.filter(function(q){ return qs.indexOf(q) >= 0; });
+    if(!list.length) return;
+    var box = el("div","qsec");
+    var head = el("div","sec-head");
+    head.appendChild(el("span", null, sec.cn + "、" + sec.title + "（共 " + list.length + " 题，每题 " + sec.each + " 分，共 " + sec.subtotal + " 分）"));
+    var sc = el("span","sc");
+    box.appendChild(head);
+    list.forEach(function(q){ box.appendChild(buildQ(q)); });
+    wrap.appendChild(box);
+  });
 }
 
-/* ========== 测评历史 ========== */
-function renderHist(){
-  var t=document.getElementById("histTable");
-  document.getElementById("histActions").innerHTML=histArr.length?'<button class="btn danger" onclick="if(confirm(\'清空全部历史？\')){histArr=[];save(LS.hist,histArr);renderHist()}">清空历史</button>':"";
-  if(!histArr.length){t.innerHTML='<tr><td class="empty">暂无测评记录</td></tr>';return}
-  var h="<tr><th>时间</th><th>卷型</th><th>得分</th><th>得分率</th></tr>";
-  histArr.forEach(function(r){h+="<tr><td>"+r.d+"</td><td>"+r.m+"</td><td>"+r.s+" / "+r.t+"</td><td>"+Math.round(r.s/r.t*100)+"%</td></tr>"});
-  t.innerHTML=h;
+function buildQ(q){
+  var item = el("div","qitem");
+  var head = el("div","q-head");
+  head.appendChild(el("div","q-no", String(q.num)));
+  head.appendChild(el("div","q-stem", q.stem));
+  var tools = el("div","q-tools");
+  var mk = el("button","markbtn","⚑ 标记");
+  if(S.marked[q.id]) mk.classList.add("on");
+  mk.onclick = function(){ if(S.marked[q.id]) delete S.marked[q.id]; else S.marked[q.id] = 1; mk.classList.toggle("on", !!S.marked[q.id]); saveState(); updateProgress(); };
+  tools.appendChild(mk); head.appendChild(tools);
+  item.appendChild(head);
+
+  var ua = S.answers[q.id] || [];
+  if(q.type === "judge"){
+    var row = el("div","judge-row");
+    ["正确","错误"].forEach(function(v){
+      var b = el("button","jbtn", v);
+      if(ua.length && ua[0] === v) b.classList.add("sel");
+      b.onclick = function(){ S.answers[q.id] = [v]; saveState(); syncQ(q); updateProgress(); };
+      row.appendChild(b);
+    });
+    item.appendChild(row);
+  } else {
+    var opts = el("div","opts");
+    q.options.forEach(function(op, i){
+      var o = el("div","opt" + (q.type === "multiple" ? " m" : ""));
+      var dot = el("div","dot", LET[i]);
+      var txt = el("div", null, op);
+      o.appendChild(dot); o.appendChild(txt);
+      if(ua.indexOf(LET[i]) >= 0) o.classList.add("sel");
+      o.onclick = (function(L){ return function(){
+        if(q.type === "single"){ S.answers[q.id] = [L]; }
+        else {
+          var cur = S.answers[q.id] || [];
+          var ix = cur.indexOf(L);
+          if(ix >= 0) cur.splice(ix,1); else cur.push(L);
+          if(cur.length) S.answers[q.id] = cur; else delete S.answers[q.id];
+        }
+        saveState(); syncQ(q); updateProgress();
+      };})(LET[i]);
+      opts.appendChild(o);
+    });
+    item.appendChild(opts);
+  }
+  item.appendChild(el("div","qtag", "【" + q.chapter + " · " + q.kp + "】"));
+  return item;
 }
+
+function syncQ(q){
+  var items = document.querySelectorAll("#qwrap .qitem");
+  for(var i = 0; i < items.length; i++){
+    var it = items[i];
+    if(it.getAttribute("data-q") === q.id) { var fresh = buildQ(q); fresh.setAttribute("data-q", q.id); it.parentNode.replaceChild(fresh, it); return; }
+  }
+  /* 兜底：找不到缓存节点则整体重建当前题视图 */
+  document.querySelectorAll("#qwrap .qitem").forEach(function(it, ix){
+    var qs = activeQuestions();
+    if(ix < qs.length && qs[ix].id === q.id){ it.setAttribute("data-q", q.id); }
+  });
+}
+
+/* ---------- 答题卡 ---------- */
+function buildNav(){
+  var card = $("navcard"); card.textContent = "";
+  var qs = activeQuestions();
+  card.appendChild(el("h4", null, "答题卡"));
+  EXAM.sections.forEach(function(sec){
+    var list = sec.questions.filter(function(q){ return qs.indexOf(q) >= 0; });
+    if(!list.length) return;
+    var ns = el("div","navsec");
+    ns.appendChild(el("h4", null, sec.cn + "、" + sec.title));
+    var grid = el("div","navgrid");
+    list.forEach(function(q){
+      var b = el("button","nv", String(q.num));
+      b.id = "nv-" + q.id;
+      b.onclick = (function(qid){ return function(){
+        var t = document.querySelector('.qitem[data-q="' + qid + '"]');
+        if(t){ t.scrollIntoView({behavior:"smooth", block:"start"}); $("navcol").classList.remove("open"); }
+      };})(q.id);
+      grid.appendChild(b);
+    });
+    ns.appendChild(grid); card.appendChild(ns);
+  });
+  var lg = el("div","legend");
+  lg.appendChild(el("span",null,"已答")) ; lg.firstChild.innerHTML = '<i class="l1"></i>已答';
+  var l2 = el("span"); l2.innerHTML = '<i class="l2"></i>未答'; lg.appendChild(l2);
+  var l3 = el("span"); l3.innerHTML = '<i class="l3"></i>已标记'; lg.appendChild(l3);
+  card.appendChild(lg);
+}
+
+function updateProgress(){
+  var qs = activeQuestions();
+  var n = 0;
+  qs.forEach(function(q){ if(S.answers[q.id] && S.answers[q.id].length) n++; });
+  $("progN").textContent = n; $("progT").textContent = qs.length;
+  qs.forEach(function(q){
+    var b = $("nv-" + q.id); if(!b) return;
+    var done = S.answers[q.id] && S.answers[q.id].length;
+    b.classList.toggle("done", !!done);
+    b.classList.toggle("mark", !!S.marked[q.id]);
+  });
+}
+
+/* ---------- 计时 ---------- */
+var timerId = null;
+function startTimer(){
+  if(timerId) clearInterval(timerId);
+  tick(); timerId = setInterval(tick, 1000);
+}
+function tick(){
+  var used = (Date.now() - S.startTs) / 1000;
+  S.remain = Math.max(0, Math.round(LIMIT - used));
+  var t = $("timer");
+  if(!t) return;
+  t.textContent = fmtTime(S.remain);
+  t.classList.toggle("warn", S.remain <= 300 && S.remain > 0);
+  if(S.remain <= 0){ clearInterval(timerId); if(S.phase === "answering"){ doSubmit(true); } }
+}
+
+/* ---------- 交卷 ---------- */
+function askSubmit(){
+  var qs = activeQuestions();
+  var un = qs.filter(function(q){ return !(S.answers[q.id] && S.answers[q.id].length); }).length;
+  $("modalTitle").textContent = un ? "还有 " + un + " 题未作答" : "确认交卷？";
+  $("modalText").textContent = un ? "未作答的题目将按 0 分计。确认交卷后将立即判分并展示逐题解析。" : "交卷后将立即判分并展示逐题答案与解析。";
+  $("modalMask").classList.remove("hide");
+}
+function closeModal(){ $("modalMask").classList.add("hide"); }
+function askGiveup(){
+  $("modalTitle").textContent = "放弃本次作答？";
+  $("modalText").textContent = "当前作答进度将被清除，回到开始页面。";
+  $("modalYes").textContent = "确认放弃";
+  $("modalMask").classList.remove("hide");
+  $("modalYes").onclick = function(){ $("modalYes").textContent = "确认交卷"; $("modalYes").onclick = doSubmit; resetAll(); };
+}
+function doSubmit(auto){
+  if(arguments.length === 1 && auto === true){ toast("时间到，已自动交卷"); }
+  closeModal();
+  if(timerId){ clearInterval(timerId); timerId = null; }
+  var res = grade();
+  S.phase = "result"; S.results = res; S.remainAtSubmit = S.remain;
+  saveState(); renderResult();
+  window.scrollTo(0,0);
+}
+
+function grade(){
+  var qs = activeQuestions();
+  var total = 0, okN = 0, noN = 0;
+  var secs = [];
+  EXAM.sections.forEach(function(sec){
+    var st = { name: sec.cn + "、" + sec.title, score: 0, full: 0, ok: 0, count: 0 };
+    sec.questions.forEach(function(q){
+      if(qs.indexOf(q) < 0) return;
+      st.full += q.score; st.count++;
+      var ua = S.answers[q.id] || [];
+      if(isCorrect(q, ua)){ st.score += q.score; st.ok++; okN++; total += q.score; }
+      else noN++;
+    });
+    secs.push(st);
+  });
+  var wrongIds = qs.filter(function(q){ return !isCorrect(q, S.answers[q.id] || []); }).map(function(q){ return q.id; });
+  return { total: total, full: qs.reduce(function(a,q){ return a + q.score; }, 0), okN: okN, noN: noN, secs: secs, wrongIds: wrongIds, used: LIMIT - S.remain };
+}
+
+/* ---------- 成绩页 ---------- */
+var onlyWrong = false;
+function gradeText(t){
+  if(t >= 90) return "优秀 · 金融功底扎实";
+  if(t >= 80) return "良好 · 系统掌握主干知识";
+  if(t >= 70) return "中等 · 建议针对薄弱章节回看知识点";
+  if(t >= 60) return "及格 · 重点补一补错题涉及的知识点";
+  return "待提高 · 建议先通读题库中心的知识点卡片再重测";
+}
+
+function renderResult(){
+  $("intro").classList.add("hide");
+  $("exam").classList.add("hide");
+  var R = $("result"); R.classList.remove("hide");
+  var r = S.results;
+  if(!r){ resetAll(); return; }
+  R.textContent = "";
+  var isRetry = S.mode === "retry";
+
+  var card = el("div","scorecard");
+  var top = el("div","score-top");
+  var num = el("div","score-num", null); num.textContent = r.total + " "; num.appendChild(el("small",null,"/ " + r.full + " 分"));
+  top.appendChild(num);
+  var g = el("div","grade", (isRetry ? "错题重练 · " : "") + gradeText(r.total / r.full * 100));
+  top.appendChild(g);
+  card.appendChild(top);
+  var grid = el("div","score-grid");
+  r.secs.forEach(function(st){
+    if(!st.count) return;
+    var it = el("div","sc-item");
+    it.appendChild(el("div","k", st.name + "（" + st.count + "题）"));
+    it.appendChild(el("div","v", st.score + " / " + st.full));
+    grid.appendChild(it);
+  });
+  var it1 = el("div","sc-item"); it1.appendChild(el("div","k","答对题数")); it1.appendChild(el("div","v", r.okN + " / " + (r.okN + r.noN))); grid.appendChild(it1);
+  var it2 = el("div","sc-item"); it2.appendChild(el("div","k","用时")); it2.appendChild(el("div","v", fmtTime(r.used))); grid.appendChild(it2);
+  if(S.name){ var it3 = el("div","sc-item"); it3.appendChild(el("div","k","考生")); it3.appendChild(el("div","v", S.name)); grid.appendChild(it3); }
+  card.appendChild(grid);
+  R.appendChild(card);
+
+  var acts = el("div","res-actions");
+  if(r.wrongIds.length){
+    var cw = el("button","chip" + (onlyWrong ? "" : " on"), "全部 " + (r.okN + r.noN) + " 题");
+    cw.onclick = function(){ onlyWrong = false; renderResult(); };
+    var ca = el("button","chip" + (onlyWrong ? " on" : ""), "只看错题 " + r.wrongIds.length + " 题");
+    ca.onclick = function(){ onlyWrong = true; renderResult(); };
+    acts.appendChild(cw); acts.appendChild(ca);
+    if(!isRetry){ var rb = el("button","chip","错题重练（" + r.wrongIds.length + " 题）"); rb.onclick = retryWrong; acts.appendChild(rb); }
+  } else {
+    acts.appendChild(el("span","chip on","全部答对，太棒了！"));
+  }
+  var rst = el("button","chip","重新测评"); rst.onclick = resetAll; acts.appendChild(rst);
+  var pr = el("button","chip","打印成绩报告"); pr.onclick = function(){ window.print(); }; acts.appendChild(pr);
+  R.appendChild(acts);
+
+  var qs = activeQuestions().filter(function(q){ return !onlyWrong || r.wrongIds.indexOf(q.id) >= 0; });
+  qs.forEach(function(q){ R.appendChild(buildRQ(q)); });
+}
+
+function buildRQ(q){
+  var ua = S.answers[q.id] || [];
+  var ca = correctOf(q);
+  var ok = isCorrect(q, ua);
+  var box = el("div","rq " + (ok ? "ok" : "no"));
+  var head = el("div","rq-head");
+  head.appendChild(el("span","badge " + (ok ? "ok" : "no"), ok ? "✓ 答对" : "✗ 答错"));
+  head.appendChild(el("div","stem", q.num + ". " + q.stem));
+  box.appendChild(head);
+  box.appendChild(el("div","scoreline", "本题 " + q.score + " 分，你得了 " + (ok ? q.score : 0) + " 分"));
+
+  if(q.type === "judge"){
+    var row = el("div","rjudge");
+    ["正确","错误"].forEach(function(v){
+      var sp = el("span", v === ca[0] ? "ok" : (ua.length && ua[0] === v ? "no" : ""), v);
+      row.appendChild(sp);
+    });
+    box.appendChild(row);
+    var al = el("div","ansline");
+    al.innerHTML = "你的答案：<b>" + (ua.length ? ua[0] : "未作答") + "</b>　·　正确答案：<b>" + ca[0] + "</b>";
+    box.appendChild(al);
+  } else {
+    var opts = el("div","ropts");
+    q.options.forEach(function(op, i){
+      var L = LET[i];
+      var cls = "ropt" + (q.type === "multiple" ? " m" : "");
+      if(ca.indexOf(L) >= 0 && ua.indexOf(L) >= 0) cls += " hit";
+      else if(ca.indexOf(L) >= 0 && ua.indexOf(L) < 0) cls += " miss";
+      else if(ca.indexOf(L) < 0 && ua.indexOf(L) >= 0) cls += " extra";
+      var o = el("div", cls);
+      o.appendChild(el("div","r", L));
+      o.appendChild(el("div", null, op));
+      opts.appendChild(o);
+    });
+    box.appendChild(opts);
+    var al2 = el("div","ansline");
+    al2.innerHTML = "你的答案：<b>" + (ua.length ? ua.join("") : "未作答") + "</b>　·　正确答案：<b>" + ca.join("") + "</b>";
+    box.appendChild(al2);
+  }
+
+  var an = el("div","analysis");
+  an.appendChild(el("span","lab","【解析】"));
+  an.appendChild(document.createTextNode(q.analysis));
+  box.appendChild(an);
+
+  var kb = el("div","kpbox");
+  var kh = el("button","kp-head","📖 知识点：" + q.kp);
+  var arr = el("span","arr","▸"); kh.appendChild(arr);
+  var body = el("div","kp-body", q.kpc);
+  kh.onclick = function(){ kh.classList.toggle("on"); };
+  kb.appendChild(kh); kb.appendChild(body);
+  box.appendChild(kb);
+  return box;
+}
+
+/* ---------- 错题重练 / 重置 ---------- */
+function retryWrong(){
+  S.mode = "retry"; S.retryIds = S.results.wrongIds.slice();
+  S.answers = {}; S.marked = {}; S.startTs = Date.now(); S.results = null; S.phase = "answering";
+  onlyWrong = false;
+  saveState(); enterExam(false);
+  toast("错题重练开始，共 " + S.retryIds.length + " 题");
+}
+function resetAll(){
+  localStorage.removeItem(STORE);
+  S = { phase:"intro", answers:{}, marked:{}, startTs:0, remain:LIMIT, results:null, mode:"full", retryIds:null, name:"" };
+  onlyWrong = false;
+  $("result").classList.add("hide");
+  $("exam").classList.add("hide");
+  $("intro").classList.remove("hide");
+  var extra = document.querySelectorAll("#introActions .btn-gold");
+  extra.forEach(function(b){ b.remove(); });
+  window.scrollTo(0,0);
+}
+
+/* ---------- 工具 ---------- */
+var toastId = null;
+function toast(msg){
+  var t = $("toast"); t.textContent = msg; t.classList.add("show");
+  if(toastId) clearTimeout(toastId);
+  toastId = setTimeout(function(){ t.classList.remove("show"); }, 2200);
+}
+
+/* 选项构建时记录 data-q 以便同步 */
+(function(){
+  var origBuildQ = buildQ;
+  buildQ = function(q){ var it = origBuildQ(q); it.setAttribute("data-q", q.id); return it; };
+})();
+
+/* 序数中文 */
+function cnNum(n){ var c = "一二三四五六七八九十"; return n <= 10 ? c[n-1] : n; }
 </script>
-<script src="site-auth.js?v=2"></script>
+<script>window.LEARN = {"questions":[{"id":"q001","type":"single","chapter_id":"ch01","kp_id":"kp0101","difficulty":"easy","stem":"我国的中央银行是","options":["中国工商银行","中国人民银行","国家开发银行","财政部"],"answer":"B","analysis":"中央银行是一国金融体系的核心管理机构。我国由中国人民银行行使中央银行职能，负责人民币发行、货币政策制定与执行等。选项A为商业银行；选项C为政策性银行；选项D为政府部门，均不承担中央银行职能。因此正确答案为B。","score":2},{"id":"q002","type":"single","chapter_id":"ch01","kp_id":"kp0101","difficulty":"medium","stem":"下列各项中，不属于中央银行职能的是","options":["垄断货币发行，管理人民币流通","集中保管存款准备金，充当最后贷款人","经理国库，管理国家外汇储备","以营利为目的，面向企业和个人经营普通存贷款业务"],"answer":"D","analysis":"中央银行三大传统职能为“发行的银行”（垄断货币发行）、“银行的银行”（集中保管存款准备金、充当最后贷款人、组织清算）与“政府的银行”（经理国库、管理外汇储备）。中央银行不以营利为目的，不办理企业和个人的普通存贷款业务，这类业务由商业银行经营。选项A、B、C均属央行职能。因此正确答案为D。","score":2},{"id":"q003","type":"single","chapter_id":"ch01","kp_id":"kp0103","difficulty":"easy","stem":"我国货币供应量口径中，狭义货币 M1 是指","options":["流通中的现金","M0 加上单位活期存款","M0 加上单位定期存款和居民储蓄存款","单位定期存款"],"answer":"B","analysis":"我国货币供应量分层：M0 为流通中的现金；M1=M0+单位活期存款，即狭义货币；M2=M1+单位定期存款+居民储蓄存款+其他存款，即广义货币。选项A仅是 M0 本身；选项C 是 M2 的口径；选项D只是 M2 的组成部分之一。因此正确答案为B。","score":2},{"id":"q004","type":"single","chapter_id":"ch01","kp_id":"kp0104","difficulty":"hard","stem":"某一年期存款的名义利率为3%，当年通货膨胀率为2%，则该存款的实际利率约为","options":["5%","2%","1%","-1%"],"answer":"C","analysis":"实际利率约等于名义利率减去通货膨胀率：3%−2%=1%。实际利率衡量扣除物价上涨后的真实购买力增值。选项A误将两者相加；选项B是名义利率与另一数值的混淆；选项D对应的是通货膨胀率高于名义利率的情形，与题设不符。因此正确答案为C。","score":2},{"id":"q005","type":"multiple","chapter_id":"ch01","kp_id":"kp0102","difficulty":"medium","stem":"下列属于一般性货币政策工具的有","options":["法定存款准备金率","再贴现","公开市场操作","调整个人所得税税率"],"answer":["A","B","C"],"analysis":"法定存款准备金率、再贴现和公开市场操作是对货币供应总量进行整体调节的三大一般性货币政策工具。选项D调整个人所得税税率属于财政政策工具，由政府财政部门主导，不属于货币政策工具。因此正确答案为ABC。","score":3},{"id":"q006","type":"single","chapter_id":"ch01","kp_id":"kp0102","difficulty":"medium","stem":"中央银行下调法定存款准备金率后，最直接的影响是","options":["商业银行可贷资金增加，市场流动性趋于宽松","市场流动性收紧","商业银行必须压缩信贷投放","居民存款利率必然大幅提高"],"answer":"A","analysis":"存款准备金率下调后，商业银行缴存央行的法定准备金减少，可贷资金相应增加，货币乘数放大，市场流动性趋于宽松。选项B、C方向相反；降准并不直接调整居民存款挂牌利率，选项D“必然大幅提高”错误。因此正确答案为A。","score":2},{"id":"q007","type":"judge","chapter_id":"ch01","kp_id":"kp0101","difficulty":"easy","stem":"中央银行可以直接面向企业和社会公众个人办理普通存贷款业务。","options":[],"answer":"错误","analysis":"中央银行的服务对象是政府、商业银行等金融机构，不办理企业和居民个人的普通存贷款业务，这类业务属于商业银行的经营范畴。因此本题表述错误。","score":1},{"id":"q008","type":"single","chapter_id":"ch01","kp_id":"kp0105","difficulty":"medium","stem":"中央银行作为“最后贷款人”是指","options":["向企业发放最优惠利率的贷款","负责兑付全部居民储蓄存款","当金融机构出现流动性危机时提供紧急资金支持，防范系统性风险","专门为地方政府项目提供融资"],"answer":"C","analysis":"“最后贷款人”指当银行等金融机构出现流动性困难、可能引发系统性风险时，中央银行作为最终资金供给者提供紧急流动性支持，以防止危机向整个金融体系蔓延。选项A、B把对象错设为企业或储户；选项D央行不向地方政府项目直接融资。因此正确答案为C。","score":2},{"id":"q009","type":"judge","chapter_id":"ch01","kp_id":"kp0102","difficulty":"medium","stem":"根据《中国人民银行法》，我国货币政策的目标是保持货币币值的稳定，并以此促进经济增长。","options":[],"answer":"正确","analysis":"《中国人民银行法》明确规定，货币政策目标是保持货币币值的稳定，并以此促进经济增长。币值稳定（对内物价稳定）是促进经济长期增长的前提。因此本题表述正确。","score":1},{"id":"q010","type":"single","chapter_id":"ch02","kp_id":"kp0203","difficulty":"easy","stem":"PMI 指数高于以下哪个数值时，通常表明制造业经济总体处于扩张区间","options":["30","50","60","100"],"answer":"B","analysis":"PMI 以50%为荣枯分界线：高于50表明制造业总体扩张，低于50表明收缩。选项A、C、D均不是荣枯线标准，60、100只是更高的读数而非分界点。因此正确答案为B。","score":2},{"id":"q011","type":"single","chapter_id":"ch02","kp_id":"kp0202","difficulty":"easy","stem":"衡量居民家庭消费价格水平变动、最常用于观察通货膨胀的指标是","options":["国内生产总值（GDP）","采购经理指数（PMI）","居民消费价格指数（CPI）","广义货币供应量（M2）"],"answer":"C","analysis":"CPI（居民消费价格指数）衡量居民家庭消费的商品和服务价格水平变化，是观察通货膨胀最常用的指标。选项A反映经济总量；选项B是景气度先行指标；选项D反映货币供应总量。因此正确答案为C。","score":2},{"id":"q012","type":"single","chapter_id":"ch02","kp_id":"kp0201","difficulty":"hard","stem":"按支出法核算 GDP 时，下列各项中不计入 GDP 的是","options":["居民消费支出","企业投资支出","政府购买支出","居民缴纳的个人所得税税款"],"answer":"D","analysis":"支出法从需求端核算：GDP=居民消费(C)+企业投资(I)+政府购买(G)+净出口(NX)。个人所得税属于再分配环节的转移支付，不是对当期最终产品和服务的支出，不计入GDP。选项A、B、C分别对应C、I、G三个组成部分。因此正确答案为D。","score":2},{"id":"q013","type":"single","chapter_id":"ch02","kp_id":"kp0202","difficulty":"easy","stem":"经济学上所称的通货膨胀是指","options":["一般物价水平持续、普遍上涨","一般物价水平持续下跌","单位货币购买力不断增强","社会总产出持续下降"],"answer":"A","analysis":"通货膨胀指一般物价水平持续、普遍上涨，同时伴随货币购买力下降、货币对内贬值。选项B为通货紧缩；选项C方向相反，通胀时购买力是下降的；选项D与通胀无必然对应关系。因此正确答案为A。","score":2},{"id":"q014","type":"multiple","chapter_id":"ch02","kp_id":"kp0202","difficulty":"medium","stem":"通货膨胀发生时，通常伴随的现象有","options":["物价总水平上涨","单位货币购买力下降","单位货币购买力上升","货币对内贬值"],"answer":["A","B","D"],"analysis":"通胀发生时，物价总水平上涨，单位货币购买力下降，货币对内贬值，三者是同一过程的不同表现。选项C与通胀方向相反，购买力上升对应的是通货紧缩情形。因此正确答案为ABD。","score":3},{"id":"q015","type":"single","chapter_id":"ch02","kp_id":"kp0205","difficulty":"hard","stem":"下列关于财政政策与货币政策的表述，正确的是","options":["两者均由中央银行制定并实施","财政政策由政府通过税收和公共支出实施，货币政策由中央银行通过利率、存款准备金率等工具实施","财政政策由中央银行通过公开市场操作实施，货币政策由政府通过税收实施","两者均由财政部门制定并实施"],"answer":"B","analysis":"财政政策的实施主体是政府（财政部门），工具为税收、公共支出、国债与补贴；货币政策的实施主体是中央银行，工具为利率、存款准备金率、公开市场操作等。选项A、D把两类政策的主体错误归并；选项C将两者主体完全错配。因此正确答案为B。","score":2},{"id":"q016","type":"judge","chapter_id":"ch02","kp_id":"kp0204","difficulty":"medium","stem":"社会融资规模反映实体经济从金融体系获得的资金总额，是观察金融对实体经济支持力度的重要指标。","options":[],"answer":"正确","analysis":"社会融资规模统计一定时期内实体经济（企业和个人）从金融体系获得的资金总额，涵盖人民币贷款、债券、股票融资等多种渠道，比单看信贷更全面，是观察金融支持实体经济力度的重要指标。因此本题表述正确。","score":1},{"id":"q017","type":"judge","chapter_id":"ch02","kp_id":"kp0203","difficulty":"easy","stem":"PMI 指数低于50%，表明制造业经济总体处于收缩区间。","options":[],"answer":"正确","analysis":"PMI 以50%为荣枯线：高于50表明制造业总体扩张，低于50表明总体收缩，与50的距离反映扩张或收缩的力度。因此本题表述正确。","score":1},{"id":"q018","type":"single","chapter_id":"ch02","kp_id":"kp0202","difficulty":"easy","stem":"某经济体出现物价普遍持续下跌、货币购买力上升的现象，这属于","options":["温和通货膨胀","恶性通货膨胀","通货紧缩","经济过热"],"answer":"C","analysis":"物价总水平持续下跌、货币购买力上升是通货紧缩的典型特征，与通货膨胀正好相反。选项A、B均为物价上涨情形；选项D经济过热通常伴随物价上涨而非下跌。因此正确答案为C。","score":2},{"id":"q019","type":"multiple","chapter_id":"ch02","kp_id":"kp0205","difficulty":"medium","stem":"下列属于扩张性财政政策措施的有","options":["降低个人所得税税率","增加政府基础设施建设投资","中央银行下调存款准备金率","向居民发放消费补贴"],"answer":["A","B","D"],"analysis":"降低个税、增加政府投资、发放消费补贴均通过政府收入与支出渠道刺激总需求，属于扩张性财政政策。选项C下调存款准备金率由中央银行实施，属于扩张性货币政策而非财政政策。因此正确答案为ABD。","score":3},{"id":"q020","type":"single","chapter_id":"ch03","kp_id":"kp0301","difficulty":"easy","stem":"我国 A 股市场对当日买入股票实行的交易制度是","options":["当日买入当日即可卖出（T+0）","当日买入的股票，次一交易日才能卖出（T+1）","当日买入当日即可卖出，仅资金次日交收","买入后第四个交易日才能卖出（T+4）"],"answer":"B","analysis":"我国A股实行 T+1 交易制度：当日买入的股票，次一交易日才能卖出，资金同样 T+1 交收。选项A为境外部分市场的 T+0 做法；选项C表述自相矛盾，当日买入的股票不可当日卖出；选项D的时点错误。因此正确答案为B。","score":2},{"id":"q021","type":"single","chapter_id":"ch03","kp_id":"kp0302","difficulty":"easy","stem":"某股票股价为20元，每股收益为2元，则其市盈率为","options":["4倍","40倍","20倍","10倍"],"answer":"D","analysis":"市盈率=股价÷每股收益=20÷2=10倍。选项A为每股收益除以股价的倒置结果；选项B、C为其他口径的误算。因此正确答案为D。","score":2},{"id":"q022","type":"single","chapter_id":"ch03","kp_id":"kp0302","difficulty":"easy","stem":"市净率（PB）的计算公式是","options":["股价÷每股收益","净利润÷营业收入","股价÷每股净资产","总资产÷总负债"],"answer":"C","analysis":"市净率=股价÷每股净资产，衡量股价相对净资产的倍数，适用于银行、地产等重资产行业。选项A是市盈率公式；选项B是销售利润率相关口径；选项D是资产负债率的倒数形式。因此正确答案为C。","score":2},{"id":"q023","type":"multiple","chapter_id":"ch03","kp_id":"kp0303","difficulty":"medium","stem":"下列属于我国 A 股市场股票指数的有","options":["上证综合指数","沪深300指数","中证500指数","道琼斯工业平均指数"],"answer":["A","B","C"],"analysis":"上证综合指数、沪深300指数、中证500指数均为我国A股市场的主要指数，分别反映上交所整体、沪深蓝筹、中小盘股票表现。选项D道琼斯工业平均指数是美国市场的股票指数。因此正确答案为ABC。","score":3},{"id":"q024","type":"multiple","chapter_id":"ch03","kp_id":"kp0302","difficulty":"medium","stem":"常用的股票估值与回报指标包括","options":["市盈率","市净率","股息率","法定存款准备金率"],"answer":["A","B","C"],"analysis":"市盈率、市净率是估值指标，股息率衡量分红回报水平，三者都是股票投资最常用的分析指标。选项D法定存款准备金率是货币政策工具，与个股估值无关。因此正确答案为ABC。","score":3},{"id":"q025","type":"judge","chapter_id":"ch03","kp_id":"kp0301","difficulty":"easy","stem":"我国主板市场股票的每日涨跌幅限制一般为20%。","options":[],"answer":"错误","analysis":"我国主板股票的每日涨跌幅限制一般为前收盘价的±10%；±20%是创业板、科创板股票的限制，ST股票主板为±5%。本题把主板与创业板、科创板的规则混淆了。因此本题表述错误。","score":1},{"id":"q026","type":"single","chapter_id":"ch03","kp_id":"kp0304","difficulty":"medium","stem":"系统性风险是指","options":["仅影响单一行业的经营风险","可以通过分散投资完全消除的个别公司风险","仅影响个别公司的财务风险","由宏观因素引起、影响整个市场、无法通过分散投资消除的风险"],"answer":"D","analysis":"系统性风险由宏观经济、利率、政策等全局性因素引起，影响整个市场，无法通过分散投资消除。选项A、B、C描述的是非系统性风险，它恰恰可以通过分散投资予以降低。因此正确答案为D。","score":2},{"id":"q027","type":"single","chapter_id":"ch03","kp_id":"kp0304","difficulty":"hard","stem":"某投资者持有10只不同行业的股票，因市场出现整体性下跌导致全部亏损，该亏损主要属于","options":["非系统性风险","系统性风险","个股经营风险","债券信用风险"],"answer":"B","analysis":"市场整体性下跌使不同行业的股票普遍受损，属于系统性风险，分散持股无法规避；该投资者的非系统性风险已通过持有不同行业股票予以分散。选项A、C若成立，应表现为个别股票下跌而非全市场下跌；选项D信用风险主要指债券违约，与股票市场整体下跌无关。因此正确答案为B。","score":2},{"id":"q028","type":"single","chapter_id":"ch03","kp_id":"kp0305","difficulty":"medium","stem":"关于 ST 股票，下列说法正确的是","options":["被实施风险警示的股票，提示其存在财务状况异常等重大风险","业绩最好的一类股票","仅在科创板上市的股票","从未亏损的绩优股"],"answer":"A","analysis":"ST 是对财务状况异常或存在其他重大风险情形的股票实施的风险警示制度，主板 ST 股票涨跌幅限制为±5%。选项B、D把风险警示误解为业绩标签；ST 并非特定板块专属，选项C错误。因此正确答案为A。","score":2},{"id":"q029","type":"single","chapter_id":"ch03","kp_id":"kp0303","difficulty":"medium","stem":"沪深300指数的成分股特点是","options":["仅在上海证券交易所上市的300只股票","全部为小市值股票","沪深两市中规模大、流动性好的最具代表性的300只股票","仅为科技类行业股票"],"answer":"C","analysis":"沪深300指数由沪深两市中规模大、流动性好的最具代表性的300只股票构成，是A股蓝筹核心基准。选项A忽略了深市样本；选项B与成分股特征相反，中小盘对应中证500；选项D成分股覆盖多个行业。因此正确答案为C。","score":2},{"id":"q058","type":"single","chapter_id":"ch03","kp_id":"kp0306","difficulty":"easy","stem":"上市公司进行现金分红或送股后，股票价格在除权除息日相应下调，这一过程称为","options":["除权除息","涨跌停板","停牌复牌","熔断机制"],"answer":"A","analysis":"上市公司分红派息或送转股本后，为保持总市值连续性，交易所对股价进行相应调整：现金分红对应除息，送股转增对应除权。此时股价下调并非下跌，投资者总资产不变。选项B是每日价格波动幅度限制；选项C是暂停交易后再恢复交易；选项D是极端波动下的临时停市措施。因此正确答案为A。","score":2},{"id":"q059","type":"single","chapter_id":"ch03","kp_id":"kp0307","difficulty":"medium","stem":"投资者向证券公司借入资金买入证券、到期偿还本息的交易行为称为","options":["融券交易","股票质押","国债回购","融资交易"],"answer":"D","analysis":"融资交易指投资者向证券公司借入资金买入证券；融券则是向证券公司借入证券卖出，两者合称融资融券。两融属于杠杆交易，需缴纳保证金并支付利息，收益与亏损都会被放大，触及平仓线还可能被强制平仓。选项A方向相反；选项B是质押借款但非交易所融资交易；选项D国债回购是资金拆借工具。因此正确答案为D。","score":2},{"id":"q060","type":"single","chapter_id":"ch03","kp_id":"kp0309","difficulty":"easy","stem":"我国创业板与科创板股票的日常涨跌幅限制为","options":["5%","20%","10%","30%"],"answer":"B","analysis":"主板股票日常涨跌幅限制为前收盘价的±10%（ST股票为±5%），创业板与科创板为±20%。选项A是ST股票的限制；选项C是主板的限制；选项D不是我国现行标准。因此正确答案为B。","score":2},{"id":"q061","type":"single","chapter_id":"ch03","kp_id":"kp0308","difficulty":"medium","stem":"通过研究宏观经济、行业景气度和公司盈利能力来评估股票内在价值的分析方法称为","options":["技术面分析","消息面跟风","基本面分析","内幕交易分析"],"answer":"C","analysis":"基本面分析自上而下研究宏观经济、行业景气与公司财务盈利，回答“这家公司值不值这个价”；技术面分析研究对象是价格、成交量与走势形态，回答“何时买卖”。选项A研究价量形态而非内在价值；选项B属于投机行为；选项D属于违法行为。因此正确答案为C。","score":2},{"id":"q062","type":"single","chapter_id":"ch03","kp_id":"kp0306","difficulty":"easy","stem":"某股票股价为10元，每年每股现金分红0.5元，则其股息率为","options":["5%","0.5%","50%","2%"],"answer":"A","analysis":"股息率=每股现金分红÷股价=0.5÷10=5%，衡量按现价买入靠分红获得的年化回报，是高股息策略的核心指标。选项B误将数值直接当作比率；选项C将除法方向倒置；选项D为误算。因此正确答案为A。","score":2},{"id":"q063","type":"judge","chapter_id":"ch03","kp_id":"kp0310","difficulty":"medium","stem":"我国 A 股证券交易印花税目前仅在卖出环节单向征收。","options":[],"answer":"正确","analysis":"自2008年9月起，A股证券交易印花税调整为仅向卖出方单边征收，买入环节不再征收。印花税与佣金、过户费共同构成交易成本，频繁交易的成本累积会显著侵蚀收益。因此本题表述正确。","score":1},{"id":"q064","type":"judge","chapter_id":"ch03","kp_id":"kp0302","difficulty":"medium","stem":"市盈率越低的股票越值得买入。","options":[],"answer":"错误","analysis":"市盈率低可能意味着估值便宜，但也可能反映市场预期盈利将要下滑，或周期股正处于景气顶部；高成长公司的市盈率往往偏高却未必贵。估值必须结合成长性、行业属性与盈利质量综合判断，单看市盈率绝对值高低选股并不成立。因此本题表述错误。","score":1},{"id":"q030","type":"single","chapter_id":"ch04","kp_id":"kp0401","difficulty":"easy","stem":"国债的发行主体是","options":["中央政府","地方政府","商业银行","大型中央企业"],"answer":"A","analysis":"国债由中央政府（代表国家）发行，以国家信用为基础，违约风险极低。选项B发行的是地方政府债券；选项C、D发行的是金融债、企业债，主体不符。因此正确答案为A。","score":2},{"id":"q031","type":"single","chapter_id":"ch04","kp_id":"kp0402","difficulty":"hard","stem":"其他条件不变，市场利率上升时，存量固定利率债券的价格一般会","options":["上涨","下跌","保持不变","变动方向与市场利率无关"],"answer":"B","analysis":"债券价格与市场利率呈反向关系：市场利率上升后，新发债券票息更高，存量固定票息债券的相对吸引力下降，其市场价格随之下跌；反之市场利率下降时价格上涨。选项A方向相反；选项C忽视了价格随利率联动；选项D否定了这一基本关系。因此正确答案为B。","score":2},{"id":"q032","type":"single","chapter_id":"ch04","kp_id":"kp0403","difficulty":"easy","stem":"债券信用评级中，通常代表偿债能力最强、违约风险最低的级别是","options":["CC","BBB","AA","AAA"],"answer":"D","analysis":"国内信用评级由高到低大致为 AAA、AA、A、BBB、BB、B、CCC、CC、C，AAA 为最高等级，违约风险最低。选项A、B、C的等级均低于 AAA。因此正确答案为D。","score":2},{"id":"q033","type":"multiple","chapter_id":"ch04","kp_id":"kp0401","difficulty":"medium","stem":"下列关于国债的说法，正确的有","options":["以国家信用为基础发行","常被称为“金边债券”","投资国债不承担任何风险","是中央银行公开市场操作的重要工具"],"answer":["A","B","D"],"analysis":"国债以国家信用为基础、违约风险极低，被称为“金边债券”，也是央行公开市场操作的重要工具。选项C错误：国债虽几乎无信用风险，但仍有利率风险，其价格会随市场利率波动，中长期国债尤为明显。因此正确答案为ABD。","score":3},{"id":"q034","type":"multiple","chapter_id":"ch04","kp_id":"kp0404","difficulty":"easy","stem":"债券投资的收益来源包括","options":["票面利息收入","发行机构支付的推介返佣","买卖价差（资本利得）","利息再投资收益"],"answer":["A","C","D"],"analysis":"债券收益来自三部分：票面利息、买卖价差（资本利得）与利息再投资收益。选项B“推介返佣”不是债券投资的收益来源，正规债券投资中不存在面向投资者的返佣安排。因此正确答案为ACD。","score":3},{"id":"q035","type":"judge","chapter_id":"ch04","kp_id":"kp0401","difficulty":"medium","stem":"同期限的国债收益率一般高于信用债，因为国债承担的信用风险更高。","options":[],"answer":"错误","analysis":"国债以国家信用为基础，违约风险最低，同期限下收益率一般低于信用债；信用债因承担发行人违约的信用风险，需要以更高的收益率作为风险补偿。本题把两者的风险与收益关系说反了。因此本题表述错误。","score":1},{"id":"q036","type":"judge","chapter_id":"ch04","kp_id":"kp0405","difficulty":"medium","stem":"在其他条件相同的情况下，债券的期限越长，其价格受市场利率变动的影响越小。","options":[],"answer":"错误","analysis":"其他条件相同时，债券期限越长，其价格对市场利率变动越敏感（久期更长）：利率上行时长久期债券跌幅更大，利率下行时其上涨弹性也更大。本题将期限与利率敏感度的关系说反了。因此本题表述错误。","score":1},{"id":"q037","type":"judge","chapter_id":"ch04","kp_id":"kp0401","difficulty":"medium","stem":"可转换债券是指债券持有人可按约定条件将债券转换为发行公司股票的债券。","options":[],"answer":"正确","analysis":"可转换债券兼具债性与股性，持有人可在约定期限内按约定条件将债券转换为发行公司的股票，转换前享有债券利息，是“进可攻、退可守”的混合型证券。因此本题表述正确。","score":1},{"id":"q038","type":"single","chapter_id":"ch04","kp_id":"kp0402","difficulty":"hard","stem":"某3年期债券面值100元、票面利率3%，若市场利率升至4%并保持不变，投资者按当前市场价格买入并持有到期，其到期收益率与票面利率的关系是","options":["高于票面利率","低于票面利率","恰好等于票面利率","可能高于也可能低于票面利率"],"answer":"A","analysis":"市场利率（4%）高于票面利率（3%）时，该债券只能以低于面值的价格折价成交。投资者折价买入并持有到期，除获得票息外还获得到期按面值兑付的价差补偿，到期收益率因此高于票面利率。选项B对应溢价买入的情形；选项C对应平价买入的情形；选项D忽视了价格与收益率之间的确定关系。因此正确答案为A。","score":2},{"id":"q039","type":"single","chapter_id":"ch05","kp_id":"kp0501","difficulty":"easy","stem":"主要投资于短期货币市场工具、风险较低、流动性较好的基金是","options":["主要投资于股票的股票基金","主要投资于短期货币市场工具的货币市场基金","专门投资于房地产的基金","承诺保本保收益的储蓄替代产品"],"answer":"B","analysis":"货币市场基金主要投资于银行存款、同业存单、短期债券等货币市场工具，具有低风险、流动性好的特点，但它不是储蓄，不承诺保本。选项A为股票基金的投向；选项C与题意不符；选项D“承诺保本保收益”违背资管产品不得保本保收益的规定。因此正确答案为B。","score":2},{"id":"q040","type":"judge","chapter_id":"ch05","kp_id":"kp0505","difficulty":"medium","stem":"基金单位净值越高，说明该基金未来的收益能力越强。","options":[],"answer":"错误","analysis":"基金净值高低反映的是基金历史累计表现与份额结构（成立时间长短、分红与拆分都会影响净值绝对数），与未来收益能力之间没有必然联系，也不能用净值高低判断基金“贵”或“便宜”。因此本题表述错误。","score":1},{"id":"q041","type":"judge","chapter_id":"ch05","kp_id":"kp0501","difficulty":"easy","stem":"指数基金采用被动跟踪指数的策略，其管理费率通常低于主动管理型基金。","options":[],"answer":"正确","analysis":"指数基金被动跟踪标的指数，不依赖高成本的投研选股，运作透明，管理费率通常显著低于主动管理型基金，这也是指数基金长期受投资者青睐的原因之一。因此本题表述正确。","score":1},{"id":"q042","type":"single","chapter_id":"ch05","kp_id":"kp0502","difficulty":"easy","stem":"按72法则估算，若年化收益率为6%，资金翻倍大约需要","options":["6年","18年","24年","12年"],"answer":"D","analysis":"72法则：资金翻倍所需年数≈72÷年化收益率=72÷6=12年。选项A、B、C均为对法则的误算或记错。因此正确答案为D。","score":2},{"id":"q043","type":"single","chapter_id":"ch05","kp_id":"kp0501","difficulty":"medium","stem":"ETF（交易型开放式指数基金）的主要特点是","options":["在交易所挂牌上市，可像股票一样在盘中买卖，并跟踪特定指数","只能在银行柜台办理申购赎回的非上市基金","由基金经理主动选股以战胜市场","承诺保本的结构性存款产品"],"answer":"A","analysis":"ETF 在交易所挂牌上市，投资者可在交易时段内像买卖股票一样在二级市场交易 ETF 份额，同时其组合跟踪特定指数、被动管理。选项B混淆了 ETF 与场外基金的申赎方式；选项C是主动型基金的做法；选项D与 ETF 的属性不符。因此正确答案为A。","score":2},{"id":"q044","type":"single","chapter_id":"ch05","kp_id":"kp0503","difficulty":"medium","stem":"下列关于资产配置的说法，正确的是","options":["集中持有单一资产，收益最稳定","股票与债券价格总是同涨同跌","将资金分散于相关性较低的资产类别，有助于降低组合整体风险","资产配置对组合的风险和收益没有影响"],"answer":"C","analysis":"将资金分散于相关性较低的资产类别，可以在部分资产下跌时由其他资产对冲，从而降低组合整体风险、平滑收益曲线，这是资产配置的核心价值。选项A集中持仓放大风险；选项B错误，股债多数时期呈低相关甚至负相关；选项D否定了资产配置的作用。因此正确答案为C。","score":2},{"id":"q045","type":"single","chapter_id":"ch05","kp_id":"kp0504","difficulty":"medium","stem":"关于投资中风险与收益的关系，下列说法正确的是","options":["预期收益越高，通常伴随的风险越大","收益高低与风险大小无关","承担高风险必然获得高收益","低风险产品一定能带来高收益"],"answer":"A","analysis":"风险与收益相匹配是投资的基本规律：预期收益越高，通常伴随的风险越大。选项B否定了二者的关联；选项C错误，高风险可能带来高收益也可能亏损，“必然”属于绝对化表述；选项D违背基本规律，“低风险高收益”多为骗局话术。因此正确答案为A。","score":2},{"id":"q046","type":"multiple","chapter_id":"ch05","kp_id":"kp0502","difficulty":"medium","stem":"关于复利，下列说法正确的有","options":["每期收益计入本金继续参与增值","时间越长，复利效应越显著","复利投资不承担任何风险","可用“72法则”估算资金翻倍所需的年数"],"answer":["A","B","D"],"analysis":"复利指每期收益并入本金继续增值（“利滚利”），时间越长效应越显著；72法则（72÷年化收益率≈翻倍年数）是估算复利效应的常用工具。选项C错误：复利只是一种计息方式，与是否承担风险无关，投资本金的亏损同样会按复利侵蚀。因此正确答案为ABD。","score":3},{"id":"q047","type":"multiple","chapter_id":"ch05","kp_id":"kp0505","difficulty":"medium","stem":"基金定期定额投资（定投）的优点包括","options":["分批买入，摊薄持仓成本","降低一次性买在高点的择时风险","形成强制储蓄的投资纪律","保证投资只赚不亏"],"answer":["A","B","C"],"analysis":"定投通过定期定额分批买入，摊薄成本、平滑波动，避免一次性买在高点，并形成强制储蓄的纪律。选项D错误：定投不改变投资品种自身的风险，市场持续下行时同样可能亏损，无法保证只赚不亏。因此正确答案为ABC。","score":3},{"id":"q048","type":"single","chapter_id":"ch05","kp_id":"kp0503","difficulty":"hard","stem":"某投资者每年年末定投某指数基金1万元，连续定投10年，基金年化收益率为8%。按普通年金终值公式估算（8%、10年的年金终值系数为14.49），期末资产总值最接近","options":["10万元","约14.5万元","约21.5万元","约8万元"],"answer":"B","analysis":"普通年金终值=每年定投额×年金终值系数=1万元×14.49≈14.5万元。选项A仅计本金10万元，忽略了各年收益；选项C误将10万元本金按一次性复利终值计算（10×1.08的10次方≈21.6万元），混淆了年金与整存；选项D甚至低于投入本金。因此正确答案为B。","score":2},{"id":"q049","type":"judge","chapter_id":"ch06","kp_id":"kp0606","difficulty":"medium","stem":"将大额现金分拆成多笔小额、存入多个账户以规避监管，属于合法的个人资金管理技巧。","options":[],"answer":"错误","analysis":"分拆大额现金、存入多账户是典型的规避大额交易报告、掩饰资金来源的洗钱手法，属于违法行为；金融机构依法须履行客户身份识别、大额和可疑交易报告等反洗钱义务。因此本题表述错误。","score":1},{"id":"q050","type":"single","chapter_id":"ch06","kp_id":"kp0601","difficulty":"easy","stem":"2023年机构改革后，我国金融监管格局通常概括为“一行一局一会”，具体是指","options":["中国人民银行、银保监会、保监会","财政部、国家发展改革委、商务部","工商银行、农业银行、中国银行、建设银行","中国人民银行、国家金融监督管理总局、中国证监会"],"answer":"D","analysis":"2023年机构改革后形成“一行一局一会”格局：中国人民银行负责宏观审慎管理与金融稳定，国家金融监督管理总局统一监管银行、保险等机构（除证券业外），中国证监会监管证券期货市场。选项A为改革前的旧格局；选项B为宏观调控与产业管理部门；选项C为国有大型商业银行。因此正确答案为D。","score":2},{"id":"q051","type":"single","chapter_id":"ch06","kp_id":"kp0602","difficulty":"easy","stem":"根据《存款保险条例》，我国存款保险的偿付安排是","options":["同一存款人在同一投保机构的存款本息合计50万元以内全额偿付","同一存款人在同一投保机构的存款本息合计10万元以内全额偿付","同一存款人在同一投保机构的存款本息合计100万元以内全额偿付","无论金额大小均无限额全额兑付"],"answer":"A","analysis":"根据2015年施行的《存款保险条例》，同一存款人在同一投保机构的存款本息合计在50万元以内实行全额偿付，超出部分依法从投保机构清算财产中受偿。选项B、C金额错误；选项D与存款保险设有偿付上限的规定不符。因此正确答案为A。","score":2},{"id":"q052","type":"single","chapter_id":"ch06","kp_id":"kp0603","difficulty":"medium","stem":"银行理财产品按风险由低到高分为 R1—R5 五级，其中风险最低的等级是","options":["R3（中风险）","R5（高风险）","R1（低风险）","R4（中高风险）"],"answer":"C","analysis":"理财产品风险等级由低到高为 R1（低风险）、R2（中低风险）、R3（中风险）、R4（中高风险）、R5（高风险），R1 风险最低。选项A、B、D的等级均高于R1。因此正确答案为C。","score":2},{"id":"q053","type":"single","chapter_id":"ch06","kp_id":"kp0604","difficulty":"hard","stem":"下列各项中，不属于非法集资典型特征的是","options":["未经金融管理部门依法批准，向社会公众吸收资金","以承诺高额回报为诱饵","用后来投资者的资金兑付先前投资者的本息","财政部依法公开发行国债"],"answer":"D","analysis":"非法集资的典型特征包括：未经依法批准向社会公众吸收资金、承诺高额回报、以新还旧（借新还旧）等。选项D财政部依法公开发行国债是合法的国家融资行为，与非法集资有本质区别。选项A、B、C均为非法集资的典型特征。因此正确答案为D。","score":2},{"id":"q054","type":"single","chapter_id":"ch06","kp_id":"kp0604","difficulty":"easy","stem":"庞氏骗局的核心运作方式是","options":["将资金投入真实的生产经营以创造利润","依法销售公募基金产品","大量购买黄金白银对冲通胀","用后来投资者的本金支付先前投资者的“收益”"],"answer":"D","analysis":"庞氏骗局的核心是“借新还旧”：用后来投资者的本金支付先前投资者的高额“收益”，资金本身没有真实的盈利来源，资金链一旦断裂即崩盘。选项A、B、D前三项均属于真实或合法的资金运作模式。因此正确答案为D。","score":2},{"id":"q055","type":"multiple","chapter_id":"ch06","kp_id":"kp0604","difficulty":"medium","stem":"下列理财宣传中，应当高度警惕的有","options":["“保本保息、年化收益率15%”","“内部渠道消息、稳赚不赔”","“今天投入、明天翻倍”","“理财非存款、产品有风险、投资须谨慎”"],"answer":["A","B","C"],"analysis":"“保本保息15%”“内部消息稳赚不赔”“明天翻倍”这类宣传违背风险收益匹配的基本规律，且资管产品承诺保本保收益本身即违规，应高度警惕。选项D是合规的风险提示话术，属于正常的销售披露。因此正确答案为ABC。","score":3},{"id":"q056","type":"multiple","chapter_id":"ch06","kp_id":"kp0604","difficulty":"medium","stem":"防范非法集资，正确的做法有","options":["核实机构是否持有金融监管部门的牌照","警惕明显高于市场正常水平的收益率承诺","不轻信“保本高收益”话术","亲友都在投、跟着投更安全"],"answer":["A","B","C"],"analysis":"识别非法集资应核实机构牌照、警惕显著高于市场水平的收益承诺、拒绝“保本高收益”话术。选项D错误：“亲友都在投”恰恰是非法集资常用的从众心理诱导手段，跟投并不能降低风险。因此正确答案为ABC。","score":3},{"id":"q057","type":"judge","chapter_id":"ch06","kp_id":"kp0605","difficulty":"medium","stem":"资管新规实施后，金融机构不得对资产管理产品承诺保本保收益，投资者需在“卖者尽责”的前提下自担投资风险。","options":[],"answer":"正确","analysis":"资管新规实施后，金融机构开展资产管理业务不得承诺保本保收益，打破刚性兑付、实行净值化管理；基本原则是“卖者尽责、买者自负”：机构须充分揭示风险、履行适当性管理义务，投资者在此基础上自担投资风险。因此本题表述正确。","score":1},{"id":"q065","type":"single","chapter_id":"ch07","kp_id":"kp0701","difficulty":"easy","stem":"比特币的总量上限约为","options":["2100 亿枚","210 万枚","2100 万枚","没有上限"],"answer":"C","analysis":"比特币协议将总量上限设定为约2100万枚，新增比特币以“挖矿”奖励形式产出，且约每四年减半，新增供应增速持续放缓。选项A、B数量级错误；选项D与事实相反，限量设定正是比特币区别于法币信用扩张的核心设计。因此正确答案为C。","score":2},{"id":"q066","type":"single","chapter_id":"ch07","kp_id":"kp0701","difficulty":"easy","stem":"区块链技术的本质是","options":["由单一机构管理的云数据库","由多方共同维护、难以篡改的分布式账本","一种网络支付软件","银行之间的清算专线"],"answer":"B","analysis":"区块链是由网络中多方节点共同维护的分布式账本，数据按时间顺序链式相连并通过密码学校验，单点篡改难以生效，具有去中心化、难篡改的特征。选项A是中心化数据库，恰与区块链相反；选项C把一种应用形态当作技术本质；选项D是传统金融基础设施。因此正确答案为B。","score":2},{"id":"q067","type":"single","chapter_id":"ch07","kp_id":"kp0704","difficulty":"medium","stem":"根据2021年人民银行等十部门《关于进一步防范和处置虚拟货币交易炒作风险的通知》，虚拟货币相关业务活动在我国属于","options":["非法金融活动","合法投资品种","受监管的灰色地带","仅禁止机构参与、个人可自由买卖"],"answer":"A","analysis":"《通知》明确：虚拟货币相关业务活动属于非法金融活动；境外虚拟货币交易所通过互联网向境内居民提供服务同样属于非法金融活动；参与虚拟货币投资交易的民事法律行为无效，损失由参与者自行承担。因此正确答案为A。","score":2},{"id":"q068","type":"single","chapter_id":"ch07","kp_id":"kp0702","difficulty":"medium","stem":"若自托管比特币钱包的私钥彻底丢失，结果是","options":["联系平台客服即可找回","报警后由警方重新生成私钥","由钱包软件公司补发资产","资产被永久锁死，基本无法找回"],"answer":"D","analysis":"加密资产以私钥证明所有权，私钥丢失意味着资产在链上永久锁定，没有任何中心化机构可以补发或重置私钥——这正是去中心化系统的特性。选项A、B、C都预设存在可干预的中心机构，与去中心化机制相悖。因此正确答案为D。","score":2},{"id":"q069","type":"single","chapter_id":"ch07","kp_id":"kp0706","difficulty":"hard","stem":"关于数字人民币与比特币的区别，下列说法正确的是","options":["比特币由中国人民银行发行","数字人民币是去中心化的虚拟商品","数字人民币是中国人民银行发行的法定货币的数字形式，与去中心化的比特币有本质区别","两者性质完全相同"],"answer":"C","analysis":"数字人民币（e-CNY）是央行发行的法定货币的数字形式，与实物人民币1:1、具有法偿性、由央行中心化管理；比特币是去中心化的虚拟商品，不由任何央行发行、无法偿性，其相关交易炒作在我国属于非法金融活动。选项A发行主体错误；选项B把法定货币的属性说反；选项D忽视了法偿货币与虚拟商品的本质差异。因此正确答案为C。","score":2},{"id":"q070","type":"single","chapter_id":"ch07","kp_id":"kp0703","difficulty":"easy","stem":"“稳定币”的主要特征是","options":["价值锚定某种法定货币","与美元汇率完全脱钩","价格波动比比特币更大","由各国央行联合发行"],"answer":"A","analysis":"稳定币通过储备资产或算法机制锚定法定货币价值（如1枚约等于1美元），常用于交易计价与跨境转账；其价值依赖发行方储备充足与赎回机制，历史上仍出现过脱锚事件。选项B与稳定币定义相反；选项C与其低波动设计相悖；选项D描述的是央行数字货币概念，稳定币由私人机构发行。因此正确答案为A。","score":2},{"id":"q071","type":"single","chapter_id":"ch07","kp_id":"kp0701","difficulty":"hard","stem":"比特币的“减半”是指","options":["比特币的市场价格自动减半","约每四年，矿工获得的新产出奖励减半，新增供应增速随之放缓","交易平台将手续费减半","持仓数量每四年自动翻倍"],"answer":"B","analysis":"比特币协议约定矿工“挖矿”奖励约每四年减半一次，新增供应呈阶梯式放缓，这是其限量与通缩属性的来源，市场也常将减半视为供给端的标志性事件。选项A把供给机制误当作价格机制；选项C是平台收费政策，与协议无关；选项D与减半方向相反。因此正确答案为B。","score":2},{"id":"q072","type":"judge","chapter_id":"ch07","kp_id":"kp0702","difficulty":"medium","stem":"把加密资产存放在交易平台，等于自己掌握了资产的私钥。","options":[],"answer":"错误","analysis":"存放在交易所的加密资产由平台托管，私钥控制在平台手中，投资者持有的只是对平台的账户债权；一旦平台挪用、破产或跑路，资产可能无法追回，历史上多次发生大型交易所暴雷事件。只有自托管钱包（自己保管私钥）才是真正掌握资产。因此本题表述错误。","score":1},{"id":"q073","type":"multiple","chapter_id":"ch07","kp_id":"kp0705","difficulty":"medium","stem":"下列属于加密货币市场典型风险的有","options":["价格极端波动，可单日大幅涨跌","高杠杆合约交易极易爆仓归零","“带单老师”诱导重仓跟单","有涨跌停板和熔断机制保护"],"answer":["A","B","C"],"analysis":"加密市场为7×24小时交易，无涨跌幅限制与熔断保护，价格可单日大幅波动；高杠杆合约在剧烈波动下极易爆仓归零；“带单老师”诱导重仓跟单是典型骗局手法。选项D与事实相反——加密市场恰恰没有涨跌停与熔断机制，这是其风险远高于受监管证券市场的重要原因。因此正确答案为ABC。","score":3},{"id":"q074","type":"judge","chapter_id":"ch07","kp_id":"kp0704","difficulty":"easy","stem":"中国已全面清退虚拟货币“挖矿”项目。","options":[],"answer":"正确","analysis":"2021年国家发展改革委等部门将虚拟货币“挖矿”活动列为淘汰类产业并全面清退：挖矿能耗高、经济贡献低，且与虚拟货币炒作风险直接相关。因此本题表述正确。","score":1},{"id":"v1-02","type":"single","chapter_id":"ch01","kp_id":"","difficulty":"medium","options":["10 万元","25 万元","50 万元","100 万元"],"answer":"C","analysis":"存款保险实行限额偿付，最高偿付限额为 50 万元人民币，覆盖绝大多数存款人的全部存款。","score":2,"stem":"根据我国《存款保险条例》，同一存款人在同一家银行的本息偿付上限为："},{"id":"v1-03","type":"single","chapter_id":"ch01","kp_id":"","difficulty":"easy","options":["贷款市场报价利率","长期基准利率","流动性调节比例","最低准备金率"],"answer":"A","analysis":"LPR（Loan Prime Rate）即贷款市场报价利率，由各报价行在政策利率基础上加点形成，是贷款定价的参考基准。","score":2,"stem":"LPR 的中文全称是："},{"id":"v1-04","type":"single","chapter_id":"ch01","kp_id":"","difficulty":"medium","options":["提高企业贷款成本","降低社会融资成本、刺激投资与消费","提高居民存款收益","减少货币供给"],"answer":"B","analysis":"降息使银行资金成本下降，带动贷款利率下行，从而鼓励投资和消费。","score":2,"stem":"央行下调政策利率（俗称“降息”）通常的直接效果是："},{"id":"v1-05","type":"single","chapter_id":"ch01","kp_id":"","difficulty":"easy","options":["M2","M1","M0","三者相同"],"answer":"C","analysis":"M0 是流通中的现金，流动性最强；M1=M0+单位活期存款；M2 再加上定期存款等，流动性依次减弱。","score":2,"stem":"M0、M1、M2 中流动性最强的是："},{"id":"v1-06","type":"single","chapter_id":"ch01","kp_id":"","difficulty":"easy","options":["吸收存款","发放贷款","代理销售基金","票据贴现"],"answer":"A","analysis":"银行主要靠吸收存款（负债）获得资金，再通过放贷（资产）获取利差收入。","score":2,"stem":"商业银行最主要的负债业务是："},{"id":"v1-07","type":"single","chapter_id":"ch01","kp_id":"","difficulty":"easy","options":["把旧钞换成新钞","将非法所得伪装成合法收入","银行间资金清算","外汇兑换业务"],"answer":"B","analysis":"洗钱指通过金融交易掩盖犯罪所得的来源和性质，使其“合法化”，是严重刑事犯罪。","score":2,"stem":"“洗钱”行为的本质是："},{"id":"v1-08","type":"single","chapter_id":"ch03","kp_id":"","difficulty":"easy","options":["T+0","T+1","T+2","T+3"],"answer":"B","analysis":"A 股目前实行 T+1：当天买入的股票次一交易日才能卖出，资金交收也为 T+1。","score":2,"stem":"我国 A 股股票交易实行的交收制度是："},{"id":"v1-09","type":"single","chapter_id":"ch03","kp_id":"","difficulty":"easy","options":["股价 ÷ 每股收益","股价 ÷ 每股净资产","股价 × 总股本","净利润 ÷ 营业收入"],"answer":"A","analysis":"PE=股价÷每股收益（EPS），可粗略理解为按当前盈利水平“多少年回本”。","score":2,"stem":"市盈率（PE）的计算公式是："},{"id":"v1-10","type":"single","chapter_id":"ch03","kp_id":"","difficulty":"easy","options":["创业板股票整体表现","沪深两市规模最大的 300 只股票整体表现","全部 A 股平均股价","债券市场收益水平"],"answer":"B","analysis":"沪深 300 由沪深两市中规模大、流动性好的 300 只股票构成，是衡量大盘走势的核心宽基指数。","score":2,"stem":"沪深 300 指数反映的是："},{"id":"v1-11","type":"single","chapter_id":"ch03","kp_id":"","difficulty":"easy","options":["通常跟踪某一指数","可在场内像股票一样交易","费率一般较低","基金经理主动重仓个股博取超额收益"],"answer":"D","analysis":"ETF 属于被动指数产品，目标是紧跟指数；主动选股博超额收益的是主动型基金。","score":2,"stem":"ETF 基金的主要特点不包括："},{"id":"v1-12","type":"single","chapter_id":"ch03","kp_id":"","difficulty":"easy","options":["申购首次公开发行的新股票","买入当天上市的旧股票","申购新发行的国债","买入新股开板后的涨停板"],"answer":"A","analysis":"打新即参与 IPO 申购；A 股历史上新股上市初期涨幅较好，但注册制后破发风险同样存在。","score":2,"stem":"“打新股”指的是："},{"id":"v1-14","type":"single","chapter_id":"ch05","kp_id":"","difficulty":"easy","options":["保证只赚不赔","平摊买入成本、弱化择时","收益一定高于一次性买入","免收任何手续费"],"answer":"B","analysis":"定期定额买入可在高位少买、低位多买，摊薄成本，降低一次性买在高点的风险；但不保证盈利。","score":2,"stem":"基金定投的核心优势是："},{"id":"v1-15","type":"single","chapter_id":"ch08","kp_id":"","difficulty":"easy","options":["与保险人订立合同并缴纳保费的人","领取保险金的人","保险公司本身","被保险人的继承人"],"answer":"A","analysis":"投保人负责订立合同和缴费；被保险人是受保障的人；受益人是领取保险金的人，三者可以不同。","score":2,"stem":"保险合同中“投保人”是指："},{"id":"v1-16","type":"single","chapter_id":"ch08","kp_id":"","difficulty":"easy","options":["按保额一次性给付","实报实销、不超过实际花费","不设免赔额","凭诊断书即赔"],"answer":"B","analysis":"费用报销型医疗险适用损失补偿原则，赔付以实际合理费用为限；重疾险才是确诊给付型。","score":2,"stem":"商业费用型医疗险的赔付一般遵循："},{"id":"v1-17","type":"single","chapter_id":"ch08","kp_id":"","difficulty":"easy","options":["缴费方式不同","保障期限不同","保险标的不同","投保年龄不同"],"answer":"B","analysis":"定期寿险只保障约定年限（如至 60 岁），杠杆高、保费低；终身寿险保障至身故，兼具储蓄功能、保费更高。","score":2,"stem":"定期寿险与终身寿险的最主要区别是："},{"id":"v1-18","type":"single","chapter_id":"ch08","kp_id":"","difficulty":"easy","options":["保险公司赔付的下限","开始赔付前需自行承担的部分","保险费之外的附加费","必须购买的基础保额"],"answer":"B","analysis":"免赔额以内的损失由被保险人自担，超出部分才按比例赔付，可降低小额理赔成本、压低保费。","score":2,"stem":"保险条款中的“免赔额”是指："},{"id":"v1-19","type":"single","chapter_id":"ch08","kp_id":"","difficulty":"easy","options":["实报实销","确诊符合约定疾病即按保额一次性给付","按月发放养老金","身故后才能领取"],"answer":"B","analysis":"重疾险是给付型：达到合同约定的疾病定义即一次性赔付保额，资金用途不限。","score":2,"stem":"重疾险的典型给付方式是："},{"id":"v1-20","type":"single","chapter_id":"ch08","kp_id":"","difficulty":"easy","options":["损失全部保费","仅承担极小成本（如工本费）","被列入黑名单","需赔付违约金"],"answer":"B","analysis":"长期险一般有 10—15 天犹豫期，期内退保基本无损失；犹豫期后退保只能拿回现金价值，损失较大。","score":2,"stem":"保险“犹豫期”内退保，投保人一般："},{"id":"v1-21","type":"single","chapter_id":"ch08","kp_id":"","difficulty":"easy","options":["保费撬动保额的倍数","保险公司的股价","保单贷款利率","分红收益率"],"answer":"A","analysis":"如几百元保费换来百万元保障，就是保险杠杆的价值，即以小成本转移大风险。","score":2,"stem":"保险“杠杆”通俗指："},{"id":"v1-22","type":"single","chapter_id":"ch02","kp_id":"","difficulty":"easy","options":["居民消费价格的变动水平","房价走势","股市整体估值","出口景气度"],"answer":"A","analysis":"CPI（居民消费价格指数）衡量一篮子消费品与服务的价格变化，是观察通货膨胀最常用的指标。","score":2,"stem":"CPI 指数主要反映："},{"id":"v1-23","type":"single","chapter_id":"ch02","kp_id":"","difficulty":"medium","options":["提高","被侵蚀下降","不受影响","翻倍"],"answer":"B","analysis":"实际收益≈名义利率−通胀率；通胀走高时固定的票面利息购买力缩水，实际收益下降。","score":2,"stem":"通胀率明显上升时，持有固定利率债券的实际收益会："},{"id":"v1-24","type":"single","chapter_id":"ch02","kp_id":"","difficulty":"easy","options":["一国一定时期内生产的全部最终产品和服务的市场价值总和","政府财政收入总量","全部交易额之和","居民存款总额"],"answer":"A","analysis":"GDP 只统计最终产品（避免中间品重复计算），是衡量经济总量最核心的指标。","score":2,"stem":"GDP 的含义是："},{"id":"v1-25","type":"single","chapter_id":"ch02","kp_id":"","difficulty":"easy","options":["存款准备金率","公开市场操作","再贴现率","调整税率"],"answer":"D","analysis":"税率属于财政政策（政府收支）；前三个是央行货币政策三大传统工具。","score":2,"stem":"以下哪一项不属于货币政策工具？"},{"id":"v1-26","type":"single","chapter_id":"ch02","kp_id":"","difficulty":"easy","options":["美元兑人民币汇率升破 7，人民币对美元贬值","人民币升值超过 7%","7 天期逆回购重启","房价跌破 7 折"],"answer":"A","analysis":"指 1 美元兑换人民币超过 7 元，即人民币对美元贬值；反之“升破/回落”表述为升值。","score":2,"stem":"“人民币破 7”通常指："},{"id":"v1-27","type":"single","chapter_id":"ch02","kp_id":"","difficulty":"easy","options":["降低存款准备金率","降低贷款利率","降低存款利率上限","降低外汇准备金"],"answer":"A","analysis":"降准即下调金融机构存款准备金率，银行可贷资金增加，属于释放流动性的宽松操作。","score":2,"stem":"“降准”的意思是："},{"id":"v1-28","type":"single","chapter_id":"ch02","kp_id":"","difficulty":"easy","options":["经济增长停滞与通货膨胀并存","经济高速增长","物价持续下跌","贸易顺差扩大"],"answer":"A","analysis":"滞胀=停（增长停滞、失业上升）+胀（物价上涨），政策上顾此失彼、最难治理。","score":2,"stem":"“滞胀”是指："},{"id":"v1-29","type":"single","chapter_id":"ch05","kp_id":"","difficulty":"easy","options":["利息再计入本金继续生息","单利的别称","只对本金计息","银行同业拆借利率"],"answer":"A","analysis":"复利即“利滚利”，长期收益远超单利，爱因斯坦称其为“世界第八大奇迹”。","score":2,"stem":"“复利”是指："},{"id":"v1-30","type":"single","chapter_id":"ch05","kp_id":"","difficulty":"medium","options":["6 年","12 年","18 年","24 年"],"answer":"B","analysis":"72÷6=12 年。该法则可快速估算：翻倍年数≈72÷年化收益率（%）。","score":2,"stem":"按“72 法则”，年化收益 6% 时本金翻倍约需："},{"id":"v1-31","type":"single","chapter_id":"ch05","kp_id":"","difficulty":"easy","options":["1 个月生活费","3—6 个月生活费","1—2 年生活费","无需预留"],"answer":"B","analysis":"3—6 个月开支可覆盖失业、疾病等突发状况，应放在随取随用的活期或货币基金中。","score":2,"stem":"一般建议应急备用金预留："},{"id":"v1-32","type":"single","chapter_id":"ch05","kp_id":"","difficulty":"easy","options":["全部资金买入最热门资产","在相关性较低的多类资产间分散配置","只持有现金","满仓单一股票"],"answer":"B","analysis":"研究表明大类资产间的配置比例是长期收益与风险的主要来源，分散可平滑波动。","score":2,"stem":"“资产配置”的核心思想是："},{"id":"v1-33","type":"single","chapter_id":"ch05","kp_id":"","difficulty":"easy","options":["剩余部分免息","剩余部分按日计收循环利息","自动分期","信用分提高"],"answer":"B","analysis":"最低还款可避免逾期记录，但未还部分自记账日起按约万分之五/日计息，成本很高。","score":2,"stem":"信用卡只按“最低还款额”还款的后果是："},{"id":"v1-34","type":"single","chapter_id":"ch05","kp_id":"","difficulty":"easy","options":["前者每月还款额固定，后者逐月递减","前者利率更低","后者总利息更高","没有区别"],"answer":"A","analysis":"等额本息月供恒定、前期利息占比高；等额本金月供逐月递减、总利息较少但前期压力大。","score":2,"stem":"等额本息与等额本金房贷的区别是："},{"id":"v1-35","type":"single","chapter_id":"ch05","kp_id":"","difficulty":"easy","options":["存在低风险高收益的常规渠道","高收益必然伴随高风险","风险可完全消除","收益与风险无关"],"answer":"B","analysis":"宣称“稳赚不赔还高收益”的基本可判定为骗局；正常市场中高收益需要承担高风险作对价。","score":2,"stem":"“收益与风险相匹配”原则意味着："},{"id":"v1-36","type":"single","chapter_id":"ch06","kp_id":"","difficulty":"easy","options":["持牌经营","承诺高额回报、向社会公众吸收资金","资金托管于银行","信息披露充分"],"answer":"B","analysis":"“高息诱惑+公开宣传+不特定公众+无牌经营”是非法集资画像；参与损失自行承担。","score":2,"stem":"非法集资最典型的特征是："},{"id":"v1-37","type":"single","chapter_id":"ch06","kp_id":"","difficulty":"medium","options":["网贷技术不成熟","无牌照高息集资不受法律保护","投资者太少","利率太低"],"answer":"B","analysis":"P2P 缺乏资本约束与托管机制，形成资金池和庞氏链条；2020 年底 P2P 机构已全部清零。","score":2,"stem":"P2P 网贷平台大面积暴雷的核心教训是："},{"id":"v1-38","type":"single","chapter_id":"ch06","kp_id":"","difficulty":"medium","options":["把合适的产品卖给合适的投资者","增加销售环节","限制低收入人群投资","为监管罚款提供依据"],"answer":"A","analysis":"适当性管理要求机构了解客户（风险承受力）与产品（风险等级），实现匹配销售。","score":2,"stem":"投资者风险承受能力评估（KYC/适当性管理）的目的是："},{"id":"v1-39","type":"single","chapter_id":"ch06","kp_id":"","difficulty":"medium","options":["果断全仓买入","资管新规下正规产品不得承诺保本保收益，多为违规或诈骗","收益适中即可信","银行大厅发的都可信"],"answer":"B","analysis":"资管新规打破刚性兑付，任何“保本保收益”的非存款类宣传都涉嫌违规甚至诈骗。","score":2,"stem":"看到“保本保收益”的理财产品宣传，正确判断是："},{"id":"v1-40","type":"single","chapter_id":"ch06","kp_id":"","difficulty":"medium","options":["合法投资咨询","非法证券投资咨询/诈骗","券商官方服务","基金销售渠道"],"answer":"B","analysis":"无资质荐股收费属非法证券活动；先给“涨停票”骗信任，再诱导加大投入甚至入金对赌盘。","score":2,"stem":"电话/群聊“荐股带单、收费分成”常见性质是："},{"id":"v1-41","type":"single","chapter_id":"ch06","kp_id":"","difficulty":"easy","options":["无法乘坐高铁","影响贷款、信用卡审批及利率","限制旅游出行","电话被停机"],"answer":"B","analysis":"征信不良直接抬高融资成本甚至导致拒贷；普通逾期不涉及出行限制（失信被执行人另当别论）。","score":2,"stem":"个人征信不良记录的最主要影响是："},{"id":"v1-42","type":"single","chapter_id":"ch06","kp_id":"","difficulty":"medium","options":["集中投资","分散投资","追涨杀跌","杠杆投资"],"answer":"B","analysis":"分散投资通过持有相关性较低的多种资产，降低单一资产暴雷对总财富的冲击。","score":2,"stem":"“不要把鸡蛋放在同一个篮子里”体现的投资原则是："}],"kps":[{"id":"kp0101","chapter_id":"ch01","title":"中央银行的性质与职能","content":"我国的中央银行是中国人民银行，是国务院组成部门，代表国家制定和执行货币政策，不以营利为目的。央行三大传统职能：一是“发行的银行”，垄断人民币发行与流通管理；二是“银行的银行”，集中保管商业银行存款准备金、充当最后贷款人、组织银行间清算；三是“政府的银行”，经理国库、持有和经营国家外汇储备、代表政府参与国际金融活动。央行不办理企业和居民个人的普通存贷款业务。","importance":"high"},{"id":"kp0102","chapter_id":"ch01","title":"一般性货币政策三大工具","content":"法定存款准备金率、再贴现、公开市场操作，是对货币供应总量进行整体调节的三大一般性工具。存款准备金率是商业银行缴存央行的资金比例，上调收缩信贷、下调释放流动性；再贴现是商业银行将未到期票据向央行贴现融资时适用的利率与额度政策；公开市场操作是央行在市场买卖国债、央票等证券以调节基础货币。此外央行还运用结构性货币政策工具和窗口指导等方式。","importance":"medium"},{"id":"kp0103","chapter_id":"ch01","title":"货币供应量层次 M0/M1/M2","content":"M0=流通中的现金；M1（狭义货币）=M0+单位活期存款，流动性强，反映经济现实购买力；M2（广义货币）=M1+单位定期存款+居民储蓄存款+其他存款，同时反映现实与潜在购买力。M1 增速高于 M2 常被视为资金活化、企业经营活跃的信号；M2 增速常被用来观察流动性松紧和未来通胀压力。","importance":"medium"},{"id":"kp0104","chapter_id":"ch01","title":"名义利率与实际利率","content":"名义利率是银行挂牌、合同约定的货币利率；实际利率衡量扣除物价因素后的真实收益，近似公式为：实际利率≈名义利率−通货膨胀率。例如名义利率3%、通胀2%，实际利率约1%；若名义利率低于通胀率，则实际利率为负，存款购买力缩水。理财时只看名义收益而忽略通胀，会高估真实回报。","importance":"medium"},{"id":"kp0105","chapter_id":"ch01","title":"最后贷款人","content":"“最后贷款人”指当银行等金融机构出现流动性困难、可能引发系统性风险时，由中央银行作为最终资金供给者提供紧急流动性支持的制度安排。其目的是阻断单个机构危机向整个金融体系传染，维护金融稳定，体现了央行“银行的银行”角色。救助通常附带惩罚性条件和严格审查，以防范道德风险。","importance":"low"},{"id":"kp0201","chapter_id":"ch02","title":"GDP 与支出法核算","content":"国内生产总值（GDP）指一个国家或地区在一定时期内生产的全部最终产品和服务的市场价值。支出法从需求端核算：GDP=居民消费(C)+企业投资(I)+政府购买(G)+净出口(NX=出口−进口)。中间产品、二手交易、转移支付（如个人所得税、社保金、救济金）不计入GDP，因为它们不是当期最终产品与服务的生产。","importance":"medium"},{"id":"kp0202","chapter_id":"ch02","title":"CPI 与通货膨胀","content":"居民消费价格指数（CPI）衡量居民家庭消费的商品和服务价格水平变化，是观察通货膨胀最常用的指标。通货膨胀指一般物价水平持续、普遍上涨，伴随货币购买力下降、货币对内贬值；其对立面是通货紧缩（物价持续下跌、购买力上升）。温和通胀（通常约2%上下）被视为经济健康运行的表现，恶性通胀则会严重扰乱经济秩序。","importance":"high"},{"id":"kp0203","chapter_id":"ch02","title":"PMI 与荣枯线","content":"采购经理指数（PMI）通过对企业采购经理的调查编制，是观察制造业/服务业景气度的先行指标。以50%为荣枯分界线：PMI高于50表明行业总体扩张，低于50表明收缩，数值与50的距离代表扩张或收缩力度。PMI按月发布，属于高频指标，常先于GDP反映经济拐点，是判断短期经济走势的重要参考。","importance":"medium"},{"id":"kp0204","chapter_id":"ch02","title":"社会融资规模","content":"社会融资规模指一定时期内实体经济（企业和个人）从金融体系获得的资金总额，包括人民币贷款、外币贷款、委托贷款、信托贷款、未贴现银行承兑汇票、企业债券、非金融企业境内股票融资等。它比单看信贷更全面地反映金融对实体经济的资金支持力度，是我国重要的宏观监测指标之一。","importance":"low"},{"id":"kp0205","chapter_id":"ch02","title":"财政政策与货币政策的区分","content":"财政政策由政府（财政部门）实施，工具包括税收、政府支出、国债与补贴；扩张性财政政策如减税、增加公共投资，可刺激总需求。货币政策由中央银行实施，通过利率、存款准备金率、公开市场操作等调节货币供应量与融资成本。两者常配合使用：“双松”组合刺激经济，“双紧”组合抑制过热。区分关键在于实施主体与工具属性。","importance":"high"},{"id":"kp0301","chapter_id":"ch03","title":"A股交易基本规则","content":"我国A股实行 T+1 交易制度：当日买入的股票，次一交易日才能卖出，资金同样 T+1 交收。涨跌幅限制：主板股票一般为前收盘价的±10%，被实施风险警示的 ST 股票为±5%，创业板与科创板股票为±20%。股票交易一般以100股（一手）为整数倍申报。交易时间为每个交易日 9:30—11:30、13:00—15:00。","importance":"high"},{"id":"kp0302","chapter_id":"ch03","title":"市盈率与市净率","content":"市盈率（PE）=股价÷每股收益，表示按当前盈利水平约多少年收回投资，是最常用的估值指标；市净率（PB）=股价÷每股净资产，适用于银行、地产等重资产行业。PE低通常代表估值相对便宜，但需结合成长性判断；公司亏损时每股收益为负，PE 失去参考意义。股息率=每股分红÷股价，衡量分红回报水平。","importance":"high"},{"id":"kp0303","chapter_id":"ch03","title":"主要股票指数","content":"上证综合指数反映上交所全部股票的整体表现；沪深300指数由沪深两市规模大、流动性好的最具代表性的300只股票构成，是观察A股蓝筹整体走势的核心基准；中证500指数代表中小盘股票；创业板指数反映创业板市场表现。指数是市场整体表现的“晴雨表”，宽基指数基金多以这些指数为跟踪标的。","importance":"medium"},{"id":"kp0304","chapter_id":"ch03","title":"系统性风险与非系统性风险","content":"系统性风险（市场风险）由宏观经济、利率、汇率、政策等全局性因素引起，影响几乎所有资产，无法通过分散投资消除，典型如市场整体下跌。非系统性风险（特有风险）是单个公司或行业的经营、财务等风险，可通过持有足够数量、相关性较低的资产予以分散降低。即使是充分分散的股票基金、指数基金，仍要承受系统性风险。","importance":"high"},{"id":"kp0305","chapter_id":"ch03","title":"ST 制度与风险警示","content":"ST（Special Treatment）是沪深交易所对财务状况异常、持续经营能力存疑或存在其他重大风险情形的股票实施的风险警示制度，冠以 ST 或 *ST 标识。被实施风险警示的主板股票涨跌幅限制为±5%，存在退市风险的通常冠 *ST。ST 制度的目的是提示投资者审慎决策，而非提供投资机会。","importance":"low"},{"id":"kp0306","chapter_id":"ch03","title":"分红、股息率与除权除息","content":"上市公司以现金分红或送转股本回报股东。股息率=每股现金分红÷股价，衡量按现价买入每年靠分红获得的回报，是高股息策略的核心指标。分红或送股后，交易所会在除权除息日对股价相应下调（现金分红为除息、送转股为除权），以保证总市值连续——股价下调不等于下跌，投资者总资产不变。","importance":"medium"},{"id":"kp0307","chapter_id":"ch03","title":"融资融券与杠杆交易","content":"融资指投资者向证券公司借入资金买入证券，融券指借入证券卖出，合称两融。两融属于杠杆交易：需缴纳保证金、支付利息，收益与亏损同步放大，触及平仓线会被强制平仓。开通有资产与经验门槛，不适合新手重仓参与。","importance":"medium"},{"id":"kp0308","chapter_id":"ch03","title":"基本面分析与技术面分析","content":"基本面分析自上而下研究宏观经济、行业景气与公司财务盈利，回答“这家公司值不值这个价”；技术面分析研究价格、成交量与走势形态，回答“何时买卖”。两种方法可互补使用，但都不能保证稳定盈利，更不能替代风险控制。","importance":"medium"},{"id":"kp0309","chapter_id":"ch03","title":"板块定位与注册制","content":"我国多层次市场：主板服务成熟大企业，创业板服务成长型创新创业企业，科创板聚焦“硬科技”，北交所服务创新型中小企业。涨跌幅：主板10%（ST股5%），创业板、科创板20%。注册制以信息披露为核心，新股定价市场化，上市初期存在破发可能，“打新稳赚”的时代已经结束。","importance":"medium"},{"id":"kp0310","chapter_id":"ch03","title":"股票交易费用","content":"A股交易成本主要包括佣金（双向收取、各券商费率有差异）、印花税（2008年9月起仅在卖出环节单向征收）、过户费等。交易成本按次累积，频繁短线交易的摩擦成本会显著侵蚀长期收益，这也是指数基金等低换手策略长期占优的原因之一。","importance":"low"},{"id":"kp0401","chapter_id":"ch04","title":"债券的分类与基本要素","content":"债券是发行人依法定程序发行、约定在一定期限内还本付息的债权凭证，基本要素包括面值、票面利率、期限与发行主体。按发行主体分为国债（中央政府）、地方政府债、金融债（银行等金融机构）、企业债/公司债等。国债以国家信用为基础、违约风险极低，被称为“金边债券”；金融债与企业债合称信用债，需评估发行人违约风险。可转换债券兼具债性与股性，可按约定条件转换为发行公司股票。","importance":"medium"},{"id":"kp0402","chapter_id":"ch04","title":"债券价格与市场利率的反向关系","content":"债券价格与市场利率呈反向变动：市场利率上升，存量固定票息债券的相对吸引力下降，价格下跌；市场利率下降，价格上涨。若买入价格低于面值并持有到期，投资者除票息外还获得兑付面值的价差补偿，到期收益率高于票面利率；反之溢价买入则低于票面利率。已持有债券的投资者在加息周期面临资本损失，这就是利率风险。","importance":"high"},{"id":"kp0403","chapter_id":"ch04","title":"信用评级体系","content":"信用评级评估债券发行人按期还本付息的能力与意愿。国内评级由高到低大致为 AAA、AA、A、BBB、BB、B、CCC、CC、C：AAA 为最高等级、违约风险最低；BBB 级及以上通常视为投资级，以下为投机级（高风险）。评级越高，发行人所需支付的利率越低。评级是参考工具而非保证，仍需关注评级调整风险。","importance":"medium"},{"id":"kp0404","chapter_id":"ch04","title":"债券投资的收益来源","content":"债券投资收益来自三部分：一是票面利息，即持有期内按票面利率获得的利息；二是资本利得，即卖出价格高于买入价（或折价买入后到期按面值兑付）的价差；三是再投资收益，即将收到的利息再投资获得的收益。市场利率下行时，已持有债券除票息外还能获得价格上涨的资本利得。","importance":"medium"},{"id":"kp0405","chapter_id":"ch04","title":"债券期限与利率敏感度","content":"在其他条件相同的情况下，债券期限越长，其价格对市场利率变动越敏感（久期更长）：利率上行同样幅度时，长久期债券跌幅更大；利率下行时，其上涨弹性也更大。投资者应根据自身对利率走势的判断和资金使用期限，选择合适期限的债券，并理解期限匹配的意义。","importance":"medium"},{"id":"kp0501","chapter_id":"ch05","title":"基金的分类与特点","content":"证券投资基金按投资对象分为：货币市场基金（投资短期货币工具，低风险高流动性）、债券基金（主要投资债券，中低风险）、股票基金（主要投资股票，较高风险）、混合基金（股债兼备）；按管理方式分为主动型与被动型（指数基金）。ETF（交易型开放式指数基金）在交易所挂牌，可像股票一样盘中买卖并跟踪特定指数。指数基金采用被动跟踪策略，管理费率通常低于主动管理型基金。","importance":"medium"},{"id":"kp0502","chapter_id":"ch05","title":"复利与72法则","content":"复利指每期收益并入本金继续增值，即“利滚利”，收益增长呈加速趋势，时间越长效应越显著。72法则是快速估算工具：用72除以年化收益率，即为资金翻倍所需年数；反之用72除以目标年数即所需收益率。例如年化6%，约12年资金翻倍。复利同样作用于负收益，亏损也会按复利侵蚀本金。","importance":"medium"},{"id":"kp0503","chapter_id":"ch05","title":"资产配置与分散投资","content":"资产配置指将资金按比例分散投资于股票、债券、货币工具、黄金、保险保障等不同资产类别。不同资产之间相关性较低，风险事件不会同时冲击所有资产，组合的整体波动因此小于单一资产，可显著降低非系统性风险并平滑收益曲线。但分散投资不能消除系统性风险，市场整体下跌时组合仍会亏损。定期再平衡可防止组合比例偏离目标。","importance":"high"},{"id":"kp0504","chapter_id":"ch05","title":"风险收益匹配原则","content":"风险与收益相匹配是投资的基本规律：预期收益越高，通常伴随的风险越大；声称“低风险高收益”的产品往往暗藏陷阱。风险是亏损的可能性而非确定的损失，高风险也不必然带来高收益。投资者应先评估自身风险承受能力（年龄、收入稳定性、资金期限、心理承受力），再选择风险等级与之匹配的产品。","importance":"high"},{"id":"kp0505","chapter_id":"ch05","title":"基金净值与定投","content":"基金份额净值=基金资产净值÷份额总数，是每份基金的价值。净值高低反映历史累计表现与份额结构，不代表基金未来收益能力，也不是“贵”或“便宜”的标志。定投（定期定额投资）指固定时间、固定金额买入基金，分批入场可摊薄成本、平滑波动、降低一次性买在高点的择时风险，并形成强制储蓄纪律，但不能保证不亏损。","importance":"low"},{"id":"kp0601","chapter_id":"ch06","title":"中国金融监管体系","content":"2023年机构改革后，我国形成“一行一局一会”监管格局：中国人民银行负责宏观审慎管理与金融稳定，并监管支付机构等；国家金融监督管理总局统一负责除证券业之外的金融业监管（银行、保险、信托等机构与行为）；中国证监会统一负责证券期货市场监管。财政部负责财会制度与政府债务管理。","importance":"medium"},{"id":"kp0602","chapter_id":"ch06","title":"存款保险制度","content":"根据2015年施行的《存款保险条例》，我国建立存款保险制度：境内吸收存款的银行业金融机构须投保，同一存款人在同一投保机构的存款本息合计在50万元以内实行全额偿付，超出部分依法从投保机构清算财产中受偿。存款保险有统一的绿色标识，有助于识别正规银行机构，保障范围仅限存款，理财、基金等产品不在保障之列。","importance":"medium"},{"id":"kp0603","chapter_id":"ch06","title":"理财产品风险等级","content":"银行与理财公司销售的理财产品通常按风险由低到高分为 R1（低风险）、R2（中低风险）、R3（中风险）、R4（中高风险）、R5（高风险）五级，并对应投资者风险测评等级（C1—C5）。风险等级越高，本金亏损的可能性越大。适当性管理要求投资者购买不高于自身风险承受能力等级的产品，金融机构须充分揭示风险。","importance":"medium"},{"id":"kp0604","chapter_id":"ch06","title":"非法集资与庞氏骗局","content":"非法集资的核心特征：未经金融管理部门依法批准、以高额回报为诱饵、向不特定社会公众吸收资金。庞氏骗局是典型形态：用后来投资者的本金支付先前投资者的“利息”，制造赚钱假象，资金本身没有真实盈利来源，资金链一断即崩盘。识别要点：核实机构牌照、警惕显著高于市场水平的收益承诺、拒绝“保本高收益”话术、不盲从亲友跟投。","importance":"high"},{"id":"kp0605","chapter_id":"ch06","title":"打破刚性兑付","content":"资管新规实施后，金融机构开展资产管理业务不得承诺保本保收益，理财产品打破刚性兑付（“破刚兑”），实行净值化管理。基本原则是“卖者尽责、买者自负”：金融机构须充分揭示风险、做好适当性管理，投资者在此基础上自担投资风险。任何“保本高收益”承诺本身即违规信号。银行存款受存款保险保障，而理财、基金、信托产品不属于存款、不承诺保本。","importance":"medium"},{"id":"kp0606","chapter_id":"ch06","title":"反洗钱常识","content":"洗钱指通过各类手段掩饰、隐瞒毒品犯罪、贪污贿赂等违法所得的来源与性质，使其“合法化”的行为。常见手法包括：分拆现金存入多账户以规避大额交易报告、利用他人账户转移资金（“跑分”）、虚构交易等。金融机构须履行客户身份识别、大额和可疑交易报告等反洗钱义务。出租、出借、出售个人银行账户和收款码属于违法行为，可能沦为洗钱工具并承担法律责任。","importance":"low"},{"id":"kp0701","chapter_id":"ch07","title":"比特币与区块链","content":"比特币2009年上线，是基于区块链分布式账本的首个应用：无中央发行机构，由网络节点共同记账；协议将总量上限设定为约2100万枚，新币以“挖矿”奖励产出，并约定约每四年产出奖励减半（减半机制），新增供应增速呈阶梯式放缓。区块链的多方共同维护与密码学链式结构使其难以单点篡改，是去中心化记账的底层技术。","importance":"high"},{"id":"kp0702","chapter_id":"ch07","title":"私钥、钱包与托管风险","content":"加密资产以私钥证明所有权，“私钥在手才是你的币”。自托管分为冷钱包（离线保存，安全性高但操作门槛高）与热钱包（联网，方便但风险更高）。把资产放在交易所属于平台托管：私钥控制在平台手中，投资者只持有对平台的债权，一旦平台挪用、破产或跑路，资产可能血本无归，历史上多次发生大型交易所事件。","importance":"high"},{"id":"kp0703","chapter_id":"ch07","title":"稳定币","content":"稳定币通过储备资产或算法机制锚定法定货币价值（如1枚约锚定1美元），常用于交易计价与跨境转账。其价值依赖发行方储备充足与赎回机制，历史上仍发生过脱锚事件，并非绝对安全；锚定机制与储备透明度是判断稳定币风险的关键。","importance":"medium"},{"id":"kp0704","chapter_id":"ch07","title":"中国对虚拟货币的监管定性","content":"根据2021年人民银行等十部门《关于进一步防范和处置虚拟货币交易炒作风险的通知》：虚拟货币相关业务活动属于非法金融活动；境外虚拟货币交易所通过互联网向境内居民提供服务同样属于非法金融活动；参与虚拟货币投资交易活动的民事法律行为无效，损失自行承担。同时，虚拟货币“挖矿”活动已被列为淘汰类产业全面清退。","importance":"high"},{"id":"kp0705","chapter_id":"ch07","title":"加密货币市场风险与典型骗局","content":"加密市场为7×24小时交易，无涨跌幅限制与熔断保护，价格可单日大幅波动；高杠杆合约极易爆仓归零。典型骗局包括：只进不出的“貔貅盘”假交易平台、拉高出货、传销币、“带单老师”诱导重仓入金等。识别原则与非法集资一致：不轻信高收益承诺、不碰无法出金的平台、不上高杠杆。","importance":"high"},{"id":"kp0706","chapter_id":"ch07","title":"数字人民币与加密货币的区别","content":"数字人民币（e-CNY）是中国人民银行发行的法定货币的数字形式：与实物人民币1:1、具有法偿性、由央行中心化管理，拒收数字人民币兑付即违法。比特币等加密货币则是去中心化的虚拟商品：不由任何央行发行、无法偿性，其相关交易炒作活动在我国属于非法金融活动。二者名称相近但性质完全不同。","importance":"medium"},{"id":"kp901","chapter_id":"ch05","title":"复利","content":"利息再计入本金继续生息，“利滚利”。公式：FV=PV×(1+r)ⁿ。时间是复利最大的朋友——10 万本金年化 8%，30 年约变 100 万。","importance":"mid"},{"id":"kp902","chapter_id":"ch05","title":"72 法则","content":"快速估算翻倍年数：72 ÷ 年化收益率(%)。如年化 6%，约 12 年翻一倍。","importance":"mid"},{"id":"kp903","chapter_id":"ch02","title":"CPI 与通货膨胀","content":"CPI 衡量一篮子消费价格变动。通胀 3% 意味着购买力每年约缩水 3%——现金也有“隐性成本”。","importance":"mid"},{"id":"kp904","chapter_id":"ch03","title":"市盈率 PE","content":"股价 ÷ 每股收益，相当于按当前盈利“多少年回本”。PE 低未必便宜（可能盈利将下滑），需结合成长性判断。","importance":"mid"},{"id":"kp905","chapter_id":"ch01","title":"LPR","content":"贷款市场报价利率，我国贷款定价的基准。每月 20 日公布；房贷利率=LPR −/+ 加点。","importance":"mid"},{"id":"kp906","chapter_id":"ch01","title":"存款保险 50 万","content":"同一银行本息 50 万元以内受存款保险基金全额保障；超出部分参与破产清算受偿。分散存款可提高保障覆盖。","importance":"mid"},{"id":"kp907","chapter_id":"ch05","title":"资产配置","content":"在不同大类资产（股、债、现金、黄金等）间分配比例。研究显示配置比例决定长期收益波动的绝大部分，比选股择时更重要。","importance":"mid"},{"id":"kp908","chapter_id":"ch05","title":"应急备用金","content":"3—6 个月生活费，存于活期/货币基金。它是“不下牌桌”的安全垫，避免被迫在低点卖出资产。","importance":"mid"},{"id":"kp909","chapter_id":"ch06","title":"杠杆","content":"借钱放大收益与亏损。保证金交易中 5 倍杠杆遇到 20% 逆向波动即爆仓。杠杆不会让差策略变好，只会加快出局。","importance":"mid"},{"id":"kp910","chapter_id":"ch06","title":"期限错配","content":"短钱长投（如用一年期借款投五年项目），利率或流动性一变就面临续借风险，是金融风险的经典来源。","importance":"mid"},{"id":"kp911","chapter_id":"ch06","title":"风险收益匹配","content":"高收益必然伴随高风险。凡宣称“保本高收益”者，要么违规，要么是庞氏骗局——没有第三种可能。","importance":"mid"},{"id":"kp912","chapter_id":"ch06","title":"KYC 与适当性","content":"了解你的客户：机构须评估你的风险承受力，把风险等级匹配的产品卖给你。测评不是走形式，是风险的第一道防线。","importance":"mid"}],"chNames":{"ch01":"货币银行与中央银行","ch02":"宏观经济指标","ch03":"股票市场","ch04":"债券与固定收益","ch05":"基金与资产配置","ch06":"金融风险与监管","ch07":"加密货币与数字资产","ch08":"保险与保障"},"deep":[{"id":"d01","title":"复利与 72 法则","ch":"ch05","body":"复利是利息再计入本金继续生息，公式 FV=PV×(1+r)ⁿ。直觉：10 万本金、年化 8%，单利 30 年后是 34 万，复利则是 100 万——差距来自“利息的利息”。72 法则是快速心算工具：翻倍年数≈72÷年化收益率(%)，例如 6% 约 12 年翻倍。其原理是 ln2≈0.693，在 6%—10% 区间精度很好。复利同样作用于负债：信用卡循环利息按日计息、按月复利，年化可达 18%，是“负向复利”。通胀也在复利侵蚀购买力：3% 通胀下现金购买力约 23 年腰斩。应用要点：尽早开始、避免中断、警惕高息负债。"},{"id":"d02","title":"市盈率 PE 的正确用法","ch":"ch03","body":"PE=股价÷每股收益，可粗解为“按当前盈利多少年回本”。三种口径：静态 PE（用去年年报，滞后）、滚动 PE-TTM（最近四个季度，最常用）、预测 PE（用券商一致预期，最前瞻）。PE 高不等于贵：高增长行业（如新能源）市场愿意给溢价；PE 低不等于便宜：周期股（钢铁、航运）在盈利顶点时 PE 最低，恰恰是周期见顶信号——“周期股买高 PE、卖低 PE”。三个陷阱：① 亏损股 PE 无意义；② 跨行业不可比（银行 5 倍 vs 白酒 30 倍各有逻辑）；③ 一次性损益扭曲 EPS。搭配工具：PB 看资产底、PEG=PE÷增长率看性价比（<1 相对便宜）。"},{"id":"d03","title":"LPR 与中国利率体系","ch":"ch01","body":"中国利率是“链条式传导”：央行政策利率（7 天逆回购、MLF）→ 银行边际资金成本 → LPR 报价 → 实际贷款利率。LPR（贷款市场报价利率）每月 20 日由报价行在 MLF 基础上加点报出，分 1 年期与 5 年期以上两档。你的房贷利率=LPR(5年)±加点，重定价周期最短一年。2019 年 LPR 改革的核心目的：打通“政策利率→贷款利率”传导，让降息更快到达实体。存款端：存款利率市场化调整机制挂钩 10 年期国债与 1 年期 LPR。理解这条链，就能预判：央行降 MLF → LPR 大概率跟降 → 房贷月供变化（重定价日后生效）。"},{"id":"d04","title":"CPI 与通胀的资产含义","ch":"ch02","body":"CPI 衡量一篮子居民消费品与服务的价格变动，篮子中食品（尤其猪肉）权重高导致波动大，因此看“核心 CPI”（剔除食品与能源）更能反映趋势。通胀三来源：需求拉动（货币宽松）、成本推动（原材料涨价）、输入型（汇率贬值 imported）。对不同资产：现金购买力确定性受损；固定利率债券实际收益=票息−通胀；股票短期受压制但长期可转嫁成本；抗通胀资产（黄金、实物、提价能力强的公司股票）相对受益。温和通胀(2-3%)对企业盈利友好，恶性通胀摧毁一切定价体系。个人应对：不留过多活期现金、负债端固定利率是通胀的受益方。"},{"id":"d05","title":"资产配置：收益的真正来源","ch":"ch05","body":"Brinson 研究的经典结论：长期收益波动的 90%+ 由大类资产配置比例决定，选股与择时的贡献远小于想象。三层逻辑：① 股债天然互补（经济好股票涨利率升债券跌，反之亦然）；② 再平衡强制“高抛低吸”——每年把涨多的卖一点、跌多的买一点；③ 分散化只能降低非系统性风险，系统性风险（衰退、战争）只能靠仓位管理。实操参考：年龄法则（股票比例≈110−年龄）、三笔钱（活期应急 / 稳健理财 / 长期投资）、再平衡周期（每年一次或偏离 5% 触发）。反面清单：满仓单一资产、追热点轮动、用短钱做长投资。"},{"id":"d06","title":"存款保险与银行安全","ch":"ch01","body":"《存款保险条例》2015 年施行：同一存款人在同一银行的本息，最高偿付 50 万元，超出部分参与破产清算按比例受偿。50 万的设定依据是覆盖 99%+ 存款人的全额存款。三点实操：① 大额存款分散到多家银行，让保障覆盖最大化；② 认准“存款”而非“理财”——理财不保本，柜台的话术不能替代产品合同；③ 中小银行高息揽储要警惕，可用国家金融监管总局官网查金融许可证、用“中国货币网”查同业存单利率判断银行资质。历史案例包商银行（2019 被接管）：个人存款全额保障，但大额机构债权人打折——制度保护的是小额存款人。"},{"id":"d07","title":"A 股市场制度速览","ch":"ch03","body":"交易制度：T+1 交割（当天买次日卖）、主板 10% 涨跌停、创业板/科创板 20%、北交所 30%、ST 股 5%。发行制度：注册制（2023 全面实施）以信息披露为核心、交易所审核+证监会注册，取代核准制的实质审查——上市更容易、退市也常态化，“壳价值”消亡。板块定位：主板（成熟企业）、科创板（硬科技）、创业板（成长创新）、北交所（专精特新）。融资融券：向券商借钱买股（杠杆）或借券卖出（做空），两融余额是市场情绪指标。理解制度差异是估值前提：为什么 A 股相对 H 股有溢价、为什么小盘股波动剧烈，制度都是答案的一部分。"},{"id":"d08","title":"债券价格与利率的跷跷板","ch":"ch04","body":"债券定价=未来现金流贴现，市场利率上行→贴现率提高→存量债券价格下跌，反之上涨，这就是“跷跷板”。久期衡量敏感度：久期 5 的债券，利率每升 1%，价格约跌 5%。三种利率环境：加息周期（2022 美联储）债券熊市；降息周期（国内近年的 LPR 下调）存量债券牛市——这也是“资产荒”下机构增配债券的原因；利率低位震荡时票息为主。信用维度：利率债（国债、政金债）无违约风险；信用债有信用利差，评级越低利差越宽。个人参与：国债逆回购（节假日前高息）、债基（久期是最大变量）、可转债（股债双重属性，另有转股溢价率体系）。"},{"id":"d09","title":"基金与定投的机制","ch":"ch05","body":"基金类型光谱：货币基金（活期替代，万份收益）→ 纯债基金 → 二级债基（≤20% 股票）→ 偏股混合 → 股票型（≥80% 股票）→ 行业主题基金。费率三件套：管理费（0.15%—1.5%）、托管费（约 0.1%—0.25%）、申购赎回费（渠道差异大，长期持有常免赎回费）；指数基金与主动基金的差距主要是费率+超额收益的不确定性。定投微笑曲线：下跌期份额不断累积成本摊低，反弹时快速回本——前提是标的不死（用宽基指数而非个股）。止盈参考：目标收益率法（年化 10-15% 分批止盈）、估值法（宽基 PE 历史分位 >70% 减仓）。定投解决的是“何时买”的择时焦虑，不解决“买什么”。"},{"id":"d10","title":"非法集资与诈骗识别","ch":"ch06","body":"庞氏结构的三个特征：承诺高息（远超市场 2-3 倍）、依赖拉新（老客户返利来自新客户本金）、资金池（钱先进个人或关联公司账户）。法律定性：面向不特定公众吸收资金、承诺还本付息即涉嫌非法吸收公众存款罪；集资诈骗罪再叠加“以非法占有为目的”。四看识别法：看牌照（金融许可证，金融监管总局官网可查）、看回报（年化超 6% 要打问号、超 8% 很危险、超 10% 准备损失本金——这是监管部门的公开提示）、看托管（资金进银行托管账户还是公司账户）、看底层（钱投什么、现金流从哪来）。常见话术红旗：“保本保收益”“国资背景”“区块链创新”“限量名额”“拉人头返佣金”。"},{"id":"d11","title":"比特币与区块链原理","ch":"ch07","body":"区块链=全网共享的分布式账本，每个区块通过哈希与前块链接，改一块需重算其后所有块+超过全网 50% 算力，因此不可篡改。比特币的记账权靠 PoW 竞争：矿工算数学题，赢了打包区块并获得区块奖励（当前 3.125 BTC，每四年减半），这同时是新币的唯一发行方式，总量上限 2100 万枚写死在代码里。私钥=所有权：谁持有私钥谁能动币，没有客服、没有挂失，丢失即永久失去。中国监管定性：虚拟货币相关业务活动属于非法金融活动（2021 年 9 月十部委通知），挖矿与交易均被禁止，个人持有的财产属性在司法实践中有争议。理解技术中立与监管边界的区别，是这一章的核心。"},{"id":"d12","title":"稳定币与数字人民币","ch":"ch07","body":"稳定币锚定法币价值，三种模式：① 法币抵押型（USDT/USDC，发行方每收 1 美元发 1 枚，最主流但依赖发行方储备透明度——USDT 长期不公开审计，USDC 有月度报告）；② 加密资产抵押型（DAI，链上超额抵押，去中心化）；③ 算法型（曾有的 UST，2022 年崩盘归零，证明无抵押的“算法稳定”是伪命题）。数字人民币 e-CNY 是完全不同的物种：主权信用货币的数字化，定位 M0（现金替代），双层运营（央行—银行—公众），可控匿名（小额匿名、大额可溯），不付利息、不参与信贷创造。与稳定币的本质区别：信用基础（国家 vs 私人公司储备）、法律地位（法偿货币 vs 资产）、技术路线（中心化可控 vs 去中心化）。"}]};</script>
+
+<div id="learnhub" style="max-width:960px;margin:26px auto 60px;padding:0 16px;display:none">
+  <div class="lh-card" style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:0 1px 3px rgba(26,60,110,.06)">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+      <div style="width:34px;height:34px;border-radius:8px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800">学</div>
+      <div><b style="font-size:16px">学习中心</b> <span style="color:var(--sub);font-size:12px">· 合并题库 114 题 · 8 章 54 卡 · 12 篇深度讲解</span></div>
+      <button id="lh-close" style="margin-left:auto;border:none;background:var(--bg);border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--sub)">收起 ✕</button>
+    </div>
+    <div class="lh-tabs" style="display:flex;gap:8px;flex-wrap:wrap;border-bottom:2px solid var(--line);padding-bottom:10px;margin-bottom:14px">
+      <button class="lh-tab on" data-t="practice" style="border:1px solid var(--navy);background:var(--navy);color:#fff;border-radius:8px;padding:7px 14px;cursor:pointer;font-size:13px;font-weight:600">✍️ 题库练习</button>
+      <button class="lh-tab" data-t="kp" style="border:1px solid var(--line);background:var(--card);color:var(--sub);border-radius:8px;padding:7px 14px;cursor:pointer;font-size:13px;font-weight:600">🃏 知识点</button>
+      <button class="lh-tab" data-t="wrong" style="border:1px solid var(--line);background:var(--card);color:var(--sub);border-radius:8px;padding:7px 14px;cursor:pointer;font-size:13px;font-weight:600">❌ 错题复习<span id="lh-wrongbadge" style="display:none;background:var(--no);color:#fff;border-radius:10px;padding:1px 7px;margin-left:4px;font-size:11px">0</span></button>
+      <button class="lh-tab" data-t="hist" style="border:1px solid var(--line);background:var(--card);color:var(--sub);border-radius:8px;padding:7px 14px;cursor:pointer;font-size:13px;font-weight:600">📊 记录</button>
+      <button class="lh-tab" data-t="deep" style="border:1px solid var(--line);background:var(--card);color:var(--sub);border-radius:8px;padding:7px 14px;cursor:pointer;font-size:13px;font-weight:600">📖 深度讲解</button>
+    </div>
+    <div id="lh-body"></div>
+  </div>
+</div>
+<style>
+.lh-opt{display:block;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;margin:6px 0;cursor:pointer;font-size:13.5px;line-height:1.5}
+.lh-opt:hover{border-color:var(--navy)}
+.lh-opt.sel{border-color:var(--navy);background:#eef3fb}
+.lh-opt.right{border-color:var(--ok);background:var(--okbg)}
+.lh-opt.wrong{border-color:var(--no);background:var(--nobg)}
+.lh-chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 12px;cursor:pointer;font-size:12px;color:var(--sub);white-space:nowrap}
+.lh-chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.lh-q{border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px;background:var(--card)}
+.lh-meta{font-size:11px;color:var(--sub);display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.lh-exp{margin-top:10px;background:#f6f8fc;border-left:3px solid var(--navy);border-radius:8px;padding:11px 13px;font-size:12.5px;line-height:1.7}
+.lh-kpc{margin-top:8px;border:1px dashed var(--gold);border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.7}
+.lh-btn{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:9px 18px;cursor:pointer;font-size:13px;font-weight:600}
+.lh-btn:hover{filter:brightness(1.1)}
+.lh-btn.ghost{background:var(--card);color:var(--sub);border:1px solid var(--line)}
+.lh-article{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.lh-article h4{background:var(--navy);color:#fff;margin:0;padding:11px 14px;font-size:14px;cursor:pointer}
+.lh-article .body{display:none;padding:14px 16px;font-size:13.5px;line-height:1.9;background:var(--card)}
+.lh-article.open .body{display:block}
+.lh-stat{display:inline-block;border:1px solid var(--line);border-radius:10px;padding:10px 16px;margin:4px;font-size:12px;background:var(--bg)}
+@media print{#learnhub,.siteauth-badge{display:none!important}}
+</style>
+
+<script>
+(function(){
+  var L = window.LEARN;
+  var K = { wrong:"fin_wrongbook_v1", hist:"fin_history_v1", srs:"fin_srs_v1", examState:"fin_exam_state_v1" };
+  var TYPE_NAMES = {single:"单选", multiple:"多选", judge:"判断"};
+  var DIFF_NAMES = {easy:"基础", medium:"进阶", hard:"较难"};
+  var LET = ["A","B","C","D","E","F"];
+  function load(k,d){ try{ var v = JSON.parse(localStorage.getItem(k)); return v==null?d:v }catch(e){ return d } }
+  function save(k,v){ localStorage.setItem(k, JSON.stringify(v)); window.__agMiscTouch && window.__agMiscTouch(); }
+  var wrong = load(K.wrong, []);
+  var hist = load(K.hist, []);
+  var srs = load(K.srs, {});
+  var qmap = {}; L.questions.forEach(function(q){ qmap[q.id]=q; });
+  var kmap = {}; L.kps.forEach(function(p){ kmap[p.id]=p; });
+
+  // 考试交卷后的错题并入错题本（读取考试持久状态）
+  (function mergeExam(){
+    try{
+      var st = load(K.examState, null);
+      if(st && st.results && st.results.wrongIds && st.results.wrongIds.length){
+        st.results.wrongIds.forEach(function(id){
+          if(wrong.indexOf(id) < 0) wrong.push(id);
+          srs[id] = srs[id] || {due: Date.now(), streak: 0};
+        });
+        save(K.wrong, wrong); save(K.srs, srs);
+      }
+    }catch(e){}
+  })();
+
+  var hub = document.getElementById("learnhub");
+  var body = document.getElementById("lh-body");
+  // 顶部入口：intro 的按钮排
+  var ia = document.getElementById("introActions");
+  if(ia){
+    var b = document.createElement("button");
+    b.className = "btn"; b.style.cssText = "background:var(--navy)";
+    b.textContent = "📚 学习中心（题库练习 · 知识点 · 错题复习）";
+    b.onclick = function(){ hub.style.display="block"; hub.scrollIntoView({behavior:"smooth"}); };
+    ia.appendChild(b);
+  }
+  document.getElementById("lh-close").onclick = function(){ hub.style.display="none"; };
+  function updBadge(){
+    var due = Object.keys(srs).filter(function(id){ return srs[id] && srs[id].due <= Date.now() && qmap[id]; });
+    var el = document.getElementById("lh-wrongbadge");
+    if(wrong.length){ el.style.display=""; el.textContent = wrong.length + (due.length ? " · 今日到期 " + due.length : ""); }
+  }
+  updBadge();
+
+  document.querySelectorAll(".lh-tab").forEach(function(t){
+    t.onclick = function(){
+      document.querySelectorAll(".lh-tab").forEach(function(x){ x.className = "lh-tab"; x.style.cssText = "border:1px solid var(--line);background:var(--card);color:var(--sub);border-radius:8px;padding:7px 14px;cursor:pointer;font-size:13px;font-weight:600"; });
+      t.className = "lh-tab on"; t.style.cssText = "border:1px solid var(--navy);background:var(--navy);color:#fff;border-radius:8px;padding:7px 14px;cursor:pointer;font-size:13px;font-weight:600";
+      render(t.dataset.t);
+    };
+  });
+
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
+
+  /* ---------- 题库练习 ---------- */
+  var pf = { ch:"all", type:"all", dif:"all", order:"seq", list:[], idx:0, answers:{} };
+  function renderPractice(){
+    var chips = function(cur, key, map, allLabel){
+      var h = '<span class="lh-chip'+(cur==="all"?" on":"")+'" data-k="'+key+'" data-v="all">'+allLabel+'</span>';
+      for(var k in map){ h += '<span class="lh-chip'+(cur===k?" on":"")+'" data-k="'+key+'" data-v="'+k+'">'+map[k]+'</span>'; }
+      return h;
+    };
+    body.innerHTML = '<div style="font-size:12px;color:var(--sub);margin-bottom:6px">章节</div>'
+      + '<div style="margin-bottom:8px" id="pf-ch">'+chips(pf.ch,"ch",L.chNames,"全部")+'</div>'
+      + '<div style="font-size:12px;color:var(--sub);margin-bottom:6px">题型 / 难度 / 顺序</div>'
+      + '<div style="margin-bottom:12px">'
+      + chips(pf.type,"type",TYPE_NAMES,"全部") + ' '
+      + chips(pf.dif,"dif",DIFF_NAMES,"全部") + ' '
+      + '<span class="lh-chip'+(pf.order==="rand"?" on":"")+'" data-k="order" data-v="rand">随机顺序</span> '
+      + '<button class="lh-btn" id="pf-go" style="margin-left:8px">开始练习</button>'
+      + '</div><div id="pf-area"></div>';
+    body.querySelectorAll(".lh-chip").forEach(function(c){
+      c.onclick = function(){ pf[c.dataset.k] = c.dataset.v; renderPractice(); };
+    });
+    document.getElementById("pf-go").onclick = function(){
+      var pool = L.questions.filter(function(q){
+        return (pf.ch==="all"||q.chapter_id===pf.ch) && (pf.type==="all"||q.type===pf.type) && (pf.dif==="all"||q.difficulty===pf.dif);
+      });
+      if(pf.order==="rand") pool.sort(function(){ return Math.random()-0.5; });
+      pf.list = pool; pf.idx = 0; pf.answers = {};
+      drawQ();
+    };
+    drawIntroStat();
+  }
+  function drawIntroStat(){
+    var a = document.getElementById("pf-area");
+    if(a) a.innerHTML = '<div style="color:var(--sub);font-size:12.5px;padding:6px 2px">共库 114 题（v2 考试题库 74 + 精选补充 40）· 选择条件后点「开始练习」，逐题作答即时判分并计入错题本</div>';
+  }
+  function drawQ(){
+    var a = document.getElementById("pf-area"); if(!a) return;
+    if(!pf.list.length){ drawIntroStat(); return; }
+    if(pf.idx >= pf.list.length){
+      var ok = 0; pf.list.forEach(function(q){ if(pf.answers[q.id] && isOk(q, pf.answers[q.id])) ok++; });
+      a.innerHTML = '<div class="lh-q"><b>本轮练习完成</b><div style="margin-top:8px;font-size:13px">答对 '+ok+' / '+pf.list.length+' 题 · 答错的题已进入错题复习（遗忘曲线队列）</div><button class="lh-btn" style="margin-top:10px" onclick="location.reload()">再来一轮</button></div>';
+      return;
+    }
+    var q = pf.list[pf.idx];
+    var h = '<div class="lh-q"><div class="lh-meta"><span style="color:var(--navy);font-weight:700">'+L.chNames[q.chapter_id]+'</span><span>'+TYPE_NAMES[q.type]+'</span><span>'+DIFF_NAMES[q.difficulty]+'</span><span>第 '+(pf.idx+1)+' / '+pf.list.length+' 题</span>'+(wrong.indexOf(q.id)>=0?'<span style="color:var(--no)">曾错</span>':'')+'</div>'
+      + '<div style="font-size:14.5px;font-weight:600;line-height:1.6;margin-bottom:8px">'+esc(q.stem)+'</div>';
+    if(q.type==="judge"){ h += '<div class="lh-opt" data-v="正确">正确</div><div class="lh-opt" data-v="错误">错误</div>'; }
+    else { q.options.forEach(function(o,i){ h += '<div class="lh-opt" data-v="'+LET[i]+'">'+LET[i]+'. '+esc(o)+'</div>'; }); }
+    h += '<div id="pf-exp"></div></div>';
+    a.innerHTML = h;
+    var picked = [];
+    a.querySelectorAll(".lh-opt").forEach(function(o){
+      o.onclick = function(){
+        if(a.getAttribute("data-done")) return;
+        if(q.type==="multiple"){
+          o.classList.toggle("sel");
+          var v = o.dataset.v;
+          var ix = picked.indexOf(v); if(ix>=0) picked.splice(ix,1); else picked.push(v);
+        } else {
+          a.querySelectorAll(".lh-opt").forEach(function(x){ x.classList.remove("sel"); });
+          picked = [o.dataset.v];
+          a.setAttribute("data-done","1");
+          judge(q, picked, a);
+        }
+      };
+    });
+    if(q.type==="multiple"){
+      var sub = document.createElement("button"); sub.className="lh-btn"; sub.textContent="提交本题"; sub.style.marginTop="8px";
+      sub.onclick = function(){ if(!picked.length) return; a.setAttribute("data-done","1"); judge(q, picked, a); };
+      a.appendChild(sub);
+    }
+  }
+  function isOk(q, ua){
+    var ca = Array.isArray(q.answer) ? q.answer.slice().sort() : [q.answer];
+    var u = ua.slice().sort();
+    return u.length===ca.length && u.every(function(x,i){ return x===ca[i]; });
+  }
+  function judge(q, ua, area){
+    var ok = isOk(q, ua);
+    var ca = Array.isArray(q.answer) ? q.answer.slice().sort().join("") : q.answer;
+    area.querySelectorAll(".lh-opt").forEach(function(o){
+      var v = o.dataset.v;
+      if(Array.isArray(q.answer) ? q.answer.indexOf(v)>=0 : v===q.answer) o.classList.add("right");
+      else if(ua.indexOf(v)>=0) o.classList.add("wrong");
+    });
+    // 错题入库 + SRS
+    if(!ok){
+      if(wrong.indexOf(q.id)<0) wrong.push(q.id);
+      srs[q.id] = srs[q.id] || {due: Date.now(), streak: 0};
+    } else if(srs[q.id] && srs[q.id].streak >= 0){
+      // 练习答对不提前消除 SRS（按复习队列来）
+    }
+    save(K.wrong, wrong); save(K.srs, srs); updBadge();
+    var kp = q.kp_id && kmap[q.kp_id];
+    var exp = document.getElementById("pf-exp");
+    exp.innerHTML = '<div class="lh-exp"><b style="color:'+(ok?"var(--ok)":"var(--no)")+'">'+(ok?"✅ 答对":"❌ 答错，已加入复习队列")+'</b> · 正确答案：<b>'+ca+'</b><br>'+esc(q.analysis||"")+'</div>'
+      + (kp ? '<div class="lh-kpc"><b>📖 关联知识点：'+esc(kp.title)+'</b><br>'+esc(kp.content)+'</div>' : "");
+    var nx = document.createElement("button"); nx.className="lh-btn"; nx.textContent="下一题 →"; nx.style.marginTop="10px";
+    nx.onclick = function(){ pf.idx++; drawQ(); };
+    area.appendChild(nx);
+  }
+
+  /* ---------- 知识点卡 ---------- */
+  function renderKp(){
+    var h = '<div id="kp-ch2" style="margin-bottom:10px"></div><div id="kp-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px"></div>';
+    body.innerHTML = h;
+    var chips = '<span class="lh-chip on" data-v="all">全部（'+L.kps.length+'）</span>';
+    for(var c in L.chNames){ chips += '<span class="lh-chip" data-v="'+c+'">'+L.chNames[c]+'</span>'; }
+    document.getElementById("kp-ch2").innerHTML = chips;
+    document.querySelectorAll("#kp-ch2 .lh-chip").forEach(function(x){
+      x.onclick = function(){
+        document.querySelectorAll("#kp-ch2 .lh-chip").forEach(function(y){ y.className="lh-chip"; });
+        x.className = "lh-chip on";
+        drawKp(x.dataset.v);
+      };
+    });
+    drawKp("all");
+  }
+  function drawKp(ch){
+    var list = L.kps.filter(function(p){ return ch==="all"||p.chapter_id===ch; });
+    document.getElementById("kp-grid").innerHTML = list.map(function(p){
+      return '<div class="lh-q" style="margin:0"><div class="lh-meta"><span style="color:var(--navy);font-weight:700">'+L.chNames[p.chapter_id]+'</span></div><b style="font-size:14px">'+esc(p.title)+'</b><div style="font-size:12.5px;line-height:1.7;color:var(--sub);margin-top:6px">'+esc(p.content)+'</div></div>';
+    }).join("") || '<div style="color:var(--sub);font-size:13px">本章暂无卡片</div>';
+  }
+
+  /* ---------- 错题复习（SRS） ---------- */
+  function renderWrong(){
+    var due = [];
+    var future = 0;
+    wrong.forEach(function(id){ if(qmap[id] && srs[id]){ if(srs[id].due<=Date.now()) due.push(id); else future++; } });
+    var h = '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">'
+      + '<span class="lh-stat">错题本：<b>'+wrong.length+'</b> 题</span>'
+      + '<span class="lh-stat">今日到期复习：<b style="color:'+(due.length?"var(--warn)":"var(--ok)")+'">'+due.length+'</b> 题</span>'
+      + '<span class="lh-stat">排期中：'+future+' 题</span>'
+      + '<button class="lh-btn ghost" id="wr-clear">清空错题本</button></div><div id="wr-area"></div>';
+    body.innerHTML = h;
+    document.getElementById("wr-clear").onclick = function(){
+      if(!confirm("清空全部错题与复习队列？")) return;
+      wrong = []; srs = {}; save(K.wrong, wrong); save(K.srs, srs); updBadge(); renderWrong();
+    };
+    var area = document.getElementById("wr-area");
+    if(!due.length){
+      area.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:16px 0">今日没有到期的复习题 🎉</div>';
+      return;
+    }
+    var id = due[0];
+    var q = qmap[id];
+    var h2 = '<div class="lh-q"><div class="lh-meta"><span style="color:var(--navy);font-weight:700">'+L.chNames[q.chapter_id]+'</span><span>'+TYPE_NAMES[q.type]+'</span><span>还剩 '+due.length+' 题到期</span></div>'
+      + '<div style="font-size:14.5px;font-weight:600;line-height:1.6;margin-bottom:8px">'+esc(q.stem)+'</div>';
+    if(q.type==="judge"){ h2 += '<div class="lh-opt" data-v="正确">正确</div><div class="lh-opt" data-v="错误">错误</div>'; }
+    else { q.options.forEach(function(o,i){ h2 += '<div class="lh-opt" data-v="'+LET[i]+'">'+LET[i]+'. '+esc(o)+'</div>'; }); }
+    h2 += '</div>';
+    area.innerHTML = h2;
+    area.querySelectorAll(".lh-opt").forEach(function(o){
+      o.onclick = function(){
+        var ok = isOk(q, [o.dataset.v]);
+        area.querySelectorAll(".lh-opt").forEach(function(x){
+          var v = x.dataset.v;
+          if(v===q.answer) x.classList.add("right"); else if(v===o.dataset.v && !ok) x.classList.add("wrong");
+        });
+        // SRS 更新：对→间隔拉长，错→明天再见
+        var s = srs[id] || {streak:0};
+        if(ok){ s.streak = (s.streak||0)+1; s.due = Date.now() + [1,2,4,7,15,30][Math.min(s.streak-1,5)]*86400000; }
+        else { s.streak = 0; s.due = Date.now() + 86400000; }
+        srs[id] = s;
+        // 连续答对 3 次移出错题本
+        if(ok && s.streak>=3){ wrong = wrong.filter(function(x){ return x!==id; }); delete srs[id]; }
+        save(K.wrong, wrong); save(K.srs, srs); updBadge();
+        var kp = q.kp_id && kmap[q.kp_id];
+        area.insertAdjacentHTML("beforeend", '<div class="lh-exp"><b style="color:'+(ok?"var(--ok)":"var(--no)")+'">'+(ok?"✅ 答对 · "+(s.streak>=3?"已移出错题本":"间隔已延长"):"❌ 答错 · 明天再见")+'</b> · 正确答案：<b>'+q.answer+'</b><br>'+esc(q.analysis||"")+'</div>'+(kp?'<div class="lh-kpc"><b>📖 '+esc(kp.title)+'</b><br>'+esc(kp.content)+'</div>':'')+'<button class="lh-btn" style="margin-top:10px" id="wr-next">下一题 →</button>');
+        document.getElementById("wr-next").onclick = renderWrong;
+      };
+    });
+  }
+
+  /* ---------- 记录 ---------- */
+  function renderHist(){
+    var rows = hist.slice(0, 20).map(function(r){
+      return '<tr><td style="padding:7px 8px;border-bottom:1px solid var(--line);font-size:12.5px">'+esc(r.d)+'</td><td style="padding:7px 8px;border-bottom:1px solid var(--line);font-size:12.5px">'+esc(r.m)+'</td><td style="padding:7px 8px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--navy);font-weight:700">'+r.s+' / '+r.t+'</td><td style="padding:7px 8px;border-bottom:1px solid var(--line);font-size:12.5px">'+r.rate+'%</td></tr>';
+    }).join("");
+    body.innerHTML = '<div style="display:flex;gap:8px;align-items:center;margin-bottom:10px"><b>练习与考试记录（本机保存 20 条）</b><button class="lh-btn ghost" id="hs-clear">清空</button></div>'
+      + '<table style="width:100%;border-collapse:collapse"><tr><th style="padding:7px 8px;text-align:left;font-size:11px;color:var(--sub)">时间</th><th style="padding:7px 8px;text-align:left;font-size:11px;color:var(--sub)">类型</th><th style="padding:7px 8px;text-align:left;font-size:11px;color:var(--sub)">得分</th><th style="padding:7px 8px;text-align:left;font-size:11px;color:var(--sub)">正确率</th></tr>'+(rows||'<tr><td colspan="4" style="padding:16px;text-align:center;color:var(--sub)">暂无记录，去练习或考试吧</td></tr>')+'</table>';
+    document.getElementById("hs-clear").onclick = function(){ if(!confirm("清空记录？"))return; hist=[]; save(K.hist,hist); renderHist(); };
+  }
+  // hook：考试交卷时写历史（包装原 submitExam）
+  try{
+    var orig = window.submitExam;
+    if(orig){
+      window.submitExam = function(){
+        orig();
+        try{
+          var st = load(K.examState, null);
+          if(st && st.results){
+            hist.unshift({ d: new Date().toLocaleString("zh-CN"), m: "正式测评", s: st.results.total, t: st.results.full, rate: Math.round(st.results.total/st.results.full*100) });
+            hist = hist.slice(0,20); save(K.hist, hist);
+          }
+        }catch(e){}
+      };
+    }
+  }catch(e){}
+
+  /* ---------- 深度讲解 ---------- */
+  function renderDeep(){
+    body.innerHTML = L.deep.map(function(a, i){
+      return '<div class="lh-article" id="da-'+a.id+'"><h4 onclick="this.parentNode.classList.toggle(\'open\')">'+(i+1)+'. '+esc(a.title)+' <span style="float:right;font-weight:400;font-size:12px;opacity:.8">'+esc(L.chNames[a.ch]||"")+' · 点击展开</span></h4><div class="body">'+esc(a.body)+'</div></div>';
+    }).join("");
+  }
+
+  function render(t){
+    if(t==="practice") renderPractice();
+    else if(t==="kp") renderKp();
+    else if(t==="wrong") renderWrong();
+    else if(t==="hist") renderHist();
+    else if(t==="deep") renderDeep();
+  }
+  render("practice");
+})();
+</script>
+<script src="site-auth.js?v=3"></script>
 </body>
 </html>

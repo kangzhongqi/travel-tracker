@@ -36,9 +36,9 @@ const sections = [
   },
   {
     title: '🤖 Agent 学习中心', cards: [
-      { icon: '🎓', name: '学习中心（跨设备云同步）', desc: 'GitHub 授权登录 · 错题/历史/词汇自动同步 · 金融测评 + 西语 A2', tag: 'Agent 版 · Vue', href: 'study.html', hot: true },
-      { icon: '💰', name: '金融知识测评 · 单机版', desc: '题库中心 · 在线测评 · 学生卷/教师卷 · 知识点卡片', tag: 'Agent 版', href: 'agent-finance.html' },
-      { icon: '🇪🇸', name: '西语 A2 复习 · 单机版', desc: '语法笔记 · 词汇三档复习 · 错词本 · 综合小测', tag: 'Agent 版', href: 'agent-spanish.html' }
+      { icon: '🎓', name: '学习中心（Vue · 云同步）', desc: '金融测评 + 西语 A2 · 登录后错题/词汇/打卡自动同步', tag: 'Agent 版 · Vue', href: 'study.html', hot: true },
+      { icon: '💰', name: '金融测评 · 合体版', desc: '114 题 8 章 · 60 分钟考试断点续考 · 错题遗忘曲线 · 12 篇深度讲解', tag: 'Agent 合体版', href: 'agent-finance.html', hot: true },
+      { icon: '🇪🇸', name: '西语 A2 · 合体版', desc: '272 词库 · 20 张透彻语法卡 · 114 动词变位速查 · 遗忘曲线复习', tag: 'Agent 合体版', href: 'agent-spanish.html', hot: true }
     ]
   }
 ]

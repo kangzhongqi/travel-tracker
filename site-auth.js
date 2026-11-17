@@ -12,7 +12,9 @@
     'visited', 'china_travel_visited', 'china_travel_v2',
     'county_visited_v2', 'county_visited_v4',
     'beijing_subway_visited', 'bj_subway_v2', 'subway_checked',
-    'spanish_verb_hist', 'sp_daily', 'sp_history', 'lang_test_h'
+    'spanish_verb_hist', 'sp_daily', 'sp_history', 'lang_test_h',
+    'fin_exam_state_v1', 'fin_wrongbook_v1', 'fin_history_v1', 'fin_srs_v1',
+    'agv_mark_v2', 'es_srs_v1'
   ]
   var API = 'https://api.github.com'
   var gh = { token: '', owner: '' }
