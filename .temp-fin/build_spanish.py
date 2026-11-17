@@ -45,8 +45,14 @@ json.dump(merged, open(OUT + "/vocab_merged.json", "w", encoding="utf-8"), ensur
 # 旧 VMARK(索引键) → 新文本键 的迁移映射
 mig = {str(i): w[0] for i, w in enumerate(vocab_old)}
 
-DATA = "window.ESDATA = " + json.dumps({
-    "grammar": grammar, "vocab": merged, "verbs": verbs, "mig": mig
+ext = {}
+for name in ["dailyBank", "travelData", "sentenceBank", "verbBank"]:
+    ext[name] = json.load(open(OUT + "/ext_" + name + ".json", encoding="utf-8"))
+
+DATA = json.dumps({
+    "grammar": grammar, "vocab": merged, "verbs": verbs, "mig": mig,
+    "daily": ext["dailyBank"], "travel": ext["travelData"],
+    "sent": ext["sentenceBank"], "verbQuiz": ext["verbBank"]
 }, ensure_ascii=False, separators=(",", ":")) + ";"
 
 HTML = """<!DOCTYPE html>
@@ -139,7 +145,7 @@ input.q:focus{border-color:var(--accent)}
     <button class="tab on" data-p="gram"><span id="t1">📖 语法精讲</span></button>
     <button class="tab" data-p="vocab"><span id="t2">🃏 词汇复习</span></button>
     <button class="tab" data-p="verbs"><span id="t3">🔤 动词变位</span></button>
-    <button class="tab" data-p="srs"><span id="t5">🔁 遗忘曲线</span><span id="srsBadge" style="display:none;margin-left:4px;font-size:11px;color:var(--warn)"></span></button>
+    <button class="tab" data-p="sent">✍️ 句子训练</button>\n    <button class="tab" data-p="srs"><span id="t5">🔁 遗忘曲线</span><span id="srsBadge" style="display:none;margin-left:4px;font-size:11px;color:var(--warn)"></span></button>
     <button class="tab" data-p="quiz"><span id="t4">📝 综合小测</span></button>
   </div>
 
@@ -165,8 +171,25 @@ input.q:focus{border-color:var(--accent)}
       <h3>🔤 动词变位速查（114 个高频动词）</h3>
       <div class="hint" style="margin-bottom:10px">搜索动词原形或中文含义；点击动词行展开 6 人称现在时 + 简单过去时关键位。</div>
       <input class="q" id="verbSearch" placeholder="输入动词，如 hablar / ser / 吃">
+      <button class="btn" id="vqStart" style="margin-left:10px">🎯 变位练习（12 题）</button>
     </div>
     <div id="verbList"></div>
+    <div id="verbQuizArea" style="margin-top:14px"></div>
+  </div>
+
+  <div class="panel" id="p-sent">
+    <div class="card" id="dailyBox"></div>
+    <div class="card">
+      <h3>✍️ 句子训练（L1-L4）</h3>
+      <div class="hint" style="margin-bottom:8px">四级递进：L1 变位填空 → L2 点击组句 → L3 中译西 → L4 阅读理解。历史沿用旧版练习记录。</div>
+      <div class="chips" id="sentLv"></div>
+      <div id="sentArea"></div>
+    </div>
+    <div class="card">
+      <h3>🧳 旅行场景速用</h3>
+      <div class="chips" id="travelChips"></div>
+      <div id="travelArea"></div>
+    </div>
   </div>
 
   <div class="panel" id="p-srs">
@@ -438,7 +461,8 @@ document.getElementById("qStart").onclick = function(){
         var ex = document.getElementById("qExp");
         ex.style.display = "block";
         ex.innerHTML = '<b>'+(ok?"✅":"❌")+'</b> '+it.e+(ok?"":(it.word?" · 已加入遗忘曲线队列":""));
-        updSrsBadge();
+        
+updSrsBadge();
         setTimeout(function(){
           qi++;
           if(qi<items.length) draw();
@@ -452,6 +476,215 @@ document.getElementById("qStart").onclick = function(){
   draw();
 };
 
+/* ===== 变位练习（历史沿用 spanish_verb_hist）===== */
+var VH_KEY = "spanish_verb_hist";
+function vHist(){ try{ return JSON.parse(localStorage.getItem(VH_KEY))||[] }catch(e){ return [] } }
+document.getElementById("vqStart").onclick = function(){
+  var bank = D.verbQuiz.slice().sort(function(){ return Math.random()-.5; }).slice(0,12);
+  var qi = 0, ok = 0;
+  var area = document.getElementById("verbQuizArea");
+  function draw(){
+    if(qi >= bank.length){
+      var h = vHist(); h.push({ok:ok, total:bank.length, d:new Date().toLocaleString("zh-CN")});
+      localStorage.setItem(VH_KEY, JSON.stringify(h.slice(-50)));
+      window.__agMiscTouch && window.__agMiscTouch();
+      area.innerHTML = '<div class="card"><b>本轮变位练习：'+ok+' / '+bank.length+'</b><div class="hint" style="margin-top:6px">已计入历史（沿用旧版练习记录）</div><button class="btn ghost" style="margin-top:8px" id="vqClose">关闭</button></div>';
+      document.getElementById("vqClose").onclick = function(){ area.innerHTML = ""; };
+      return;
+    }
+    var q = bank[qi];
+    var distr = D.verbQuiz.filter(function(x){ return x.ans!==q.ans; }).sort(function(){ return Math.random()-.5; }).slice(0,3).map(function(x){ return x.ans; });
+    var opts = distr.concat([q.ans]).sort(function(){ return Math.random()-.5; });
+    area.innerHTML = '<div class="card"><div class="hint" style="margin-bottom:8px">第 '+(qi+1)+' / '+bank.length+' 题 · 已对 '+ok+'</div>'
+      + '<div style="font-size:16px;font-weight:700">🎯 <b style="color:var(--accent2)">'+q.v+'</b> · '+q.tense+' · 主语 '+q.subj+'（'+q.person+'）</div>'
+      + '<div class="hint" style="margin:4px 0 10px">'+q.hint+'</div>'
+      + opts.map(function(o){ return '<div class="opt" data-a="'+o+'">'+o+'</div>'; }).join("")
+      + '</div>';
+    area.querySelectorAll(".opt").forEach(function(op){
+      op.onclick = function(){
+        var right = op.dataset.a === q.ans;
+        if(right) ok++;
+        op.classList.add(right?"right":"wrong");
+        area.querySelectorAll(".opt").forEach(function(x){ if(x.dataset.a===q.ans) x.classList.add("right"); });
+        setTimeout(function(){ qi++; draw(); }, 800);
+      };
+    });
+  }
+  draw();
+};
+
+/* ===== 每日一句（沿用 sp_daily 连续打卡）===== */
+function norm(t){
+  var map={'á':'a','é':'e','í':'i','ó':'o','ú':'u','ü':'u','ñ':'n','Á':'A','É':'E','Í':'I','Ó':'O','Ú':'U','Ü':'U','Ñ':'N','?':'?','¿':'?'};
+  return String(t).toLowerCase().split("").map(function(c){ return map[c]||c; }).join("").replace(/[.,!?¡¿]/g,"").replace(/\s+/g," ").trim();
+}
+function drawDaily(){
+  var today = new Date().toISOString().slice(0,10);
+  var d;
+  try{ d = JSON.parse(localStorage.getItem("sp_daily"))||{date:"",count:0}; }catch(e){ d = {date:"",count:0}; }
+  if(d.date===today){ /* 已打卡 */ }
+  var idx = Math.floor(new Date().getDate()*7 % D.daily.length);
+  var sent = D.daily[idx];
+  document.getElementById("dailyBox").innerHTML =
+    '<h3>📅 每日一句 · 连续打卡 <b style="color:var(--accent2)">'+(d.count||0)+'</b> 天</h3>'
+    + '<div style="font-size:17px;font-weight:800;margin:10px 0 4px">'+sent.es+'</div>'
+    + '<div class="hint" style="font-size:13px;color:var(--text2)">'+sent.zh+'</div>'
+    + '<button class="btn" id="dailyBtn" style="margin-top:12px" '+(d.date===today?'disabled':'')+'>'+(d.date===today?'✅ 今日已完成':'我学会了，打卡 +1')+'</button>';
+  document.getElementById("dailyBtn").onclick = function(){
+    var dd;
+    try{ dd = JSON.parse(localStorage.getItem("sp_daily"))||{date:"",count:0}; }catch(e){ dd = {date:"",count:0}; }
+    if(dd.date===today) return;
+    var y = new Date(Date.now()-864e5).toISOString().slice(0,10);
+    dd.count = (dd.date===y) ? (dd.count||0)+1 : 1;
+    dd.date = today;
+    localStorage.setItem("sp_daily", JSON.stringify(dd));
+    window.__agMiscTouch && window.__agMiscTouch();
+    drawDaily();
+  };
+}
+
+/* ===== 句子训练 L1-L4（历史沿用 sp_history）===== */
+var SPH_KEY = "sp_history";
+function pushHist(type, correct, total){
+  var h; try{ h = JSON.parse(localStorage.getItem(SPH_KEY))||[] }catch(e){ h = [] }
+  h.push({type:type, correct:correct, total:total, d:new Date().toISOString().slice(0,16).replace('T',' ')});
+  localStorage.setItem(SPH_KEY, JSON.stringify(h.slice(-100)));
+  window.__agMiscTouch && window.__agMiscTouch();
+}
+var sentLv = 1;
+function drawSentLv(){
+  var lvNames = {1:"L1 变位填空", 2:"L2 点击组句", 3:"L3 中译西", 4:"L4 阅读理解"};
+  var h = "";
+  for(var i=1;i<=4;i++){ h += '<span class="chip'+(sentLv===i?" on":"")+'" data-l="'+i+'">'+lvNames[i]+'</span>'; }
+  h += '<span class="hint" style="flex:100%;margin-top:4px">历史记录沿用旧版（sp_history），可在旧练习页看到全部数据</span>';
+  document.getElementById("sentLv").innerHTML = h;
+  document.querySelectorAll("#sentLv .chip").forEach(function(c){
+    c.onclick = function(){ sentLv = +c.dataset.l; drawSentLv(); drawSent(); };
+  });
+}
+function drawSent(){
+  var area = document.getElementById("sentArea");
+  var bank = D.sent[sentLv] || [];
+  var items = bank.slice().sort(function(){ return Math.random()-.5; }).slice(0, 4);
+  var h = "";
+  if(sentLv === 1 || sentLv === 3){
+    items.forEach(function(it, i){
+      h += '<div class="card"><div class="hint" style="margin-bottom:6px">'+(sentLv===1?'填入动词的正确形式':'翻译成西班牙语')+'</div>'
+        + '<div style="font-size:14.5px;font-weight:600;margin-bottom:4px">'+(sentLv===1? it.q : it.zh||it.q)+'</div>'
+        + (it.hint ? '<div class="hint" style="margin-bottom:8px">💡 '+it.hint+'</div>' : '')
+        + '<input class="q" id="si-'+i+'" placeholder="'+(sentLv===1?'输入动词变位':'输入西语句子')+'" style="max-width:100%">'
+        + '<button class="btn" style="margin-top:8px" data-i="'+i+'">检查</button><div id="sf-'+i+'"></div></div>';
+    });
+  } else if(sentLv === 2){
+    items.forEach(function(it, i){
+      var pool = it.words.slice().sort(function(){ return Math.random()-.5; });
+      h += '<div class="card"><div class="hint" style="margin-bottom:6px">点击单词组成句子</div>'
+        + '<div style="font-size:14px;font-weight:600;margin-bottom:8px">'+it.zh+'</div>'
+        + '<div class="chips" id="sc-'+i+'" style="margin-bottom:8px"></div>'
+        + '<div class="chips" id="sp2-'+i+'"></div>'
+        + '<button class="btn" style="margin-top:8px" data-i="'+i+'" data-check="1">检查</button><div id="sf-'+i+'"></div></div>';
+    });
+  } else {
+    h = '<div class="card"><div style="font-size:14px;line-height:1.9;margin-bottom:10px">'+items[0].text+'</div>';
+    items[0].qs.forEach(function(q, qi){
+      h += '<div style="font-weight:700;margin:10px 0 6px">'+q.q+'</div>';
+      q.opts.forEach(function(o, oi){ h += '<div class="opt" data-i="0" data-q="'+qi+'" data-o="'+oi+'">'+o+'</div>'; });
+    });
+    h += '<button class="btn" style="margin-top:10px" id="l4check">检查阅读题</button><div id="sf-0"></div></div>';
+  }
+  area.innerHTML = h;
+  var answered = {};
+  if(sentLv === 1 || sentLv === 3){
+    area.querySelectorAll("button[data-i]").forEach(function(b){
+      b.onclick = function(){
+        var i = b.dataset.i, it = items[i];
+        var val = document.getElementById("si-"+i).value;
+        var ok = norm(val) === norm(it.ans);
+        answered[i] = ok;
+        document.getElementById("sf-"+i).innerHTML = '<div class="exp"><b>'+(ok?"✅":"❌")+'</b> 正确答案：'+it.ans+'</div>';
+        if(Object.keys(answered).length === items.length) pushHist(sentLv===1?"L1填空":"L3翻译", Object.values(answered).filter(Boolean).length, items.length);
+      };
+    });
+  } else if(sentLv === 2){
+    var sel = {};
+    items.forEach(function(it, i){
+      sel[i] = [];
+      var poolEl = document.getElementById("sp2-"+i), chipEl = document.getElementById("sc-"+i);
+      function render2(){
+        poolEl.innerHTML = it.words.map(function(w, wi){
+          var used = sel[i].indexOf(wi) >= 0;
+          return '<span class="chip" data-w="'+wi+'" style="'+(used?"opacity:.3":"")+'">'+w+'</span>';
+        }).join("");
+        chipEl.innerHTML = sel[i].map(function(wi){ return '<span class="chip on" data-back="'+wi+'">'+it.words[wi]+'</span>'; }).join("");
+        poolEl.querySelectorAll(".chip:not([data-back])").forEach(function(c){
+          if(c.style.opacity === "0.3") return;
+          c.onclick = function(){ sel[i].push(+c.dataset.w); render2(); };
+        });
+        chipEl.querySelectorAll(".chip").forEach(function(c){
+          c.onclick = function(){ sel[i] = sel[i].filter(function(x){ return x !== +c.dataset.back; }); render2(); };
+        });
+      }
+      render2();
+    });
+    area.querySelectorAll("button[data-check]").forEach(function(b){
+      b.onclick = function(){
+        var i = b.dataset.i, it = items[i];
+        var built = sel[i].map(function(wi){ return it.words[wi]; }).join(" ");
+        var ok = norm(built) === norm(it.ans);
+        answered[i] = ok;
+        document.getElementById("sf-"+i).innerHTML = '<div class="exp"><b>'+(ok?"✅":"❌")+'</b> 正确答案：'+it.ans+'</div>';
+        if(Object.keys(answered).length === items.length) pushHist("L2组句", Object.values(answered).filter(Boolean).length, items.length);
+      };
+    });
+  } else if(sentLv === 4){
+    var picks = {};
+    area.querySelectorAll(".opt").forEach(function(o){
+      o.onclick = function(){
+        picks[o.dataset.q] = +o.dataset.o;
+        o.parentNode.querySelectorAll(".opt").forEach(function(x){ x.classList.remove("right"); });
+        o.classList.add("sel");
+      };
+    });
+    document.getElementById("l4check").onclick = function(){
+      var qs = items[0].qs, ok = 0;
+      qs.forEach(function(q, qi){ if(picks[qi] === q.ans) ok++; });
+      qs.forEach(function(q, qi){
+        area.querySelectorAll('.opt[data-q="'+qi+'"]').forEach(function(x){ if(+x.dataset.o === q.ans) x.classList.add("right"); else if(picks[qi]===+x.dataset.o) x.classList.add("wrong"); });
+      });
+      document.getElementById("sf-0").innerHTML = '<div class="exp"><b>阅读得分：'+ok+' / '+qs.length+'</b></div>';
+      pushHist("L4阅读", ok, qs.length);
+    };
+  }
+}
+
+/* ===== 旅行场景 ===== */
+var travelSel = null;
+function drawTravel(){
+  var h = "";
+  for(var name in D.travel){ h += '<span class="chip'+(travelSel===name?" on":"")+'" data-n="'+name+'">'+name+'（'+D.travel[name].length+'）</span>'; }
+  document.getElementById("travelChips").innerHTML = h;
+  document.querySelectorAll("#travelChips .chip").forEach(function(c){
+    c.onclick = function(){ travelSel = c.dataset.n; drawTravel(); };
+  });
+  var area = document.getElementById("travelArea");
+  if(!travelSel){ area.innerHTML = '<div class="empty">选择场景查看常用句</div>'; return; }
+  var list = D.travel[travelSel];
+  area.innerHTML = list.map(function(x){
+    return '<div class="exp" style="margin-bottom:8px"><b>'+x.es+'</b><br><i>'+x.zh+'</i></div>';
+  }).join("");
+}
+
+/* tab 切换挂载句子训练 */
+(function(){
+  var origTabs = document.querySelectorAll(".tab");
+  origTabs.forEach(function(t){
+    if(t.dataset.p === "sent"){
+      t.addEventListener("click", function(){ drawDaily(); drawSentLv(); drawSent(); drawTravel(); });
+    }
+  });
+})();
+
+updSrsBadge();
 updSrsBadge();
 applyLang();
 })();

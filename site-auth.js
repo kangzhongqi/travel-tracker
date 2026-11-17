@@ -149,7 +149,7 @@
     if (token && uname) {
       var chip = document.createElement('a')
       chip.href = 'study.html'
-      chip.title = '进入学习中心'
+      chip.title = '账号与同步中心'
       chip.innerHTML = '👤 ' + esc(uname)
       chip.style.cssText = 'pointer-events:auto;text-decoration:none;cursor:pointer;font-size:13px;font-weight:600;line-height:1;padding:8px 14px;border-radius:999px;background:rgba(17,24,39,.88);color:#34d399;border:1px solid rgba(16,185,129,.55);white-space:nowrap;max-width:44vw;overflow:hidden;text-overflow:ellipsis;display:inline-block'
       var cloud = document.createElement('span')

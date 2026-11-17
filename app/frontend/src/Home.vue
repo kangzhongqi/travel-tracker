@@ -9,6 +9,13 @@ const showPass = ref(false)
 
 const sections = [
   {
+    title: '🤖 学习中心（主力）', cards: [
+      { icon: '💰', name: '金融测评 · 合体版', desc: '114 题 8 章 · 60 分钟考试断点续考 · 错题遗忘曲线 · 12 篇深度讲解', tag: '主力', href: 'agent-finance.html', hot: true },
+      { icon: '🇪🇸', name: '西语 A2 · 合体版', desc: '272 词 · 20 语法卡 · 114 动词变位与练习 · 句子训练/每日一句 · 遗忘曲线', tag: '主力', href: 'agent-spanish.html', hot: true },
+      { icon: '🛰️', name: '账号与同步中心', desc: '登录/接力/密码 · 全站数据云同步 · 旧版数据一键迁移', tag: '账号', href: 'study.html' }
+    ]
+  },
+  {
     title: '🗺️ Travel Maps', cards: [
       { icon: '🇨🇳', name: '中国足迹 · 地级市', desc: '360+ 地级行政区打卡', tag: '地图', href: '中国旅行足迹地图.html' },
       { icon: '🗺️', name: '中国足迹 · 县级', desc: '2,800+ 县级行政区打卡', tag: '地图', href: '中国旅行足迹-县级.html' },
@@ -16,29 +23,9 @@ const sections = [
     ]
   },
   {
-    title: '📚 Language', cards: [
-      { icon: '🇪🇸', name: '西语动词变位', desc: '现在时 · 简单过去时 · 120+ 动词', tag: '学习', href: 'spanish-verbs.html' },
-      { icon: '📖', name: '西语 A2 手册', desc: '语法速查 · 260+词汇 · 听写跟读', tag: '学习', href: 'spanish-grammar.html' },
-      { icon: '✍️', name: '西语练习', desc: '每日一句 · 旅行手册 · 句子训练', tag: '练习', href: 'spanish-practice.html' },
-      { icon: '📝', name: '多语种水平测试', desc: '日语 · 西语 · 德语', tag: '测试', href: 'japanese-test.html' }
-    ]
-  },
-  {
     title: '📱 Mobile', cards: [
       { icon: '🇨🇳', name: '中国足迹 · iPhone', desc: '地级市触屏优化版', tag: '移动端', href: '中国旅行足迹-iPhone.html' },
       { icon: '🚇', name: '北京地铁 · iPhone', desc: '地铁触屏优化版', tag: '移动端', href: '北京地铁打卡-iPhone.html' }
-    ]
-  },
-  {
-    title: '🔧 Tools', cards: [
-      { icon: '📱', name: '多端同步', desc: '二维码 / 文本码跨设备同步数据', tag: '工具', href: 'sync.html' }
-    ]
-  },
-  {
-    title: '🤖 Agent 学习中心', cards: [
-      { icon: '🎓', name: '学习中心（Vue · 云同步）', desc: '金融测评 + 西语 A2 · 登录后错题/词汇/打卡自动同步', tag: 'Agent 版 · Vue', href: 'study.html', hot: true },
-      { icon: '💰', name: '金融测评 · 合体版', desc: '114 题 8 章 · 60 分钟考试断点续考 · 错题遗忘曲线 · 12 篇深度讲解', tag: 'Agent 合体版', href: 'agent-finance.html', hot: true },
-      { icon: '🇪🇸', name: '西语 A2 · 合体版', desc: '272 词库 · 20 张透彻语法卡 · 114 动词变位速查 · 遗忘曲线复习', tag: 'Agent 合体版', href: 'agent-spanish.html', hot: true }
     ]
   }
 ]
